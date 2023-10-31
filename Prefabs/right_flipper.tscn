@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://rvg8pn7803jr"]
+
+[ext_resource type="Script" path="res://Scripts/Flipper.cs" id="1_ueuy7"]
+[ext_resource type="Texture2D" uid="uid://cl2dmi7xdsm3p" path="res://Sprites/flipper_right_small.png" id="2_tsc1f"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7f8h3"]
+friction = 0.0
+bounce = 0.25
+
+[node name="AnimatableBody2D" type="AnimatableBody2D"]
+collision_layer = 2
+physics_material_override = SubResource("PhysicsMaterial_7f8h3")
+constant_angular_velocity = 0.174533
+script = ExtResource("1_ueuy7")
+RotationMax = 75.0
+RotationFrameDuration = 6.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-5, -12)
+rotation = 3.14159
+scale = Vector2(1, -1)
+polygon = PackedVector2Array(63, -0.000159264, -18, 0, -18, 16, -10, 24, 63, 15.9998, 63, 7.99984)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-48, -4)
+texture = ExtResource("2_tsc1f")
+offset = Vector2(20.1443, 3.78757)

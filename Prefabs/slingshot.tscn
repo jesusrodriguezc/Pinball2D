@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://dn0oy12w8ujny"]
+
+[ext_resource type="Script" path="res://Scripts/Slingshot.cs" id="1_3rkph"]
+[ext_resource type="Texture2D" uid="uid://d2bnhi8neow7m" path="res://Sprites/slingshot.png" id="1_bhqkn"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iow5l"]
+friction = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rikut"]
+size = Vector2(114, 4)
+
+[node name="Slingshot" type="StaticBody2D"]
+collision_layer = 2
+physics_material_override = SubResource("PhysicsMaterial_iow5l")
+script = ExtResource("1_3rkph")
+HitPower = 3000.0
+BaseScore = 500.0
+
+[node name="Slingshot" type="Sprite2D" parent="."]
+position = Vector2(-4.58994, 4.6151)
+rotation = -1.12647
+texture = ExtResource("1_bhqkn")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(1, 1)
+polygon = PackedVector2Array(-67, 8, 8, 44, 55, 9, 55, 0, 47, 0, -65, 0, -68, 4)
+
+[node name="CollisionArea" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="HitCollisionShape" type="CollisionShape2D" parent="CollisionArea"]
+position = Vector2(-4, 1.3113e-06)
+shape = SubResource("RectangleShape2D_rikut")
+debug_color = Color(0, 0.560784, 0.788235, 0.419608)

@@ -1,0 +1,43 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Pinball"
+run/main_scene="res://Escenas/MainScene.tscn"
+config/features=PackedStringArray("4.1", "C#", "Mobile")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/resizable=false
+window/stretch/mode="viewport"
+
+[dotnet]
+
+project/assembly_name="Pinball"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
+
+[layer_names]
+
+2d_physics/layer_1="Ball"
+2d_physics/layer_2="Bordes permanentes"
+2d_physics/layer_3="Zona baja"
+2d_physics/layer_4="Planta 1a"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="mobile"

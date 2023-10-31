@@ -1,0 +1,143 @@
+[gd_scene load_steps=15 format=3 uid="uid://cb7aph7p675a8"]
+
+[ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Prefabs/ball.tscn" id="1_bf8pj"]
+[ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_e6ce1"]
+[ext_resource type="Script" path="res://Scripts/Events/SignalManager.cs" id="2_qb2q0"]
+[ext_resource type="PackedScene" uid="uid://rvg8pn7803jr" path="res://Prefabs/right_flipper.tscn" id="4_ageu4"]
+[ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Prefabs/left_flipper.tscn" id="4_bmf2m"]
+[ext_resource type="PackedScene" uid="uid://38xq64i6x6gq" path="res://Prefabs/bumper.tscn" id="5_wh0uw"]
+[ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Prefabs/slingshot.tscn" id="6_mxqhm"]
+[ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://Prefabs/user_interface.tscn" id="9_6nyh6"]
+[ext_resource type="PackedScene" uid="uid://46ubn6t0slfa" path="res://Prefabs/shooter_lane.tscn" id="10_54stf"]
+[ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Prefabs/bordes.tscn" id="10_orda4"]
+
+[sub_resource type="Gradient" id="Gradient_37jsp"]
+colors = PackedColorArray(0, 0.0470588, 0.301961, 1, 0, 0.0470588, 0.301961, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ox6ls"]
+gradient = SubResource("Gradient_37jsp")
+width = 1280
+height = 720
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_5fy75"]
+friction = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0dfug"]
+size = Vector2(456, 17)
+
+[node name="Main" type="Node2D"]
+position = Vector2(2, 0)
+script = ExtResource("1_e6ce1")
+Debug = true
+LivesLeft = 999
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Fondo" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_ox6ls")
+
+[node name="UI" parent="." instance=ExtResource("9_6nyh6")]
+offset_left = -609.0
+offset_top = -352.0
+offset_right = -545.0
+offset_bottom = -296.0
+metadata/_edit_use_anchors_ = true
+
+[node name="EventManager" type="Node" parent="."]
+script = ExtResource("2_qb2q0")
+
+[node name="Ball" parent="." instance=ExtResource("1_bf8pj")]
+position = Vector2(228, 216)
+mass = 5.0
+physics_material_override = SubResource("PhysicsMaterial_5fy75")
+gravity_scale = 0.75
+continuous_cd = 1
+max_contacts_reported = 100
+contact_monitor = true
+DebugPower = 6000
+
+[node name="Bumpers" type="Node" parent="."]
+
+[node name="Bumper4" parent="Bumpers" instance=ExtResource("5_wh0uw")]
+position = Vector2(-29, -175)
+collision_layer = 4
+HitPower = 2000.0
+
+[node name="Bumper5" parent="Bumpers" instance=ExtResource("5_wh0uw")]
+position = Vector2(37, -189)
+collision_layer = 4
+HitPower = 2000.0
+
+[node name="Bumper6" parent="Bumpers" instance=ExtResource("5_wh0uw")]
+position = Vector2(5, -134)
+collision_layer = 4
+HitPower = 2000.0
+
+[node name="Bumper7" parent="Bumpers" instance=ExtResource("5_wh0uw")]
+position = Vector2(-184, -298)
+collision_layer = 4
+HitPower = 2000.0
+
+[node name="Bumper8" parent="Bumpers" instance=ExtResource("5_wh0uw")]
+position = Vector2(-248, -32)
+collision_layer = 8
+HitPower = 2000.0
+BaseScore = 1500.0
+
+[node name="Bumper9" parent="Bumpers" instance=ExtResource("5_wh0uw")]
+position = Vector2(-184, -32)
+collision_layer = 8
+HitPower = 2000.0
+BaseScore = 1500.0
+
+[node name="Bumper10" parent="Bumpers" instance=ExtResource("5_wh0uw")]
+position = Vector2(-216, 8)
+collision_layer = 8
+HitPower = 2000.0
+BaseScore = 1500.0
+
+[node name="Slingshots" type="Node" parent="."]
+
+[node name="Slingshot" parent="Slingshots" instance=ExtResource("6_mxqhm")]
+position = Vector2(-116, 116)
+rotation = 1.13446
+collision_layer = 4
+HitPower = 4000.0
+
+[node name="Slingshot2" parent="Slingshots" instance=ExtResource("6_mxqhm")]
+position = Vector2(118, 114)
+rotation = -1.13446
+scale = Vector2(-1, 1)
+collision_layer = 4
+HitPower = 4000.0
+
+[node name="Left Flipper" parent="." instance=ExtResource("4_bmf2m")]
+position = Vector2(-79, 231)
+rotation = 0.453786
+collision_layer = 4
+collision_mask = 0
+RotationMax = 45.0
+
+[node name="Right Flipper" parent="." instance=ExtResource("4_ageu4")]
+position = Vector2(75, 231)
+rotation = -0.453786
+collision_layer = 4
+collision_mask = 0
+RotationMax = 45.0
+
+[node name="Deathzone" type="Area2D" parent="."]
+position = Vector2(-89, 99)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Deathzone"]
+position = Vector2(68, 205.5)
+shape = SubResource("RectangleShape2D_0dfug")
+
+[node name="Bordes" parent="." instance=ExtResource("10_orda4")]
+
+[node name="ShooterLane" parent="." instance=ExtResource("10_54stf")]
+position = Vector2(229, 301)
+collision_layer = 4
+MaxPowerHoldTime = 1.0
+
+[connection signal="body_entered" from="Deathzone" to="Ball" method="_OnDeathzoneBodyEntered"]

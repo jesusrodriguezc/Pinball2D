@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://diqnpn3h5cjk3"]
+
+[ext_resource type="Texture2D" uid="uid://bw7a7i8fdjy5c" path="res://Sprites/returnlaneborder.png" id="1_1s6xu"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xt8wt"]
+friction = 0.0
+
+[node name="ReturnLaneBorder" type="StaticBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_xt8wt")
+
+[node name="Returnlaneborder" type="Sprite2D" parent="."]
+texture = ExtResource("1_1s6xu")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-131, 173, -152, 216, -328, 128, -328, -88, -312, -88, -312, 83)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="."]
+position = Vector2(-3, 0)
+scale = Vector2(-1, 1)
+polygon = PackedVector2Array(-132, 173, -155, 221, -328, 133, -328, -88, -312, -88, -312, 83)

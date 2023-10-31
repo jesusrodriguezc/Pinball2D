@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://dcaa2ka0nnjar"]
+
+[ext_resource type="Script" path="res://Scripts/PathManager.cs" id="1_jp4wb"]
+[ext_resource type="Texture2D" uid="uid://dmcxkhui2liup" path="res://Sprites/mapt.png" id="2_ly1et"]
+
+[sub_resource type="Curve2D" id="Curve2D_504av"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 231, 304, 0, 0, 0, 0, 231, -128, 0, 0, 0, 0, 228, -167, 0, 0, 0, 0, 215, -200, 0, 0, 0, 0, 191, -248, 0, 0, 0, 0, 159, -272, 0, 0, 0, 0, 119, -288, 0, 0, 0, 0, 16, -303, 0, 0, 0, 0, -96, -295)
+}
+point_count = 9
+
+[node name="Paths" type="Node"]
+script = ExtResource("1_jp4wb")
+
+[node name="ShooterLane" type="Path2D" parent="."]
+position = Vector2(0, -1)
+curve = SubResource("Curve2D_504av")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="ShooterLane"]
+position = Vector2(231, 304)
+rotation = -1.5708
+rotates = false
+cubic_interp = false
+loop = false
+
+[node name="Mapt" type="Sprite2D" parent="."]
+position = Vector2(-2, 0)
+texture = ExtResource("2_ly1et")
