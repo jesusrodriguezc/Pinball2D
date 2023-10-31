@@ -33,6 +33,10 @@ project/assembly_name="Pinball"
 2d_physics/layer_3="Zona baja"
 2d_physics/layer_4="Planta 1a"
 
+[physics]
+
+common/physics_ticks_per_second=120
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

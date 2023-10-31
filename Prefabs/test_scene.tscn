@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://b606sy5irh3a1"]
+[gd_scene load_steps=10 format=3 uid="uid://b606sy5irh3a1"]
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_5yvl5"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://Prefabs/user_interface.tscn" id="2_1x3cs"]
 [ext_resource type="Script" path="res://Scripts/Events/SignalManager.cs" id="3_liffd"]
 [ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Prefabs/ball.tscn" id="4_0ml7y"]
 [ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Prefabs/slingshot.tscn" id="6_jcyy1"]
+[ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Prefabs/left_flipper.tscn" id="7_3nyud"]
 [ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Prefabs/bordes.tscn" id="8_k8cuc"]
 
 [sub_resource type="Gradient" id="Gradient_b81lh"]
@@ -49,6 +50,9 @@ DebugPower = 1000
 [node name="Slingshots" type="Node2D" parent="."]
 
 [node name="Slingshot" parent="Slingshots" instance=ExtResource("6_jcyy1")]
-position = Vector2(7, 248)
+position = Vector2(39, 224)
 collision_layer = 4
 collision_mask = 0
+
+[node name="AnimatableBody2D" parent="." instance=ExtResource("7_3nyud")]
+position = Vector2(-73, 224)

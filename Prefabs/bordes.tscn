@@ -146,8 +146,9 @@ polygon = PackedVector2Array(-219, 53, -218, 86, -215, 86, -216, 52)
 [node name="Triggers" type="Node" parent="."]
 
 [node name="Rampa_in" parent="Triggers" instance=ExtResource("2_r5gqp")]
-position = Vector2(-146, -163)
-scale = Vector2(0.36, 2.52)
+position = Vector2(-156, -164)
+rotation = -0.314603
+scale = Vector2(0.234414, 2.52)
 collision_layer = 2
 collision_mask = 1
 inLayer = 3
@@ -156,6 +157,24 @@ outLayer = 4
 [node name="Rampa_out" parent="Triggers" instance=ExtResource("2_r5gqp")]
 position = Vector2(-198, 100)
 rotation = 1.309
+scale = Vector2(0.36, 1.89146)
+collision_layer = 2
+collision_mask = 1
+inLayer = 4
+outLayer = 3
+
+[node name="Rampa_out2" parent="Triggers" instance=ExtResource("2_r5gqp")]
+position = Vector2(-165, -133)
+rotation = 1.05126
+scale = Vector2(0.36, 1.89146)
+collision_layer = 2
+collision_mask = 1
+inLayer = 4
+outLayer = 3
+
+[node name="Rampa_out3" parent="Triggers" instance=ExtResource("2_r5gqp")]
+position = Vector2(-194, -204)
+rotation = -0.501035
 scale = Vector2(0.36, 1.89146)
 collision_layer = 2
 collision_mask = 1

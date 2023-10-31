@@ -51,9 +51,6 @@ public partial class ShooterLane : Area2D
 					if (!key.Pressed) {
 						float percButtonTime = (float)Mathf.Min(1, timeCountButtonHold / (double)MaxPowerHoldTime);
 
-						//GD.Print($"Pepinatso de {percButtonTime}");
-
-						// Ejercemos la fuerza sobre la bola.
 						EmitSignal(SignalName.Impulse, Vector2.Up * ShotterLanePower * Mathx.FuncSmooth(percButtonTime));
 
 						DisableButtonHoldTimer();

@@ -77,6 +77,12 @@ public partial class Ball : RigidBody2D
 			Reset();
 			currentStatus = Status.ON_SHOOTER_LANE;
 		}
+
+		GD.Print($"Velocidad de la bola: {LinearVelocity}");
+		if (LinearVelocity.LengthSquared() > 4000000f) {
+			GD.Print("Te pasaste de pinche lanza. Bajamos revoluciones.");
+			LinearVelocity = LinearVelocity.LimitLength(2000f);
+		}
 	}
 
 	private void _OnBumperImpulse (Vector2 impulse, Bumper bumper) {
@@ -105,11 +111,12 @@ public partial class Ball : RigidBody2D
 
 	public void Move ()
 	{
+		GD.Print($"Golpeamos la bola");
+
 		Vector2 mousePosition = GetGlobalMousePosition();
 		Vector2 forceDirection = (mousePosition - GlobalPosition).Normalized();
 		
 		ApplyCentralImpulse(forceDirection * DebugPower); //, Position - (Vector2) result["position"]);
-
 
 	}
 	

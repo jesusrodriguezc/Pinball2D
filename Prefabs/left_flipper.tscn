@@ -18,7 +18,7 @@ RotationFrameDuration = 6.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 position = Vector2(6.6, -12.8)
-polygon = PackedVector2Array(63.4, 0.8, -18, 0, -18, 16, -10, 24, 63.4, 16.8, 63.4, 8.8)
+polygon = PackedVector2Array(63.4, 0.8, -17.6, 0.799999, -17.6, 28.8, 63.4, 28.8)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(8.6, -3.8)

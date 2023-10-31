@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/.vs/Pinball/FileContentIndex/52596da8-1715-486d-b1ec-30485d57be25.vsidx
+/.vs/Pinball/FileContentIndex/2880e637-661e-4ee4-805c-61014c3ae3e8.vsidx
+/.vs/Pinball/FileContentIndex/136e92df-278f-4c2d-aedc-e6aafb0aa907.vsidx

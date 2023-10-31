@@ -16,10 +16,10 @@ RotationMax = 75.0
 RotationFrameDuration = 6.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-position = Vector2(-5, -12)
+position = Vector2(-6, -12)
 rotation = 3.14159
 scale = Vector2(1, -1)
-polygon = PackedVector2Array(63, -0.000159264, -18, 0, -18, 16, -10, 24, 63, 15.9998, 63, 7.99984)
+polygon = PackedVector2Array(63, -0.000159264, -18, 0, -17.9999, 28, 63.0001, 27.9998, 63, 7.99984)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-48, -4)
