@@ -26,10 +26,6 @@ window/stretch/mode="viewport"
 
 project/assembly_name="Pinball"
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
-
 [layer_names]
 
 2d_physics/layer_1="Ball"
