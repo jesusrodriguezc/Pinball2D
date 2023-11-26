@@ -1,0 +1,123 @@
+[gd_scene load_steps=12 format=3 uid="uid://dn0oy12w8ujny"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/Slingshot.cs" id="1_3rkph"]
+[ext_resource type="Texture2D" uid="uid://d2bnhi8neow7m" path="res://Assets/Slingshot/slingshot.png" id="1_bhqkn"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iow5l"]
+friction = 0.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4wbbu"]
+radius = 5.49999
+height = 102.0
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_es85n"]
+polygon = PackedVector2Array(-24, -52, -23, -52, -23, -50, -22, -50, -22, -48, -21, -48, -21, -47, -20, -47, -20, -45, -19, -45, -19, -43, -18, -43, -18, -41, -17, -41, -17, -38, -16, -38, -16, -36, -15, -36, -15, -34, -14, -34, -14, -32, -13, -32, -13, -30, -12, -30, -12, -28, -11, -28, -11, -26, -10, -26, -10, -24, -9, -24, -9, -21, -8, -21, -8, -19, -7, -19, -7, -17, -6, -17, -6, -15, -5, -15, -5, -13, -4, -13, -4, -11, -3, -11, -3, -9, -2, -9, -2, -7, -1, -7, -1, -5, 0, -5, 0, -2, 1, -2, 1, 0, 2, 0, 2, 2, 3, 2, 3, 4, 4, 4, 4, 6, 5, 6, 5, 8, 6, 8, 6, 10, 7, 10, 7, 12, 8, 12, 8, 14, 9, 14, 9, 17, 10, 17, 10, 19, 11, 19, 11, 21, 12, 21, 12, 23, 13, 23, 13, 25, 14, 25, 14, 27, 15, 27, 15, 29, 16, 29, 16, 31, 17, 31, 17, 34, 18, 34, 18, 36, 19, 36, 19, 38, 20, 38, 20, 40, 21, 40, 21, 42, 22, 42, 22, 44, 23, 44, 23, 48, 24, 48, 24, 51, 23, 51, 23, 52, 19, 52, 19, 51, 16, 51, 16, 50, 14, 50, 14, 49, 12, 49, 12, 48, 10, 48, 10, 47, 8, 47, 8, 46, 7, 46, 7, 45, 5, 45, 5, 44, 3, 44, 3, 43, 1, 43, 1, 42, 0, 42, 0, 41, -2, 41, -2, 40, -4, 40, -4, 39, -6, 39, -6, 38, -8, 38, -8, 37, -9, 37, -9, 36, -11, 36, -11, 35, -13, 35, -13, 34, -15, 34, -15, 33, -17, 33, -17, 32, -18, 32, -18, 31, -20, 31, -20, 30, -22, 30, -22, 29, -24, 29, -24, 28, -26, 28, -26, 27, -27, 27, -27, -52, -26, -52, -26, -53, -24, -53)
+
+[sub_resource type="Gradient" id="Gradient_wkp2m"]
+offsets = PackedFloat32Array(0.074813, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sw0i0"]
+gradient = SubResource("Gradient_wkp2m")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.884615, 0.132479)
+
+[sub_resource type="Animation" id="Animation_l78ow"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.1]
+}
+
+[sub_resource type="Animation" id="Animation_pk2l5"]
+resource_name = "Impulse"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.15, 0.5]
+}
+
+[sub_resource type="Animation" id="Animation_8f5io"]
+resource_name = "on_release"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.5, 0.1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5wf00"]
+_data = {
+"RESET": SubResource("Animation_l78ow"),
+"on_collision": SubResource("Animation_pk2l5"),
+"on_release": SubResource("Animation_8f5io")
+}
+
+[node name="Slingshot" type="StaticBody2D"]
+collision_layer = 2
+physics_material_override = SubResource("PhysicsMaterial_iow5l")
+script = ExtResource("1_3rkph")
+HitPower = 3000.0
+
+[node name="Slingshot" type="Sprite2D" parent="."]
+position = Vector2(-4.58994, 4.6151)
+rotation = -1.12647
+texture = ExtResource("1_bhqkn")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(1, 1)
+polygon = PackedVector2Array(-67, 8, 8, 44, 55, 9, 55, 0, 47, 0, -65, 0, -68, 4)
+
+[node name="CollisionArea" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="HitCollisionShape" type="CollisionShape2D" parent="CollisionArea"]
+position = Vector2(-5, -0.5)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_4wbbu")
+debug_color = Color(0, 0.560784, 0.788235, 0.419608)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+visible = false
+position = Vector2(-4.58994, 4.6151)
+rotation = -1.12647
+occluder = SubResource("OccluderPolygon2D_es85n")
+sdf_collision = false
+occluder_light_mask = 6
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(-4, -12)
+scale = Vector2(2.125, 0.875)
+energy = 0.1
+shadow_enabled = true
+shadow_item_cull_mask = 6
+texture = SubResource("GradientTexture2D_sw0i0")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_5wf00")
+}

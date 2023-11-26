@@ -3,4 +3,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Scripts\Events\**" />
+    <EmbeddedResource Remove="Scripts\Events\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Scripts\EventManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
 </Project>

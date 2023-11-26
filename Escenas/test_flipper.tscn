@@ -1,11 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://61hw8lynt53k"]
+[gd_scene load_steps=15 format=3 uid="uid://61hw8lynt53k"]
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_qxhib"]
-[ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://Prefabs/user_interface.tscn" id="2_yix0e"]
-[ext_resource type="Script" path="res://Scripts/Events/SignalManager.cs" id="3_jg67b"]
-[ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Prefabs/ball.tscn" id="4_ec1oo"]
-[ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Prefabs/slingshot.tscn" id="5_7bra6"]
-[ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Prefabs/left_flipper.tscn" id="6_1dtec"]
+[ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_yix0e"]
+[ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="4_ec1oo"]
+[ext_resource type="PackedScene" uid="uid://38xq64i6x6gq" path="res://Assets/Bumper/bumper.tscn" id="5_w4h2i"]
+[ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/trigger_area.tscn" id="5_xd2a3"]
 
 [sub_resource type="Gradient" id="Gradient_b81lh"]
 colors = PackedColorArray(0, 0.0470588, 0.301961, 1, 0, 0.0470588, 0.301961, 1)
@@ -18,7 +17,29 @@ height = 720
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c2do7"]
 friction = 0.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rlgju"]
+size = Vector2(16, 16)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pgxfe"]
+friction = 0.0
+bounce = 0.15
+
+[sub_resource type="Gradient" id="Gradient_4ut0w"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hohox"]
+gradient = SubResource("Gradient_4ut0w")
+width = 10
+height = 32
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xxuiy"]
+size = Vector2(9, 34)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_obvq1"]
+friction = 0.0
+bounce = 0.15
+
 [node name="Main" type="Node2D"]
+process_mode = 3
 position = Vector2(1, 0)
 script = ExtResource("1_qxhib")
 Debug = true
@@ -36,44 +57,80 @@ offset_right = -545.0
 offset_bottom = -296.0
 metadata/_edit_use_anchors_ = true
 
-[node name="EventManager" type="Node" parent="."]
-script = ExtResource("3_jg67b")
-
 [node name="Ball" parent="." instance=ExtResource("4_ec1oo")]
-position = Vector2(-41, 80)
+position = Vector2(-65, 64)
+collision_mask = 7
 mass = 5.0
 gravity_scale = 0.5
 max_contacts_reported = 10
 contact_monitor = true
-DebugPower = 5000
+DebugPower = 500
+MaxVelocity = 1000.0
 
-[node name="Slingshots" type="Node2D" parent="."]
-position = Vector2(71, -176)
+[node name="Bumpers" type="Node2D" parent="."]
+position = Vector2(-289, 56)
 
-[node name="Slingshot" parent="Slingshots" instance=ExtResource("5_7bra6")]
-position = Vector2(-120, 0)
-rotation = -3.14159
-collision_layer = 4
-collision_mask = 0
-HitPower = 5000.0
-
-[node name="Slingshot2" parent="Slingshots" instance=ExtResource("5_7bra6")]
-position = Vector2(-224, 32)
-rotation = -3.66519
-collision_layer = 4
-collision_mask = 0
-HitPower = 10000.0
-
-[node name="AnimatableBody2D" parent="." instance=ExtResource("6_1dtec")]
-position = Vector2(-70, 220)
-RotationMax = 50.0
+[node name="Bumper" parent="Bumpers" instance=ExtResource("5_w4h2i")]
+position = Vector2(192, 8)
+HitPower = 30000.0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 collision_layer = 2
 physics_material_override = SubResource("PhysicsMaterial_c2do7")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PackedVector2Array(-81, 208, -161, -136, -201, -200, -17, -200, -17, 208, -17, 224, 15, 224, 15, -248, -225, -248, -225, 208, -81, 224)
+polygon = PackedVector2Array(-281, 96, 271, 96, 271, -72, 239, -72, 239, 72, -249, 72, -249, -72, 271, -72, 271, -96, -281, -96)
 
-[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PackedVector2Array(-81, 208, -161, -136, -201, -200, -17, -200, -17, 208, -17, 224, 15, 224, 15, -248, -225, -248, -225, 208, -81, 224)
+[node name="Entrada" parent="." instance=ExtResource("5_xd2a3")]
+position = Vector2(31, 56)
+scale = Vector2(0.298677, 2.3011)
+collision_layer = 2
+collision_mask = 1
+Type = 0
+inLayer = 3
+outLayer = 4
+
+[node name="In" type="CollisionShape2D" parent="Entrada"]
+shape = SubResource("RectangleShape2D_rlgju")
+debug_color = Color(0.929412, 0, 0.12549, 0.419608)
+
+[node name="Seguro antifuga" parent="." instance=ExtResource("5_xd2a3")]
+position = Vector2(7, 56)
+scale = Vector2(0.36, 2.20551)
+collision_layer = 2
+collision_mask = 1
+Type = 0
+inLayer = 4
+outLayer = 3
+
+[node name="In" type="CollisionShape2D" parent="Seguro antifuga"]
+shape = SubResource("RectangleShape2D_rlgju")
+debug_color = Color(0.929412, 0, 0.12549, 0.419608)
+
+[node name="Capa inferior" type="StaticBody2D" parent="."]
+position = Vector2(15, 0)
+collision_layer = 4
+collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_pgxfe")
+
+[node name="Sprite2D" type="Sprite2D" parent="Capa inferior"]
+position = Vector2(55, 56)
+texture = SubResource("GradientTexture2D_hohox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Capa inferior"]
+position = Vector2(55, 56)
+shape = SubResource("RectangleShape2D_xxuiy")
+
+[node name="Capa superior" type="StaticBody2D" parent="."]
+position = Vector2(23, 0)
+collision_layer = 8
+collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_obvq1")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Capa superior"]
+position = Vector2(79, 56)
+texture = SubResource("GradientTexture2D_hohox")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Capa superior"]
+position = Vector2(79, 56)
+shape = SubResource("RectangleShape2D_xxuiy")

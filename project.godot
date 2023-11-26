@@ -11,8 +11,9 @@ config_version=5
 [application]
 
 config/name="Pinball"
-run/main_scene="res://Escenas/MainScene.tscn"
+run/main_scene="res://Escenas/MainMenu.tscn"
 config/features=PackedStringArray("4.1", "C#", "Mobile")
+run/max_fps=120
 config/icon="res://icon.svg"
 
 [display]
@@ -28,10 +29,14 @@ project/assembly_name="Pinball"
 
 [layer_names]
 
+2d_render/layer_1="Global"
+2d_render/layer_2="Planta baja"
+2d_render/layer_3="Planta alta"
 2d_physics/layer_1="Ball"
 2d_physics/layer_2="Bordes permanentes"
 2d_physics/layer_3="Zona baja"
 2d_physics/layer_4="Planta 1a"
+2d_physics/layer_5="ShooterLane"
 
 [physics]
 

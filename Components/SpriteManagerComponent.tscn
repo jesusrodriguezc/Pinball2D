@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5kcmv1g2lqm2"]
+
+[ext_resource type="Script" path="res://Components/SpriteManagerComponent.cs" id="1_p551l"]
+
+[node name="SpriteManagerComponent" type="Node2D"]
+script = ExtResource("1_p551l")

@@ -1,0 +1,54 @@
+[gd_scene load_steps=9 format=3 uid="uid://b606sy5irh3a1"]
+
+[ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_5yvl5"]
+[ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_1x3cs"]
+[ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Components/Ball/ball.tscn" id="4_0ml7y"]
+[ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Components/Slingshot/slingshot.tscn" id="6_jcyy1"]
+[ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Components/Flipper/left_flipper.tscn" id="7_3nyud"]
+[ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Components/Map/Mapa.tscn" id="8_k8cuc"]
+
+[sub_resource type="Gradient" id="Gradient_b81lh"]
+colors = PackedColorArray(0, 0.0470588, 0.301961, 1, 0, 0.0470588, 0.301961, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ox6ls"]
+gradient = SubResource("Gradient_b81lh")
+width = 1280
+height = 720
+
+[node name="Main" type="Node2D"]
+position = Vector2(1, 0)
+script = ExtResource("1_5yvl5")
+Debug = true
+LivesLeft = 999
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_ox6ls")
+
+[node name="UI" parent="." instance=ExtResource("2_1x3cs")]
+offset_left = -609.0
+offset_top = -352.0
+offset_right = -545.0
+offset_bottom = -296.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Ball" parent="." instance=ExtResource("4_0ml7y")]
+position = Vector2(7, 152)
+mass = 5.0
+gravity_scale = 0.5
+max_contacts_reported = 10
+contact_monitor = true
+DebugPower = 1000
+
+[node name="Bordes" parent="." instance=ExtResource("8_k8cuc")]
+
+[node name="Slingshots" type="Node2D" parent="."]
+
+[node name="Slingshot" parent="Slingshots" instance=ExtResource("6_jcyy1")]
+position = Vector2(39, 224)
+collision_layer = 4
+collision_mask = 0
+
+[node name="AnimatableBody2D" parent="." instance=ExtResource("7_3nyud")]
+position = Vector2(-73, 224)

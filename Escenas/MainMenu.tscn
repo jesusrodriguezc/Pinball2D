@@ -1,16 +1,67 @@
-[gd_scene load_steps=2 format=3 uid="uid://dfujrtg01b34v"]
+[gd_scene load_steps=8 format=3 uid="uid://dfujrtg01b34v"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_121xr"]
-font_size = 50
+[ext_resource type="Script" path="res://Scripts/UI/MainMenu.cs" id="1_ik6wg"]
+[ext_resource type="PackedScene" uid="uid://d2nxno0i2sfan" path="res://Assets/ShaderPlaceholder.tscn" id="2_hdlul"]
+[ext_resource type="PackedScene" uid="uid://cb7aph7p675a8" path="res://Escenas/MainScene.tscn" id="2_mdv4h"]
+[ext_resource type="Shader" path="res://Shaders/BluePalette.gdshader" id="2_tsmfj"]
+[ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="3_oh02j"]
+[ext_resource type="Texture2D" uid="uid://ggw0a3rmao8j" path="res://Palettes/blue_palette.png" id="4_tec20"]
 
-[node name="Label" type="Label"]
-offset_left = 424.0
-offset_top = 120.0
-offset_right = 861.0
-offset_bottom = 270.0
-text = "FLIPARIO PINBALL"
-label_settings = SubResource("LabelSettings_121xr")
-horizontal_alignment = 1
-uppercase = true
-metadata/_edit_horizontal_guides_ = [0.0]
-metadata/_edit_vertical_guides_ = [1280.0, 640.0]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b4jrk"]
+resource_local_to_scene = true
+shader = ExtResource("2_tsmfj")
+shader_parameter/firstFrame = true
+shader_parameter/palette = ExtResource("4_tec20")
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ik6wg")
+gameScene = ExtResource("2_mdv4h")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -93.5
+offset_top = -61.5
+offset_right = 93.5
+offset_bottom = 61.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_oh02j")
+theme_override_font_sizes/font_size = 32
+text = "BLACKHOWLER'S PINBALL"
+
+[node name="StartButton" type="Button" parent="VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_oh02j")
+text = "Start"
+
+[node name="OptionsButton" type="Button" parent="VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_oh02j")
+text = "Options"
+
+[node name="ExitButton" type="Button" parent="VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_oh02j")
+text = "Exit"
+
+[node name="ShaderPlaceholder" parent="." instance=ExtResource("2_hdlul")]
+material = SubResource("ShaderMaterial_b4jrk")
+
+[connection signal="pressed" from="VBox/StartButton" to="." method="OnStartButtonPressed"]
+[connection signal="pressed" from="VBox/OptionsButton" to="." method="OnOptionsButtonPressed"]
+[connection signal="pressed" from="VBox/ExitButton" to="." method="OnExitButtonPressed"]

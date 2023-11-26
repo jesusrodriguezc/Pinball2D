@@ -1,0 +1,77 @@
+[gd_scene load_steps=10 format=3 uid="uid://dvym84ocroljg"]
+
+[ext_resource type="Script" path="res://Scripts/UI/GameOverMenu.cs" id="1_71a1u"]
+[ext_resource type="PackedScene" uid="uid://cb7aph7p675a8" path="res://Escenas/MainScene.tscn" id="2_bfg1c"]
+[ext_resource type="PackedScene" uid="uid://dfujrtg01b34v" path="res://Escenas/MainMenu.tscn" id="3_2nsdl"]
+[ext_resource type="LabelSettings" uid="uid://dtdupns0b3vly" path="res://Fonts/PixelCodeLabelSettings.tres" id="5_31l7n"]
+[ext_resource type="Shader" path="res://Shaders/BluePalette.gdshader" id="6_gb0b6"]
+[ext_resource type="PackedScene" uid="uid://d2nxno0i2sfan" path="res://Assets/ShaderPlaceholder.tscn" id="6_o6ux7"]
+[ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="6_rb10o"]
+[ext_resource type="Texture2D" uid="uid://ggw0a3rmao8j" path="res://Palettes/blue_palette.png" id="8_jl2vf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5jhu"]
+resource_local_to_scene = true
+shader = ExtResource("6_gb0b6")
+shader_parameter/firstFrame = true
+shader_parameter/palette = ExtResource("8_jl2vf")
+
+[node name="GameOverMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_71a1u")
+gameScene = ExtResource("2_bfg1c")
+menuScene = ExtResource("3_2nsdl")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -93.5
+offset_top = -61.5
+offset_right = 93.5
+offset_bottom = 61.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="GAMEOVER" type="Label" parent="VBox"]
+layout_mode = 2
+text = "GAMEOVER"
+label_settings = ExtResource("5_31l7n")
+horizontal_alignment = 1
+language = "en"
+
+[node name="RetryButton" type="Button" parent="VBox"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../ExitButton")
+focus_neighbor_bottom = NodePath("../MainMenuButton")
+theme_override_fonts/font = ExtResource("6_rb10o")
+text = "Try again"
+
+[node name="MainMenuButton" type="Button" parent="VBox"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../RetryButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
+theme_override_fonts/font = ExtResource("6_rb10o")
+text = "Main menu"
+
+[node name="ExitButton" type="Button" parent="VBox"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../MainMenuButton")
+focus_neighbor_bottom = NodePath("../RetryButton")
+theme_override_fonts/font = ExtResource("6_rb10o")
+text = "Exit"
+
+[node name="ShaderPlaceholder" parent="." instance=ExtResource("6_o6ux7")]
+material = SubResource("ShaderMaterial_l5jhu")
+
+[connection signal="pressed" from="VBox/RetryButton" to="." method="OnRetryButtonPressed"]
+[connection signal="pressed" from="VBox/MainMenuButton" to="." method="OnMenuButtonPressed"]
+[connection signal="pressed" from="VBox/ExitButton" to="." method="OnExitButtonPressed"]

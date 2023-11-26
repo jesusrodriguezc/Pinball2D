@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://46ubn6t0slfa"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/ShooterLane.cs" id="1_lfa4p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vcuaf"]
+size = Vector2(20, 10)
+
+[node name="ShooterLane" type="Area2D"]
+collision_layer = 2
+script = ExtResource("1_lfa4p")
+ShotterLanePower = 10000
+MaxPowerHoldTime = 2.0
+
+[node name="CollisionArea" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_vcuaf")

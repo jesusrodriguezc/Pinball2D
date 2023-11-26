@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://dtdupns0b3vly"]
+
+[ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="1_qtulf"]
+
+[resource]
+line_spacing = 24.0
+font = ExtResource("1_qtulf")
+font_size = 48

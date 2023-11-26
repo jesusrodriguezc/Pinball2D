@@ -1,0 +1,94 @@
+[gd_scene load_steps=10 format=3 uid="uid://b3k8b7kbea58p"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/BonusLane.cs" id="1_w4xo0"]
+[ext_resource type="Texture2D" uid="uid://d6bjnljj6raf" path="res://Assets/BonusLane/bonus_lane-sheet.png" id="2_i82ro"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ukeyc"]
+radius = 3.0
+
+[sub_resource type="Animation" id="Animation_2abfl"]
+resource_name = "Disabled"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BonusLane:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [3, 2, 1, 0]
+}
+
+[sub_resource type="Animation" id="Animation_htr34"]
+resource_name = "active"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BonusLane:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_665ef"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BonusLane:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wyh71"]
+_data = {
+"Disabled": SubResource("Animation_2abfl"),
+"Enabled": SubResource("Animation_htr34"),
+"RESET": SubResource("Animation_665ef")
+}
+
+[sub_resource type="Gradient" id="Gradient_oml8d"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jc6mf"]
+gradient = SubResource("Gradient_oml8d")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.491453, 0.5)
+fill_to = Vector2(0.884615, 0.141026)
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_w4xo0")
+
+[node name="BonusLane" type="Sprite2D" parent="."]
+texture = ExtResource("2_i82ro")
+hframes = 2
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ukeyc")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_wyh71")
+}
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, 2.38419e-07)
+scale = Vector2(0.5, 0.5)
+energy = 0.5
+texture = SubResource("GradientTexture2D_jc6mf")

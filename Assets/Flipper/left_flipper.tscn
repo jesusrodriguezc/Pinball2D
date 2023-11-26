@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=3 uid="uid://b7u8gr8pt5tuv"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/Flipper.cs" id="1_id8jy"]
+[ext_resource type="Texture2D" uid="uid://bif4vjda4e2v2" path="res://Assets/Flipper/flipper_left_small.png" id="2_vqvb1"]
+[ext_resource type="Texture2D" uid="uid://bdijv5nxxbgx1" path="res://Assets/Flipper/flipper_left.png_normal.png" id="3_uqjmn"]
+[ext_resource type="AudioStream" uid="uid://dqul6ym6rlnyy" path="res://SFX/flipper.wav" id="4_lv73c"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7f8h3"]
+friction = 0.0
+bounce = 0.25
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_7s777"]
+diffuse_texture = ExtResource("2_vqvb1")
+normal_texture = ExtResource("3_uqjmn")
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_cevpl"]
+polygon = PackedVector2Array(35, -10, 37, -10, 37, -9, 38, -9, 38, -7, 39, -7, 39, -1, 38, -1, 38, 1, 37, 1, 37, 2, 35, 2, 35, 3, 28, 3, 28, 4, 21, 4, 21, 5, 13, 5, 13, 6, 6, 6, 6, 7, -1, 7, -1, 8, -8, 8, -8, 9, -16, 9, -16, 10, -24, 10, -24, 11, -32, 11, -32, 10, -34, 10, -34, 9, -35, 9, -35, 8, -36, 8, -36, 7, -37, 7, -37, 6, -38, 6, -38, 4, -39, 4, -39, -4, -38, -4, -38, -6, -37, -6, -37, -7, -36, -7, -36, -8, -35, -8, -35, -9, -34, -9, -34, -10, -32, -10, -32, -11, 35, -11)
+
+[node name="AnimatableBody2D" type="AnimatableBody2D"]
+collision_layer = 2
+physics_material_override = SubResource("PhysicsMaterial_7f8h3")
+constant_angular_velocity = 0.174533
+script = ExtResource("1_id8jy")
+isLeftFlipper = true
+RotationMax = 75.0
+RotationFrameDuration = 6.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(6.6, -12.8)
+polygon = PackedVector2Array(63.4, 0.8, -17.6, 0.799999, -17.6, 28.8, 63.4, 28.8)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(8.6, -3.8)
+texture = SubResource("CanvasTexture_7s777")
+offset = Vector2(20.1443, 3.78757)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+position = Vector2(29, 0)
+occluder = SubResource("OccluderPolygon2D_cevpl")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_lv73c")
