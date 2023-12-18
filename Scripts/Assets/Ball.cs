@@ -1,4 +1,5 @@
 using Godot;
+using Pinball.Scripts.Utils;
 using System.Linq;
 using static PinballController;
 
@@ -26,31 +27,35 @@ public partial class Ball : RigidBody2D {
 	public Status currentStatus;
 
 	private Vector2 initialPosition;
+	private AudioComponent _audioComponent;
+	private readonly StringName DEAD = "Dead";
 
 	public override void _Ready () {
 
-		var bumperGroup = GetNodeOrNull("/root/Main/Bumpers");
-		if (bumperGroup != null) {
-			foreach (var bumper in bumperGroup.GetChildren().OfType<Bumper>()) {
-				bumper.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
-			}
+		var bumpers = Nodes.findByClass<Bumper>(GetTree().Root);
+		foreach (var bumper in bumpers) {
+			bumper.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
 		}
 
-		var slingshotGroup = GetNodeOrNull("/root/Main/Slingshots");
-		if (slingshotGroup != null) {
-			foreach (var slingshot in slingshotGroup.GetChildren().OfType<Slingshot>()) {
-				slingshot.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
-			}
+		var slingshots = Nodes.findByClass<Slingshot>(GetTree().Root);
+		foreach (var slingshot in slingshots) {
+			slingshot.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
 		}
 
-		var shooterLane = GetNodeOrNull<ShooterLane>("/root/Main/ShooterLane");
-		if (shooterLane != null) {
+		var shooterLanes = Nodes.findByClass<ShooterLane>(GetTree().Root);
+		foreach (var shooterLane in shooterLanes) {
 			shooterLane.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
 		}
 
-		var deathZone = GetNodeOrNull<Deathzone>("/root/Main/Deathzone");
-		if (deathZone != null) {
+		var deathZones = Nodes.findByClass<Deathzone>(GetTree().Root);
+		foreach (var deathZone in deathZones) {
 			deathZone.BodyEntered += _OnDeathzoneBodyEntered;
+		}
+
+		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
+		if (_audioComponent != null) {
+			_audioComponent.AddAudio(DEAD, ResourceLoader.Load<AudioStream>("res://SFX/deathzone_enter.wav"));
+
 		}
 
 		initialPosition = GlobalPosition;
@@ -101,6 +106,8 @@ public partial class Ball : RigidBody2D {
 	private void _OnDeathzoneBodyEntered (Node2D body) {
 		if (body != this) return;
 
+		_audioComponent?.Play(DEAD, AudioComponent.SFX_BUS);
+
 		currentStatus = Status.DEAD;
 
 		EmitSignal(SignalName.Death, this);
@@ -115,12 +122,18 @@ public partial class Ball : RigidBody2D {
 	}
 
 	public void SetLevel (int level) {
-		var collisionMaskActual = CollisionMask;
+		if (level == 0) { return; }
+
+		GD.Print($"[Pre-Ball.SetLevel({level})] CollisionMask = {CollisionMask} - ZIndex = {ZIndex}");
+
+		//var collisionMaskActual = CollisionMask;
 		CollisionMask &= 0b0011;
 
 		SetCollisionMaskValue(level, true);
 
 		ZIndex = LayerManager.GetZLevel(level);
+
+		GD.Print($"[Post-Ball.SetLevel({level})] CollisionMask = {CollisionMask} - ZIndex = {ZIndex}");
 
 
 	}

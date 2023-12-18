@@ -3,33 +3,26 @@ using System;
 
 public partial class GameOverMenu : Control
 {
-	[Export] PackedScene gameScene;
-	[Export] PackedScene menuScene;
+	private SceneSwitcher sceneSwitcher;
+
 	public override void _Ready()
 	{
-		GetNode<Button>("VBox/RetryButton").GrabFocus();
+		sceneSwitcher = GetNodeOrNull<SceneSwitcher>("/root/SceneSwitcher");
+
 	}
 
 	private void OnRetryButtonPressed () {
-		if (gameScene == null) {
-			return;
-		}
-		
-		GetTree().ChangeSceneToPacked(gameScene);
+		sceneSwitcher?.GotoScene("res://Escenas/GameScene.tscn");
 	}
 
 
 	private void OnMenuButtonPressed () {
-		if (gameScene == null) {
-			return;
-		}
-		GetTree().ChangeSceneToPacked(menuScene);
+		sceneSwitcher?.GotoScene("res://Escenas/MainMenu.tscn");
 	}
 
 
 	private void OnExitButtonPressed () {
 		GetTree().Quit();
-
 	}
 }
 

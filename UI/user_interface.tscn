@@ -1,11 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7c7gyfni5vjd"]
+[gd_scene load_steps=3 format=3 uid="uid://c7c7gyfni5vjd"]
 
 [ext_resource type="Script" path="res://Scripts/UI/GameUI.cs" id="1_k5vy0"]
+[ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_pp32x"]
 
 [node name="VBoxContainer" type="VBoxContainer"]
 offset_left = 68.0
 offset_right = 68.0
 offset_bottom = 40.0
+theme = ExtResource("1_pp32x")
+theme_override_constants/separation = 8
 script = ExtResource("1_k5vy0")
 
 [node name="FPS" type="Label" parent="."]
@@ -21,13 +24,14 @@ text = "Score: 0
 layout_mode = 2
 text = "Lives: 0"
 
-[node name="Light energy" type="Label" parent="."]
+[node name="Gravity" type="Label" parent="."]
 layout_mode = 2
-text = "Light energy"
+text = "Gravity
+"
 
-[node name="Light" type="HSlider" parent="."]
+[node name="GravitySlider" type="HSlider" parent="."]
 layout_mode = 2
 max_value = 2.0
 step = 0.05
 
-[connection signal="drag_ended" from="Light" to="." method="OnLightValueChanged"]
+[connection signal="drag_ended" from="GravitySlider" to="." method="OnGravityValueChanged"]

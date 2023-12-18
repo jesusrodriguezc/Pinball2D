@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://b2k5k6gh6ggy7"]
+[gd_scene load_steps=16 format=3 uid="uid://b2k5k6gh6ggy7"]
 
 [ext_resource type="Script" path="res://Scripts/Assets/Bumper.cs" id="1_6y8gu"]
 [ext_resource type="PackedScene" uid="uid://b5kcmv1g2lqm2" path="res://Components/SpriteManagerComponent.tscn" id="2_7j4u4"]
 [ext_resource type="Texture2D" uid="uid://k1ab4u46125" path="res://Assets/Bumper/bumper_powerup_animation.png" id="2_g0ynk"]
 [ext_resource type="Texture2D" uid="uid://bkpaie781lt8d" path="res://Assets/Bumper/bumper_animation-sheet.png" id="3_olycd"]
 [ext_resource type="PackedScene" uid="uid://cy3dvu3unu2uo" path="res://Components/ScoreComponent.tscn" id="5_amtdr"]
+[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="6_kpp4q"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pwd13"]
 friction = 0.0
@@ -190,3 +191,5 @@ vframes = 4
 
 [node name="ScoreComponent" parent="." instance=ExtResource("5_amtdr")]
 BaseScore = 1000.0
+
+[node name="AudioComponent" parent="." instance=ExtResource("6_kpp4q")]

@@ -1,14 +1,21 @@
 ﻿using Godot;
 using Pinball.Utils;
 
+[Tool]
 public partial class Slingshot : StaticBody2D {
 	private AnimationPlayer _animationPlayer;
 	private ScoreComponent _scoreComponent;
+	private AudioComponent _audioComponent;
+
+	public readonly StringName HIT = "Hit";
+	public readonly StringName CLICK = "Click";
 
 	private Area2D collisionArea;
 
 	private Vector2 perfectDirection;
 	private Vector2 horizontal;
+	private Vector2 lastDirImpulso;
+
 	// Called when the node enters the scene tree for the first time.
 
 	[Signal]
@@ -23,6 +30,12 @@ public partial class Slingshot : StaticBody2D {
 	public bool EvenlyDistributedPower { get; set; }
 	public override void _Ready () {
 		_animationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
+		if (_audioComponent != null) {
+			_audioComponent.AddAudio(CLICK, ResourceLoader.Load<AudioStream>("res://SFX/slingshot_click.wav"));
+			_audioComponent.AddAudio(HIT, ResourceLoader.Load<AudioStream>("res://SFX/slingshot_hit_2.wav"));
+
+		}
 
 		collisionArea = GetNodeOrNull<Area2D>("CollisionArea");
 
@@ -44,17 +57,19 @@ public partial class Slingshot : StaticBody2D {
 		}
 
 		Ball currBall = (Ball)node;
-		if (!PinballController.Instance.Balls.Contains(currBall)) {
+		if (PinballController.Instance.Ball != currBall) {
 			GD.PrintErr("La pelota no esta en la lista de pelotas.");
 			return;
 		}
 
 		// Calculamos el vector entre la bola y el bumper.
 
-		Vector2 dirImpulso = CalculateImpulseDirection(currBall);
+		lastDirImpulso = CalculateImpulseDirection(currBall);
+		QueueRedraw();
 		_animationPlayer?.Play("on_collision");
-
-		EmitSignal(SignalName.Impulse, currBall, dirImpulso * HitPower);
+		_audioComponent?.Play(CLICK, AudioComponent.SFX_BUS);
+		_audioComponent?.Play(HIT, 0.1f);
+		EmitSignal(SignalName.Impulse, currBall, lastDirImpulso * HitPower);
 		_scoreComponent?.AddScore();
 
 	}
@@ -65,16 +80,16 @@ public partial class Slingshot : StaticBody2D {
 
 		Vector2 golpeRecto, golpeLateral;
 		if (EvenlyDistributedPower) {
-			golpeRecto = perfectDirection * 2f + 0f * hitVector * 0.25f;
-			golpeLateral = Vector2.Zero;
+			golpeRecto = perfectDirection * 4f;
+			golpeLateral = hitVector * 0.5f;
 		} 
 		else {
 			var forceDistributionPerc = Mathx.SlingshotDistribution(vectorProximity);
 			golpeRecto = perfectDirection * forceDistributionPerc;
-			golpeLateral = hitVector * (1 - forceDistributionPerc) * 0.25f;
+			golpeLateral = hitVector * (1 - forceDistributionPerc) * 0.5f;
 		}
 
-		return golpeRecto + golpeLateral;
+		return (golpeRecto + golpeLateral) / 2f;
 	}
 
 	private void _OnRelease (Node node) {
@@ -85,7 +100,7 @@ public partial class Slingshot : StaticBody2D {
 		}
 
 		Ball currBall = (Ball)node;
-		if (!PinballController.Instance.Balls.Contains(currBall)) {
+		if (PinballController.Instance.Ball != currBall) {
 			GD.Print("La pelota no esta en la lista de pelotas.");
 			return;
 		}
@@ -93,5 +108,11 @@ public partial class Slingshot : StaticBody2D {
 
 	}
 
+	public override void _Draw () {
+		GD.Print($"Dibujando pepinatso: {lastDirImpulso}");
+		DrawLine(Vector2.Zero, lastDirImpulso.Rotated(-this.Rotation) * HitPower, Colors.Red, 4f);
+	}
+
 }
+
 

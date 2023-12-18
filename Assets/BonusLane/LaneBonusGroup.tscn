@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://8wbtmaw03d7i"]
+[gd_scene load_steps=4 format=3 uid="uid://8wbtmaw03d7i"]
 
 [ext_resource type="Script" path="res://Scripts/BonusInfo.cs" id="1_u3cgj"]
+[ext_resource type="AudioStream" uid="uid://bf6ferj70n64e" path="res://SFX/powerup.wav" id="2_gjnup"]
+[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="3_60phd"]
 
 [node name="ReentryLaneBonus" type="Node2D" node_paths=PackedStringArray("elements")]
 script = ExtResource("1_u3cgj")
@@ -10,3 +12,9 @@ elements = []
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_gjnup")
+volume_db = -10.0
+
+[node name="AudioComponent" parent="." instance=ExtResource("3_60phd")]

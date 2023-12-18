@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://dn0oy12w8ujny"]
+[gd_scene load_steps=13 format=3 uid="uid://dn0oy12w8ujny"]
 
 [ext_resource type="Script" path="res://Scripts/Assets/Slingshot.cs" id="1_3rkph"]
 [ext_resource type="Texture2D" uid="uid://d2bnhi8neow7m" path="res://Assets/Slingshot/slingshot.png" id="1_bhqkn"]
+[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="4_bf0p5"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iow5l"]
 friction = 0.0
@@ -121,3 +122,5 @@ texture = SubResource("GradientTexture2D_sw0i0")
 libraries = {
 "": SubResource("AnimationLibrary_5wf00")
 }
+
+[node name="AudioComponent" parent="." instance=ExtResource("4_bf0p5")]

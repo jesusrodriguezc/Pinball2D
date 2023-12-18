@@ -31,7 +31,31 @@ public partial class Flipper : AnimatableBody2D {
 
 	public bool buttonPressed = false;
 
-	AudioStreamPlayer audioStreamPlayer;
+	private AudioComponent _audioComponent;
+
+	public readonly StringName HIT = "Hit";
+
+
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready () {
+		//currentStatus = Status.IDLE;
+
+		idleRotation = Rotation;
+		rotationDuration = RotationFrameDuration / 120f;
+		rotationSpeed = Mathf.DegToRad(RotationMax) / rotationDuration;
+
+		if (isLeftFlipper) {
+			hitRotation = Rotation - Mathf.DegToRad(RotationMax);
+		} else {
+			hitRotation = Rotation + Mathf.DegToRad(RotationMax);
+		}
+
+		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
+		if (_audioComponent != null) {
+			_audioComponent.AddAudio(HIT, ResourceLoader.Load<AudioStream>("res://SFX/flipper_press.wav"));
+
+		}
+	}
 
 	public override void _Input (InputEvent @event) {
 		if (currentStatus == Status.GAMEOVER) {
@@ -48,7 +72,9 @@ public partial class Flipper : AnimatableBody2D {
 						break;
 					}
 					buttonPressed = key.IsPressed();
-					if (buttonPressed) audioStreamPlayer.Play();
+					if (buttonPressed) {
+						_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
+					}
 					break;
 				case Key.E:
 					if (isLeftFlipper) {
@@ -58,27 +84,12 @@ public partial class Flipper : AnimatableBody2D {
 						break;
 					}
 					buttonPressed = key.IsPressed();
-					if (buttonPressed) audioStreamPlayer.Play();
+					if (buttonPressed) {
+						_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
+					}
 					break;
 			}
 		}
-	}
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready () {
-		//currentStatus = Status.IDLE;
-
-		idleRotation = Rotation;
-		rotationDuration = RotationFrameDuration / 120f;
-		rotationSpeed = Mathf.DegToRad(RotationMax) / rotationDuration;
-
-		if (isLeftFlipper) {
-			hitRotation = Rotation - Mathf.DegToRad(RotationMax);
-		} else {
-			hitRotation = Rotation + Mathf.DegToRad(RotationMax);
-		}
-
-		audioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
 	}
 
 	public override void _Process (double delta) {

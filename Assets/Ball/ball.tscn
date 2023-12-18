@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://uuk4ox1idhce"]
+[gd_scene load_steps=9 format=3 uid="uid://uuk4ox1idhce"]
 
 [ext_resource type="Script" path="res://Scripts/Assets/Ball.cs" id="1_qoyix"]
 [ext_resource type="Texture2D" uid="uid://bu5xwoo7sgbjn" path="res://Assets/Ball/ball.png" id="2_em5k0"]
+[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="3_6ffcx"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_g8rgw"]
 friction = 0.0
@@ -48,3 +49,5 @@ texture = SubResource("GradientTexture2D_a1i3i")
 scale = Vector2(0.5, 0.5)
 occluder = SubResource("OccluderPolygon2D_v0gfe")
 occluder_light_mask = 6
+
+[node name="AudioComponent" parent="." instance=ExtResource("3_6ffcx")]

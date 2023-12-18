@@ -1,17 +1,36 @@
-[gd_scene load_steps=8 format=3 uid="uid://dfujrtg01b34v"]
+[gd_scene load_steps=11 format=3 uid="uid://dfujrtg01b34v"]
 
+[ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_37sgk"]
 [ext_resource type="Script" path="res://Scripts/UI/MainMenu.cs" id="1_ik6wg"]
-[ext_resource type="PackedScene" uid="uid://d2nxno0i2sfan" path="res://Assets/ShaderPlaceholder.tscn" id="2_hdlul"]
-[ext_resource type="PackedScene" uid="uid://cb7aph7p675a8" path="res://Escenas/MainScene.tscn" id="2_mdv4h"]
-[ext_resource type="Shader" path="res://Shaders/BluePalette.gdshader" id="2_tsmfj"]
+[ext_resource type="PackedScene" uid="uid://cb7aph7p675a8" path="res://Escenas/GameScene.tscn" id="3_jx1nn"]
 [ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="3_oh02j"]
-[ext_resource type="Texture2D" uid="uid://ggw0a3rmao8j" path="res://Palettes/blue_palette.png" id="4_tec20"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b4jrk"]
-resource_local_to_scene = true
-shader = ExtResource("2_tsmfj")
-shader_parameter/firstFrame = true
-shader_parameter/palette = ExtResource("4_tec20")
+[sub_resource type="Gradient" id="Gradient_mxmr4"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fmnoj"]
+gradient = SubResource("Gradient_mxmr4")
+fill_from = Vector2(1, 0.1)
+fill_to = Vector2(1, 0.8)
+metadata/_snap_enabled = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_6jh72"]
+line_spacing = 16.0
+font = ExtResource("3_oh02j")
+font_size = 48
+outline_size = 2
+shadow_size = 5
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_cyxoj"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_31qxq"]
+font = ExtResource("3_oh02j")
+font_size = 24
+outline_size = 1
+shadow_size = 5
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_l1f28"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -20,48 +39,101 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_37sgk")
 script = ExtResource("1_ik6wg")
-gameScene = ExtResource("2_mdv4h")
+gameScene = ExtResource("3_jx1nn")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+scale = Vector2(20, 11.25)
+texture = SubResource("GradientTexture2D_fmnoj")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+offset_left = 189.0
+offset_top = 176.0
+offset_right = 1092.0
+offset_bottom = 273.0
+theme_override_font_sizes/font_size = 32
+text = "SHADED PINBALL"
+label_settings = SubResource("LabelSettings_6jh72")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -93.5
-offset_top = -61.5
-offset_right = 93.5
-offset_bottom = 61.5
+offset_left = -152.0
+offset_top = -134.0
+offset_right = 152.0
+offset_bottom = -130.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_cyxoj")
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -451.5
+offset_top = -130.5
+offset_right = 451.5
+offset_bottom = -33.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "by BlackHowler"
+label_settings = SubResource("LabelSettings_31qxq")
+horizontal_alignment = 1
+
+[node name="Menu" type="VBoxContainer" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -55.0
+offset_right = 128.0
+offset_bottom = 105.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = SubResource("Theme_l1f28")
 alignment = 1
 
-[node name="Label" type="Label" parent="VBox"]
+[node name="StartButton" type="Button" parent="Menu"]
+custom_minimum_size = Vector2(256, 20)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_oh02j")
-theme_override_font_sizes/font_size = 32
-text = "BLACKHOWLER'S PINBALL"
-
-[node name="StartButton" type="Button" parent="VBox"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("3_oh02j")
 text = "Start"
 
-[node name="OptionsButton" type="Button" parent="VBox"]
+[node name="OptionsButton" type="Button" parent="Menu"]
+custom_minimum_size = Vector2(256, 20)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_oh02j")
 text = "Options"
 
-[node name="ExitButton" type="Button" parent="VBox"]
+[node name="CreditsButton" type="Button" parent="Menu"]
+custom_minimum_size = Vector2(256, 20)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_oh02j")
+text = "Credits"
+
+[node name="ExitButton" type="Button" parent="Menu"]
+custom_minimum_size = Vector2(256, 20)
+layout_mode = 2
 text = "Exit"
 
-[node name="ShaderPlaceholder" parent="." instance=ExtResource("2_hdlul")]
-material = SubResource("ShaderMaterial_b4jrk")
-
-[connection signal="pressed" from="VBox/StartButton" to="." method="OnStartButtonPressed"]
-[connection signal="pressed" from="VBox/OptionsButton" to="." method="OnOptionsButtonPressed"]
-[connection signal="pressed" from="VBox/ExitButton" to="." method="OnExitButtonPressed"]
+[connection signal="pressed" from="Menu/StartButton" to="." method="OnStartButtonPressed"]
+[connection signal="pressed" from="Menu/OptionsButton" to="." method="OnOptionsButtonPressed"]
+[connection signal="pressed" from="Menu/CreditsButton" to="." method="OnCreditsButtonPressed"]
+[connection signal="pressed" from="Menu/ExitButton" to="." method="OnExitButtonPressed"]

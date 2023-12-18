@@ -15,5 +15,12 @@ namespace Pinball.Utils {
 			return Mathf.Abs(x - y) <= Mathf.Abs(maxDiff);
 		}
 
+		public static double Linear2Db(double value) {
+			return 20d * Math.Log(value);
+		}
+		public static double Db2Linear (double value) {
+			return Math.Pow(value, Math.E) / 20d;
+		}
+
 	}
 }

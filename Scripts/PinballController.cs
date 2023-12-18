@@ -27,32 +27,25 @@ public partial class PinballController : Node {
 
 	[Export]
 	public int LivesLeft { get; set; }
-	public List<Ball> Balls { get; set; }
+	public Ball Ball { get; set; }
 
 	public ScoringController ScoreCtrl;
-	private PackedScene gameOverMenu;
 
 	public override void _Ready () {
 		_instance = this;
 
-		Balls = GetChildren().OfType<Ball>().ToList();
+		Ball = GetChildren().OfType<Ball>().ToList().First();
 
 		ScoreCtrl = new ScoringController(GetTree().Root);
 
-		Balls.ForEach(ball => { ball.Death += RemoveLive; });
-
-		gameOverMenu = ResourceLoader.Load<PackedScene>("res://Escenas/GameOverMenu.tscn");
-
-
-
-
+		Ball.Death += RemoveLive;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process (double delta) {
 		if (LivesLeft <= 0) {
 			GD.Print("Hemos perdido");
-			Balls.ForEach(ball => { ball.currentStatus = Ball.Status.GAMEOVER; });
+			Ball.currentStatus = Ball.Status.GAMEOVER;
 			Gameover();
 
 
@@ -70,14 +63,8 @@ public partial class PinballController : Node {
 	}
 
 	public void Gameover () {
-		if (gameOverMenu == null) {
-			return;
-		}
-
-		if (gameOverMenu == null) {
-			return;
-		}
-		GetTree().ChangeSceneToPacked(gameOverMenu);
+		var global = GetNode<SceneSwitcher>("/root/SceneSwitcher");
+		global.GotoScene("res://Escenas/GameOverMenu.tscn");
 	}
 
 

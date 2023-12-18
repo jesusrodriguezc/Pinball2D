@@ -2,6 +2,9 @@ using Godot;
 
 public partial class BonusLane : Area2D {
 	private AnimationPlayer _animationPlayer;
+	private AudioComponent _audioComponent;
+
+	public readonly StringName SWITCH = "Switch";
 
 	public bool Active { get; private set; }
 	public bool Blocked { get; set; } = false;
@@ -11,7 +14,10 @@ public partial class BonusLane : Area2D {
 	public override void _Ready () {
 
 		_animationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
-
+		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
+		if (_audioComponent != null) {
+			_audioComponent.AddAudio(SWITCH, ResourceLoader.Load<AudioStream>("res://SFX/bonuslane_switch.wav"));
+		}
 		BodyEntered += ChangeStatus;
 
 	}
@@ -38,12 +44,15 @@ public partial class BonusLane : Area2D {
 
 	public void Enable () {
 		Active = true;
-		_animationPlayer.Play("Enabled");
+		_animationPlayer?.Play("Enabled");
+		_audioComponent?.Play(SWITCH, AudioComponent.SFX_BUS);
 	}
 
 	public void Disable () {
 		Active = false;
-		_animationPlayer.Play("Disabled");
+		_animationPlayer?.Play("Disabled");
+		_audioComponent?.Play(SWITCH, AudioComponent.SFX_BUS);
+
 	}
 	public void Reset () {
 		Blocked = false;

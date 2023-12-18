@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://b3k8b7kbea58p"]
+[gd_scene load_steps=11 format=3 uid="uid://b3k8b7kbea58p"]
 
 [ext_resource type="Script" path="res://Scripts/Assets/BonusLane.cs" id="1_w4xo0"]
 [ext_resource type="Texture2D" uid="uid://d6bjnljj6raf" path="res://Assets/BonusLane/bonus_lane-sheet.png" id="2_i82ro"]
+[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="3_ym00d"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ukeyc"]
 radius = 3.0
@@ -92,3 +93,5 @@ position = Vector2(0, 2.38419e-07)
 scale = Vector2(0.5, 0.5)
 energy = 0.5
 texture = SubResource("GradientTexture2D_jc6mf")
+
+[node name="AudioComponent" parent="." instance=ExtResource("3_ym00d")]

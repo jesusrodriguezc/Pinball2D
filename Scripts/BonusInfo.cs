@@ -14,12 +14,18 @@ public partial class BonusInfo : Node2D {
 	[Export]
 	public double Duration { get; set; }
 	public bool Active { get; set; }
-	public Timer timer { get; set; }
-
-	private BonusLane[] lanes;
 	private bool allActive = false;
+
+	#region Elements
 	[Export]
 	private Node[] elements;
+	private BonusLane[] lanes;
+	public Timer timer { get; set; }
+
+	private AudioComponent _audioComponent;
+
+	public readonly StringName POWERUP = "Powerup";
+	#endregion
 
 	public override void _Ready () {
 
@@ -28,6 +34,10 @@ public partial class BonusInfo : Node2D {
 		timer = GetNodeOrNull<Timer>("Timer");
 		timer.Timeout += Off;
 
+		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
+		if (_audioComponent != null) {
+			_audioComponent.AddAudio(POWERUP, ResourceLoader.Load<AudioStream>("res://SFX/powerup.wav"));
+		}
 
 	}
 
@@ -50,6 +60,7 @@ public partial class BonusInfo : Node2D {
 			EmitSignal(SignalName.Bonus, element, true);
 
 		}
+		_audioComponent.Play(POWERUP, AudioComponent.SFX_BUS);
 		timer.Start(duration ?? Duration);
 	}
 

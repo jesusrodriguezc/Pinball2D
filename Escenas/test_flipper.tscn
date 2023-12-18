@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_qxhib"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_yix0e"]
 [ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="4_ec1oo"]
-[ext_resource type="PackedScene" uid="uid://38xq64i6x6gq" path="res://Assets/Bumper/bumper.tscn" id="5_w4h2i"]
+[ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Assets/Slingshot/slingshot.tscn" id="4_tdg6g"]
 [ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/trigger_area.tscn" id="5_xd2a3"]
 
 [sub_resource type="Gradient" id="Gradient_b81lh"]
@@ -64,15 +64,15 @@ mass = 5.0
 gravity_scale = 0.5
 max_contacts_reported = 10
 contact_monitor = true
-DebugPower = 500
+DebugPower = 5000
 MaxVelocity = 1000.0
 
-[node name="Bumpers" type="Node2D" parent="."]
+[node name="Slingshots" type="Node2D" parent="."]
 position = Vector2(-289, 56)
 
-[node name="Bumper" parent="Bumpers" instance=ExtResource("5_w4h2i")]
-position = Vector2(192, 8)
-HitPower = 30000.0
+[node name="Slingshot" parent="Slingshots" instance=ExtResource("4_tdg6g")]
+position = Vector2(144, 8)
+HitPower = 6000.0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 collision_layer = 2
@@ -87,7 +87,6 @@ scale = Vector2(0.298677, 2.3011)
 collision_layer = 2
 collision_mask = 1
 Type = 0
-inLayer = 3
 outLayer = 4
 
 [node name="In" type="CollisionShape2D" parent="Entrada"]
@@ -100,7 +99,6 @@ scale = Vector2(0.36, 2.20551)
 collision_layer = 2
 collision_mask = 1
 Type = 0
-inLayer = 4
 outLayer = 3
 
 [node name="In" type="CollisionShape2D" parent="Seguro antifuga"]

@@ -1,10 +1,17 @@
 using Godot;
 
 public partial class Bumper : StaticBody2D {
+	private Area2D _collisionArea;
 	private AnimationPlayer _animationPlayer;
+
+	#region Components
 	private SpriteManagerComponent _spriteManager;
 	private ScoreComponent _scoreComponent;
-	private Area2D _collisionArea;
+	private AudioComponent _audioComponent;
+	#endregion
+
+	public readonly StringName HIT = "Hit";
+
 
 	[Signal]
 	public delegate void ImpulseEventHandler (Node2D nodeAffected, Vector2 impulse);
@@ -14,16 +21,21 @@ public partial class Bumper : StaticBody2D {
 
 	public override void _Ready () {
 		_animationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
-		_spriteManager = GetNodeOrNull<SpriteManagerComponent>("SpriteManagerComponent");
-		_scoreComponent = GetNodeOrNull<ScoreComponent>("ScoreComponent");
-		_collisionArea = GetNodeOrNull<Area2D>("CollisionArea");
 
+		_collisionArea = GetNode<Area2D>("CollisionArea");
 		_collisionArea.BodyEntered += _OnCollision;
 		_collisionArea.BodyExited += _OnRelease;
-
 		_collisionArea.CollisionLayer = CollisionLayer;
 
+		_spriteManager = GetNodeOrNull<SpriteManagerComponent>("SpriteManagerComponent");
 		_spriteManager.ChangeTexture(0);
+
+		_scoreComponent = GetNodeOrNull<ScoreComponent>("ScoreComponent");
+		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
+		if (_audioComponent != null) {
+			_audioComponent.AddAudio(HIT, ResourceLoader.Load<AudioStream>("res://SFX/bumper_hit.wav"));
+		}
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -37,15 +49,15 @@ public partial class Bumper : StaticBody2D {
 		}
 
 		Ball currBall = (Ball)node;
-		if (!PinballController.Instance.Balls.Contains(currBall)) {
+		if (PinballController.Instance.Ball != currBall) {
 			GD.PrintErr("La pelota no esta en la lista de pelotas.");
 			return;
 		}
 
 		Vector2 dirImpulso = (currBall.GlobalPosition - GlobalPosition).Normalized();
 
-		_animationPlayer.Play("on_collision");
-
+		_animationPlayer?.Play("on_collision");
+		_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
 		EmitSignal(SignalName.Impulse, currBall, dirImpulso * HitPower);
 		AddScore();
 	}
@@ -62,11 +74,11 @@ public partial class Bumper : StaticBody2D {
 		}
 
 		Ball currBall = (Ball)node;
-		if (!PinballController.Instance.Balls.Contains(currBall)) {
+		if (PinballController.Instance.Ball != currBall) {
 			GD.Print("La pelota no esta en la lista de pelotas.");
 		}
 
-		_animationPlayer.Play("on_release");
+		_animationPlayer?.Play("on_release");
 	}
 
 

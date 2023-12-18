@@ -4,34 +4,40 @@ using System;
 public partial class MainMenu : Control
 {
 	[Export] PackedScene gameScene;
+	[Export] PackedScene creditsScene;
 	[Export] PackedScene optionsScene;
+	private SceneSwitcher sceneSwitcher;
 
 	public override void _Ready () {
-		GetNode<Button>("VBox/StartButton").GrabFocus();
+		sceneSwitcher = GetNodeOrNull<SceneSwitcher>("/root/SceneSwitcher");
+
 	}
 	private void OnStartButtonPressed () {
-		if (gameScene == null) {
-			return;
-		}
-		GetTree().ChangeSceneToFile("res://Escenas/MainScene.tscn");
-		//GetTree().ChangeSceneToPacked(gameScene);
-		
+		sceneSwitcher?.GotoScene("res://Escenas/GameScene.tscn");
 	}
 
 
 	private void OnOptionsButtonPressed () {
-		if (optionsScene == null) {
-			return;
-		}
-		//var optionsScene = ResourceLoader.Load<PackedScene>(optionsScenePath).Instantiate();
-		GetTree().CurrentScene.AddChild(optionsScene.Instantiate());
+		sceneSwitcher?.GotoScene("res://Escenas/SettingsMenu.tscn");
 	}
 
 
 	private void OnExitButtonPressed () {
 		GetTree().Quit();
 	}
+	
+	private void OnCreditsButtonPressed()
+	{
+		if (creditsScene == null) {
+			return;
+		}
+
+		sceneSwitcher?.GotoScene("res://Escenas/CreditsScene.tscn");
+	}
 }
+
+
+
 
 
 

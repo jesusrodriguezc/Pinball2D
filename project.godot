@@ -10,11 +10,23 @@ config_version=5
 
 [application]
 
-config/name="Pinball"
+config/name="Shaded Pinball"
 run/main_scene="res://Escenas/MainMenu.tscn"
 config/features=PackedStringArray("4.1", "C#", "Mobile")
 run/max_fps=120
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="res://SFX/default_bus_layout.tres"
+
+[autoload]
+
+GlobalAudioSystem="*res://AutoLoad/GlobalAudioSystem.tscn"
+SaveManager="*res://Scripts/Autoload/SaveManager.cs"
+SettingsManager="*res://Scripts/Autoload/SettingsManager.cs"
+SceneSwitcher="*res://Scripts/Autoload/SceneSwitcher.cs"
+ShaderPlaceholder="*res://AutoLoad/ShaderPlaceholder.tscn"
 
 [display]
 

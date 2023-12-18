@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_5yvl5"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_1x3cs"]
-[ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Components/Ball/ball.tscn" id="4_0ml7y"]
-[ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Components/Slingshot/slingshot.tscn" id="6_jcyy1"]
-[ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Components/Flipper/left_flipper.tscn" id="7_3nyud"]
-[ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Components/Map/Mapa.tscn" id="8_k8cuc"]
+[ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="4_0ml7y"]
+[ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Assets/Slingshot/slingshot.tscn" id="6_jcyy1"]
+[ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Assets/Flipper/left_flipper.tscn" id="7_3nyud"]
+[ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Assets/Map/Mapa.tscn" id="8_k8cuc"]
 
 [sub_resource type="Gradient" id="Gradient_b81lh"]
 colors = PackedColorArray(0, 0.0470588, 0.301961, 1, 0, 0.0470588, 0.301961, 1)
@@ -49,6 +49,7 @@ DebugPower = 1000
 position = Vector2(39, 224)
 collision_layer = 4
 collision_mask = 0
+HitPower = 6000.0
 
 [node name="AnimatableBody2D" parent="." instance=ExtResource("7_3nyud")]
 position = Vector2(-73, 224)

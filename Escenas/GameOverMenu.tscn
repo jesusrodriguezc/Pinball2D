@@ -1,19 +1,35 @@
 [gd_scene load_steps=10 format=3 uid="uid://dvym84ocroljg"]
 
+[ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_45gmm"]
 [ext_resource type="Script" path="res://Scripts/UI/GameOverMenu.cs" id="1_71a1u"]
-[ext_resource type="PackedScene" uid="uid://cb7aph7p675a8" path="res://Escenas/MainScene.tscn" id="2_bfg1c"]
-[ext_resource type="PackedScene" uid="uid://dfujrtg01b34v" path="res://Escenas/MainMenu.tscn" id="3_2nsdl"]
-[ext_resource type="LabelSettings" uid="uid://dtdupns0b3vly" path="res://Fonts/PixelCodeLabelSettings.tres" id="5_31l7n"]
-[ext_resource type="Shader" path="res://Shaders/BluePalette.gdshader" id="6_gb0b6"]
-[ext_resource type="PackedScene" uid="uid://d2nxno0i2sfan" path="res://Assets/ShaderPlaceholder.tscn" id="6_o6ux7"]
 [ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="6_rb10o"]
-[ext_resource type="Texture2D" uid="uid://ggw0a3rmao8j" path="res://Palettes/blue_palette.png" id="8_jl2vf"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5jhu"]
-resource_local_to_scene = true
-shader = ExtResource("6_gb0b6")
-shader_parameter/firstFrame = true
-shader_parameter/palette = ExtResource("8_jl2vf")
+[sub_resource type="Gradient" id="Gradient_dp5nl"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_algaj"]
+gradient = SubResource("Gradient_dp5nl")
+fill_from = Vector2(1, 0.1)
+fill_to = Vector2(1, 0.8)
+metadata/_snap_enabled = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_fh288"]
+line_spacing = 16.0
+font = ExtResource("6_rb10o")
+font_size = 48
+outline_size = 2
+shadow_size = 5
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_g607r"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_0h3ga"]
+font = ExtResource("6_rb10o")
+font_size = 24
+outline_size = 1
+shadow_size = 5
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_slfa1"]
 
 [node name="GameOverMenu" type="Control"]
 layout_mode = 3
@@ -22,55 +38,94 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_45gmm")
 script = ExtResource("1_71a1u")
-gameScene = ExtResource("2_bfg1c")
-menuScene = ExtResource("3_2nsdl")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+scale = Vector2(20, 11.25)
+texture = SubResource("GradientTexture2D_algaj")
+
+[node name="GameOverLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 189.0
+offset_top = 176.0
+offset_right = 1092.0
+offset_bottom = 273.0
+theme_override_font_sizes/font_size = 32
+text = "GAMEOVER"
+label_settings = SubResource("LabelSettings_fh288")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -93.5
-offset_top = -61.5
-offset_right = 93.5
-offset_bottom = 61.5
+offset_left = -152.0
+offset_top = -134.0
+offset_right = 152.0
+offset_bottom = -130.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
+theme_override_styles/separator = SubResource("StyleBoxLine_g607r")
 
-[node name="GAMEOVER" type="Label" parent="VBox"]
-layout_mode = 2
-text = "GAMEOVER"
-label_settings = ExtResource("5_31l7n")
+[node name="ScoreLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -451.5
+offset_top = -130.5
+offset_right = 451.5
+offset_bottom = -33.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "SCORE: 000000"
+label_settings = SubResource("LabelSettings_0h3ga")
 horizontal_alignment = 1
-language = "en"
+
+[node name="VBox" type="VBoxContainer" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -73.0
+offset_right = 128.0
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = SubResource("Theme_slfa1")
+alignment = 1
 
 [node name="RetryButton" type="Button" parent="VBox"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../ExitButton")
 focus_neighbor_bottom = NodePath("../MainMenuButton")
-theme_override_fonts/font = ExtResource("6_rb10o")
 text = "Try again"
 
 [node name="MainMenuButton" type="Button" parent="VBox"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../RetryButton")
 focus_neighbor_bottom = NodePath("../ExitButton")
-theme_override_fonts/font = ExtResource("6_rb10o")
 text = "Main menu"
 
 [node name="ExitButton" type="Button" parent="VBox"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../MainMenuButton")
 focus_neighbor_bottom = NodePath("../RetryButton")
-theme_override_fonts/font = ExtResource("6_rb10o")
 text = "Exit"
-
-[node name="ShaderPlaceholder" parent="." instance=ExtResource("6_o6ux7")]
-material = SubResource("ShaderMaterial_l5jhu")
 
 [connection signal="pressed" from="VBox/RetryButton" to="." method="OnRetryButtonPressed"]
 [connection signal="pressed" from="VBox/MainMenuButton" to="." method="OnMenuButtonPressed"]
