@@ -190,6 +190,6 @@ hframes = 4
 vframes = 4
 
 [node name="ScoreComponent" parent="." instance=ExtResource("5_amtdr")]
-BaseScore = 1000.0
+BaseScore = 500.0
 
 [node name="AudioComponent" parent="." instance=ExtResource("6_kpp4q")]

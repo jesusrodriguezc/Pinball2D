@@ -1,7 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://cb7aph7p675a8"]
+[gd_scene load_steps=30 format=3 uid="uid://cb7aph7p675a8"]
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_jf6fp"]
 [ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Assets/Map/Mapa.tscn" id="2_pj3pm"]
+[ext_resource type="Script" path="res://Scripts/Assets/Camera.cs" id="3_or7yh"]
 [ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="3_ucbuj"]
 [ext_resource type="PackedScene" uid="uid://b2k5k6gh6ggy7" path="res://Assets/Bumper/bumper.tscn" id="4_7xi1l"]
 [ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Assets/Slingshot/slingshot.tscn" id="5_wm3ia"]
@@ -10,9 +11,13 @@
 [ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Assets/Flipper/left_flipper.tscn" id="8_khtso"]
 [ext_resource type="PackedScene" uid="uid://rvg8pn7803jr" path="res://Assets/Flipper/right_flipper.tscn" id="9_ee4xj"]
 [ext_resource type="PackedScene" uid="uid://c61raptelyibh" path="res://Assets/Deathzone.tscn" id="10_jrrat"]
-[ext_resource type="PackedScene" uid="uid://46ubn6t0slfa" path="res://Assets/Kicker/shooter_lane.tscn" id="11_pkgxp"]
+[ext_resource type="PackedScene" uid="uid://46ubn6t0slfa" path="res://Assets/Shooter/shooter_lane.tscn" id="11_pkgxp"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="12_uotgu"]
-[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="14_1uusf"]
+[ext_resource type="PackedScene" uid="uid://ddcmg3477qnnl" path="res://Escenas/PauseMenu.tscn" id="13_fcjr0"]
+[ext_resource type="PackedScene" uid="uid://dnnucr2srvyrn" path="res://Assets/Shooter/shooter.tscn" id="13_yfwst"]
+[ext_resource type="PackedScene" uid="uid://xv5e2r5qk23p" path="res://Escenas/SettingsMenu.tscn" id="14_5vdku"]
+[ext_resource type="Texture2D" uid="uid://bu5xwoo7sgbjn" path="res://Assets/Ball/ball.png" id="16_mglgc"]
+[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="17_tc5xm"]
 
 [sub_resource type="Gradient" id="Gradient_ivc7w"]
 
@@ -32,11 +37,31 @@ gradient = SubResource("Gradient_6vrlx")
 width = 1280
 height = 720
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s12rt"]
+size = Vector2(456, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7k5xa"]
+size = Vector2(26, 18)
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_5fy75"]
 friction = 0.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s12rt"]
-size = Vector2(456, 17)
+[sub_resource type="CircleShape2D" id="CircleShape2D_bb4j8"]
+radius = 8.0
+
+[sub_resource type="Gradient" id="Gradient_k2iol"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a1i3i"]
+gradient = SubResource("Gradient_k2iol")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.880342, 0.15812)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_v0gfe"]
+polygon = PackedVector2Array(6, -14, 10, -14, 10, -12, 12, -12, 12, -10, 14, -10, 14, -6, 16, -6, 16, 6, 14, 6, 14, 10, 12, 10, 12, 12, 10, 12, 10, 14, 6, 14, 6, 16, -6, 16, -6, 14, -10, 14, -10, 12, -12, 12, -12, 10, -14, 10, -14, 6, -16, 6, -16, -6, -14, -6, -14, -10, -12, -10, -12, -12, -10, -12, -10, -14, -6, -14, -6, -16, 6, -16)
 
 [node name="Main" type="Node2D"]
 position = Vector2(640, 360)
@@ -54,21 +79,25 @@ texture = SubResource("GradientTexture2D_ox6ls")
 
 [node name="Mapa" parent="." instance=ExtResource("2_pj3pm")]
 position = Vector2(0, 0)
+metadata/_edit_horizontal_guides_ = []
 
 [node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("3_or7yh")
 
-[node name="Ball" parent="." instance=ExtResource("3_ucbuj")]
-z_index = 35
-position = Vector2(228, 176)
-collision_mask = 3
-mass = 5.0
-physics_material_override = SubResource("PhysicsMaterial_5fy75")
-gravity_scale = 0.5
-continuous_cd = 1
-max_contacts_reported = 100
-contact_monitor = true
-DebugPower = 6000
-MaxVelocity = 900.0
+[node name="UserInterface" type="Control" parent="Camera2D"]
+z_index = 500
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GameUI" parent="Camera2D/UserInterface" instance=ExtResource("12_uotgu")]
+layout_mode = 0
+offset_left = -626.0
+offset_top = -344.0
+offset_right = -562.0
+offset_bottom = -258.0
+metadata/_edit_use_anchors_ = true
 
 [node name="Bumpers" type="Node" parent="."]
 
@@ -76,21 +105,25 @@ MaxVelocity = 900.0
 z_index = 40
 position = Vector2(587, 188)
 HitPower = 2500.0
+Score = 500.0
 
 [node name="ReentryBumper2" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
 position = Vector2(665, 179)
 HitPower = 2500.0
+Score = 500.0
 
 [node name="ReentryBumper3" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
 position = Vector2(632, 241)
 HitPower = 2500.0
+Score = 500.0
 
 [node name="RoundBumper" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
 position = Vector2(468, 64)
 HitPower = 2500.0
+Score = 500.0
 
 [node name="RampBumper" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 65
@@ -98,6 +131,7 @@ position = Vector2(368, 336)
 scale = Vector2(0.4, 0.4)
 collision_layer = 8
 HitPower = 1500.0
+Score = 1500.0
 
 [node name="RampBumper2" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 65
@@ -105,6 +139,7 @@ position = Vector2(440, 344)
 scale = Vector2(0.4, 0.4)
 collision_layer = 8
 HitPower = 1500.0
+Score = 1500.0
 
 [node name="RampBumper3" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 65
@@ -112,6 +147,7 @@ position = Vector2(400, 368)
 scale = Vector2(0.4, 0.4)
 collision_layer = 8
 HitPower = 1500.0
+Score = 1500.0
 
 [node name="Slingshots" type="Node" parent="."]
 
@@ -120,13 +156,15 @@ z_index = 40
 position = Vector2(524, 477)
 rotation = 1.13446
 HitPower = 6000.0
+Score = 500.0
 
 [node name="MiniSlingshot" parent="Slingshots" instance=ExtResource("5_wm3ia")]
 z_index = 40
-position = Vector2(506, 212)
+position = Vector2(506, 210)
 rotation = 0.804625
 scale = Vector2(0.226683, 0.137175)
 HitPower = 6000.0
+Score = 500.0
 EvenlyDistributedPower = true
 
 [node name="MiniSlingshot2" parent="Slingshots" instance=ExtResource("5_wm3ia")]
@@ -135,6 +173,7 @@ position = Vector2(751, 223)
 rotation = -1.26178
 scale = Vector2(0.226683, 0.137175)
 HitPower = 6000.0
+Score = 500.0
 EvenlyDistributedPower = true
 
 [node name="Slingshot2" parent="Slingshots" instance=ExtResource("5_wm3ia")]
@@ -143,6 +182,7 @@ position = Vector2(757, 476)
 rotation = -1.13446
 scale = Vector2(-1, 1)
 HitPower = 6000.0
+Score = 500.0
 
 [node name="ReentryLaneBonus" parent="." node_paths=PackedStringArray("elements") instance=ExtResource("6_sjfye")]
 z_index = 30
@@ -197,10 +237,21 @@ RotationFrameDuration = 8.0
 position = Vector2(68, 205.5)
 shape = SubResource("RectangleShape2D_s12rt")
 
-[node name="ShooterLane" parent="." instance=ExtResource("11_pkgxp")]
-position = Vector2(229, 301)
-collision_layer = 4
-MaxPowerHoldTime = 1.0
+[node name="ShooterLane2" parent="." instance=ExtResource("11_pkgxp")]
+position = Vector2(-89, 99)
+script = null
+
+[node name="Shooter" parent="." node_paths=PackedStringArray("Target") instance=ExtResource("13_yfwst")]
+MaxHitPower = 10000
+Target = NodePath("../Ball")
+ShootDirection = Vector2(0, -1)
+inputButton = 32
+HoldTime = 2.0
+HoldingForMaxPowerSound = 0.7
+
+[node name="CollisionArea" type="CollisionShape2D" parent="Shooter"]
+position = Vector2(229, 305)
+shape = SubResource("RectangleShape2D_7k5xa")
 
 [node name="MainLight" type="DirectionalLight2D" parent="."]
 light_mask = 6
@@ -215,19 +266,58 @@ light_mask = 7
 visibility_layer = 7
 color = Color(0.396078, 0.396078, 0.396078, 1)
 
-[node name="UserInterface" type="Control" parent="."]
-z_index = 500
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="PauseMenu" parent="." instance=ExtResource("13_fcjr0")]
+visible = false
+z_index = 1000
+clip_contents = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
 
-[node name="GameUI" parent="UserInterface" instance=ExtResource("12_uotgu")]
-layout_mode = 0
-offset_left = -626.0
-offset_top = -344.0
-offset_right = -562.0
-offset_bottom = -258.0
-metadata/_edit_use_anchors_ = true
+[node name="SettingsMenu" parent="." instance=ExtResource("14_5vdku")]
+visible = false
+z_index = 2000
+offset_left = -320.0
+offset_top = -232.0
+offset_right = 320.0
+offset_bottom = 216.0
 
-[node name="AudioComponent" parent="." instance=ExtResource("14_1uusf")]
+[node name="Ball" parent="." instance=ExtResource("3_ucbuj")]
+z_index = 35
+position = Vector2(228, 176)
+collision_mask = 3
+mass = 5.0
+physics_material_override = SubResource("PhysicsMaterial_5fy75")
+gravity_scale = 0.5
+continuous_cd = 1
+max_contacts_reported = 100
+contact_monitor = true
+DebugPower = 6000
+MaxVelocity = 900.0
+
+[node name="Sprite2D2" type="Sprite2D" parent="Ball"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("16_mglgc")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Ball"]
+shape = SubResource("CircleShape2D_bb4j8")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Ball"]
+scale = Vector2(0.75, 0.75)
+energy = 0.25
+texture = SubResource("GradientTexture2D_a1i3i")
+
+[node name="LightOccluder2D2" type="LightOccluder2D" parent="Ball"]
+scale = Vector2(0.5, 0.5)
+occluder = SubResource("OccluderPolygon2D_v0gfe")
+occluder_light_mask = 6
+
+[node name="AudioComponent2" parent="Ball" instance=ExtResource("17_tc5xm")]

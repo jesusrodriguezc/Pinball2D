@@ -1,0 +1,108 @@
+[gd_scene load_steps=11 format=3 uid="uid://ddcmg3477qnnl"]
+
+[ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_41f3v"]
+[ext_resource type="Shader" path="res://Shaders/Blur.gdshader" id="2_17pyo"]
+[ext_resource type="Script" path="res://Scripts/UI/PauseMenu.cs" id="2_tujtv"]
+[ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="3_mxec6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8bq55"]
+shader = ExtResource("2_17pyo")
+shader_parameter/lod = 3.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_a1q70"]
+line_spacing = 16.0
+font = ExtResource("3_mxec6")
+font_size = 48
+outline_size = 2
+shadow_size = 5
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_kmaa3"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_a224s"]
+font = ExtResource("3_mxec6")
+font_size = 24
+outline_size = 1
+shadow_size = 5
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wri48"]
+
+[sub_resource type="Theme" id="Theme_82r6n"]
+
+[node name="PauseMenu" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_41f3v")
+script = ExtResource("2_tujtv")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_8bq55")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="PauseLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "GAME PAUSED"
+label_settings = SubResource("LabelSettings_a1q70")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_kmaa3")
+
+[node name="ScoreLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "SCORE: 000000"
+label_settings = SubResource("LabelSettings_a224s")
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+theme_override_styles/separator = SubResource("StyleBoxEmpty_wri48")
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 6
+theme = SubResource("Theme_82r6n")
+alignment = 1
+
+[node name="ResumeButton" type="Button" parent="CenterContainer/VBoxContainer/VBox"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../ExitButton")
+focus_neighbor_bottom = NodePath("../MainMenuButton")
+text = "Resume"
+
+[node name="MainMenuButton" type="Button" parent="CenterContainer/VBoxContainer/VBox"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../ResumeButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
+text = "Main menu"
+
+[node name="ExitButton" type="Button" parent="CenterContainer/VBoxContainer/VBox"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../MainMenuButton")
+focus_neighbor_bottom = NodePath("../ResumeButton")
+text = "Exit"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/VBox/ResumeButton" to="." method="OnResumeButtonPressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/VBox/MainMenuButton" to="." method="OnMenuButtonPressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/VBox/ExitButton" to="." method="OnExitButtonPressed"]

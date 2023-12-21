@@ -21,8 +21,9 @@ public partial class Slingshot : StaticBody2D {
 	[Signal]
 	public delegate void ImpulseEventHandler (Node2D nodeAffected, Vector2 impulse);
 
-	[Export]
-	public float HitPower { get; set; }
+	[Export] public float HitPower { get; set; }
+	[Export] public float Score { get; set; }
+
 	/// <summary>
 	/// Determines if the hit power is distributed evenly over its surface or it hit harder at the center and softer at the ends.
 	/// </summary>
@@ -35,6 +36,12 @@ public partial class Slingshot : StaticBody2D {
 			_audioComponent.AddAudio(CLICK, ResourceLoader.Load<AudioStream>("res://SFX/slingshot_click.wav"));
 			_audioComponent.AddAudio(HIT, ResourceLoader.Load<AudioStream>("res://SFX/slingshot_hit_2.wav"));
 
+		}
+
+		_scoreComponent = GetNodeOrNull<ScoreComponent>("ScoreComponent");
+
+		if (_scoreComponent != null) {
+			_scoreComponent.BaseScore = Score;
 		}
 
 		collisionArea = GetNodeOrNull<Area2D>("CollisionArea");
@@ -65,7 +72,6 @@ public partial class Slingshot : StaticBody2D {
 		// Calculamos el vector entre la bola y el bumper.
 
 		lastDirImpulso = CalculateImpulseDirection(currBall);
-		QueueRedraw();
 		_animationPlayer?.Play("on_collision");
 		_audioComponent?.Play(CLICK, AudioComponent.SFX_BUS);
 		_audioComponent?.Play(HIT, 0.1f);
@@ -106,11 +112,6 @@ public partial class Slingshot : StaticBody2D {
 		}
 		_animationPlayer?.Play("on_release");
 
-	}
-
-	public override void _Draw () {
-		GD.Print($"Dibujando pepinatso: {lastDirImpulso}");
-		DrawLine(Vector2.Zero, lastDirImpulso.Rotated(-this.Rotation) * HitPower, Colors.Red, 4f);
 	}
 
 }

@@ -1,4 +1,6 @@
 ﻿using Godot;
+using Pinball.Scripts.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static System.Formats.Asn1.AsnWriter;
@@ -28,33 +30,58 @@ public partial class PinballController : Node {
 	[Export]
 	public int LivesLeft { get; set; }
 	public Ball Ball { get; set; }
+	public Camera CurrentCamera { get; set; }
 
 	public ScoringController ScoreCtrl;
+	private PauseMenu pauseMenu;
+	bool isPaused = false;
+	private SceneSwitcher sceneSwitcher;
 
 	public override void _Ready () {
 		_instance = this;
+		sceneSwitcher = GetNode<SceneSwitcher>("/root/SceneSwitcher");
 
 		Ball = GetChildren().OfType<Ball>().ToList().First();
-
+		CurrentCamera = GetChildren().OfType<Camera>().FirstOrDefault();
 		ScoreCtrl = new ScoringController(GetTree().Root);
+		pauseMenu = GetNodeOrNull<PauseMenu>("PauseMenu");
 
-		Ball.Death += RemoveLive;
+		Ball.Death += OnLiveLost;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process (double delta) {
-		if (LivesLeft <= 0) {
-			GD.Print("Hemos perdido");
-			Ball.currentStatus = Ball.Status.GAMEOVER;
-			Gameover();
-
-
+		if (LivesLeft <= 0 && Ball.currentStatus.IsNotIn(Ball.Status.DEAD, Ball.Status.GAMEOVER)) {
+			GD.Print("Este mensaje es imposible, hacker.");
+			sceneSwitcher.GotoScene("res://Escenas/MainMenu.tscn");
 		}
 	}
 
-	public void RemoveLive (Ball ball) {
+	public override void _Input (InputEvent @event) {
+		if (Input.IsActionJustPressed("Pause"))
+		{
+			isPaused = !isPaused;
+			if (isPaused) {
+				PauseGame();
+			}
+			else {
+				ResumeGame();
+			}
+
+		}
+
+	}
+
+	public void OnLiveLost(Ball ball) {
+
 		if (LivesLeft > 0) {
 			LivesLeft--;
+		}
+
+		if (LivesLeft <= 0) {
+			GD.Print("Hemos perdido");
+			Ball.currentStatus = Ball.Status.GAMEOVER;
+			sceneSwitcher.GotoScene("res://Escenas/GameOverMenu.tscn");
 		}
 	}
 
@@ -62,11 +89,16 @@ public partial class PinballController : Node {
 		return ScoreCtrl?.Score ?? 0;
 	}
 
-	public void Gameover () {
-		var global = GetNode<SceneSwitcher>("/root/SceneSwitcher");
-		global.GotoScene("res://Escenas/GameOverMenu.tscn");
+	internal void PauseGame () {
+		pauseMenu.Pause();
+		Ball.Pause();
+		Engine.TimeScale = 0f;
 	}
 
-
+	internal void ResumeGame () {
+		Engine.TimeScale = 1f;
+		Ball.Resume();
+		pauseMenu.Resume();
+	}
 }
 

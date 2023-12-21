@@ -4,7 +4,7 @@ using Pinball.Components;
 using System;
 using System.Text.Json;
 
-public partial class SettingsMenu : Node
+public partial class SettingsMenu : Control
 {
 	private SceneSwitcher sceneSwitcher;
 	private SettingsManager settingsManager;
@@ -28,21 +28,29 @@ public partial class SettingsMenu : Node
 		sceneSwitcher = GetNodeOrNull<SceneSwitcher>("/root/SceneSwitcher");
 		settingsManager = GetNode<SettingsManager>("/root/SettingsManager");
 
+		if (settingsManager.IsNodeReady()) {
+			PrepareSettingsMenu();
+		}
+	}
+
+	private void PrepareSettingsMenu () {
+
+		GD.Print($"{settingsManager.settingsData.SfxVolume}");
 		// Video
-		displayModeButton = GetNodeOrNull<OptionButton>("TabContainer/_GRAPHICS_/MarginContainer/GridContainer/DisplayModeOpt");
-		vsyncButton = GetNodeOrNull<CheckButton>("TabContainer/_GRAPHICS_/MarginContainer/GridContainer/VSyncOpt");
-		resolutionButton = GetNodeOrNull<OptionButton>("TabContainer/_GRAPHICS_/MarginContainer/GridContainer/WindowResolutionOpt");
-		shaderPaletteButton = GetNodeOrNull<OptionButton>("TabContainer/_GRAPHICS_/MarginContainer/GridContainer/ShaderPaletteOpt");
+		displayModeButton = GetNodeOrNull<OptionButton>("VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer/DisplayModeOpt");
+		vsyncButton = GetNodeOrNull<CheckButton>("VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer/VSyncOpt");
+		resolutionButton = GetNodeOrNull<OptionButton>("VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer/WindowResolutionOpt");
+		shaderPaletteButton = GetNodeOrNull<OptionButton>("VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer/ShaderPaletteOpt");
 
 		// Audio
-		masterVolumeSlider = GetNodeOrNull<HSlider>("TabContainer/_SOUND_/MarginContainer/GridContainer/MasterVolumeSlider");
-		musicVolumeSlider = GetNodeOrNull<HSlider>("TabContainer/_SOUND_/MarginContainer/GridContainer/MusicVolumeSlider");
-		sfxVolumeSlider = GetNodeOrNull<HSlider>("TabContainer/_SOUND_/MarginContainer/GridContainer/SFXVolumeSlider");
+		masterVolumeSlider = GetNodeOrNull<HSlider>("VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer/MasterVolumeSlider");
+		musicVolumeSlider = GetNodeOrNull<HSlider>("VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer/MusicVolumeSlider");
+		sfxVolumeSlider = GetNodeOrNull<HSlider>("VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer/SFXVolumeSlider");
 
 		// Gameplay
 
-		applyButton = GetNodeOrNull<Button>("HBoxContainer/ApplyButton");
-		backButton = GetNodeOrNull<Button>("HBoxContainer/BackButton");
+		applyButton = GetNodeOrNull<Button>("VBoxContainer/HBoxContainer/ApplyButton");
+		backButton = GetNodeOrNull<Button>("VBoxContainer/HBoxContainer/BackButton");
 
 		UpdateValues();
 
@@ -52,23 +60,20 @@ public partial class SettingsMenu : Node
 		resolutionButton.ItemSelected += settingsManager.WindowResolutionSelected;
 		shaderPaletteButton.ItemSelected += settingsManager.ShaderPaletteSelected;
 
-
-
 		masterVolumeSlider.ValueChanged += settingsManager.MasterVolumeSelected;
 		musicVolumeSlider.ValueChanged += settingsManager.MusicVolumeSelected;
 		sfxVolumeSlider.ValueChanged += settingsManager.SfxVolumeSelected;
 
-	
+
 
 		if (DisplayServer.WindowGetMode() != DisplayServer.WindowMode.Windowed) {
 			SetDisabledResolutionSelection(true);
 		}
 
 		applyButton.Pressed += settingsManager.Save;
-		applyButton.Pressed += () => sceneSwitcher?.GotoScene("res://Escenas/MainMenu.tscn"); 
-		
-		backButton.Pressed += () => sceneSwitcher?.GotoScene("res://Escenas/MainMenu.tscn");
+		applyButton.Pressed += () => Hide();
 
+		backButton.Pressed += () => Hide();
 
 
 	}
@@ -87,11 +92,6 @@ public partial class SettingsMenu : Node
 	public void SetDisabledResolutionSelection(bool disabled) {
 		resolutionButton.Selected = disabled? -1: resolutionButton.Selected;
 		resolutionButton.Disabled = disabled;
-	}
-	
-	private void OnBackButtonPressed()
-	{
-		sceneSwitcher?.GotoScene("res://Escenas/MainMenu.tscn");
 	}
 
 }

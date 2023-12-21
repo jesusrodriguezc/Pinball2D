@@ -24,14 +24,16 @@ text = "Score: 0
 layout_mode = 2
 text = "Lives: 0"
 
-[node name="Gravity" type="Label" parent="."]
+[node name="BallPosition" type="Label" parent="."]
 layout_mode = 2
-text = "Gravity
+text = "Ball position: (0.0, 0.0)
 "
 
-[node name="GravitySlider" type="HSlider" parent="."]
+[node name="BallVelocity" type="Label" parent="."]
 layout_mode = 2
-max_value = 2.0
-step = 0.05
+text = "Ball velocity: (0.0, 0.0)"
 
-[connection signal="drag_ended" from="GravitySlider" to="." method="OnGravityValueChanged"]
+[node name="CameraPosition" type="Label" parent="."]
+layout_mode = 2
+text = "Camera position: (0.0, 0.0)
+"

@@ -7,9 +7,10 @@ public partial class MainMenu : Control
 	[Export] PackedScene creditsScene;
 	[Export] PackedScene optionsScene;
 	private SceneSwitcher sceneSwitcher;
-
+	private SettingsMenu settingsMenu;
 	public override void _Ready () {
 		sceneSwitcher = GetNodeOrNull<SceneSwitcher>("/root/SceneSwitcher");
+		settingsMenu = GetNodeOrNull<SettingsMenu>("SettingsMenu");
 
 	}
 	private void OnStartButtonPressed () {
@@ -18,7 +19,8 @@ public partial class MainMenu : Control
 
 
 	private void OnOptionsButtonPressed () {
-		sceneSwitcher?.GotoScene("res://Escenas/SettingsMenu.tscn");
+		settingsMenu.Show();
+		//sceneSwitcher?.GotoScene("res://Escenas/SettingsMenu.tscn");
 	}
 
 

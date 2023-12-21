@@ -1,8 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://gpsmc0sgvf6"]
+[gd_scene load_steps=10 format=3 uid="uid://xv5e2r5qk23p"]
 
-[ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_01tqn"]
-[ext_resource type="Script" path="res://Scripts/UI/SettingsMenu.cs" id="2_ljsj2"]
-[ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="2_wmlbx"]
+[ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_dejiu"]
+[ext_resource type="Script" path="res://Scripts/UI/SettingsMenu.cs" id="2_01a6s"]
+[ext_resource type="Shader" path="res://Shaders/Blur.gdshader" id="3_cd4ls"]
+[ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="3_leig5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x8cor"]
+shader = ExtResource("3_cd4ls")
+shader_parameter/lod = 3.0
 
 [sub_resource type="Gradient" id="Gradient_53qar"]
 
@@ -14,7 +19,7 @@ metadata/_snap_enabled = true
 
 [sub_resource type="LabelSettings" id="LabelSettings_fh288"]
 line_spacing = 16.0
-font = ExtResource("2_wmlbx")
+font = ExtResource("3_leig5")
 font_size = 48
 outline_size = 2
 shadow_size = 5
@@ -22,70 +27,55 @@ shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_g607r"]
 
-[node name="SettingsMenu" type="Panel"]
+[node name="SettingsMenu" type="MarginContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_01tqn")
-script = ExtResource("2_ljsj2")
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme = ExtResource("1_dejiu")
+script = ExtResource("2_01a6s")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_x8cor")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(640, 360)
+visible = false
+position = Vector2(320, 232)
 scale = Vector2(20, 11.25)
 texture = SubResource("GradientTexture2D_h7kda")
 
-[node name="Settings" type="Label" parent="."]
-layout_mode = 0
-offset_left = 189.0
-offset_top = 176.0
-offset_right = 1092.0
-offset_bottom = 273.0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Settings" type="Label" parent="VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "SETTINGS"
 label_settings = SubResource("LabelSettings_fh288")
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -152.0
-offset_top = -134.0
-offset_right = 152.0
-offset_bottom = -130.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxLine_g607r")
 
-[node name="TabContainer" type="TabContainer" parent="."]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 clip_contents = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -320.0
-offset_top = -129.0
-offset_right = 320.0
-offset_bottom = 255.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+layout_mode = 2
+size_flags_vertical = 3
 tab_alignment = 1
 
-[node name="_GRAPHICS_" type="TabBar" parent="TabContainer"]
-visible = false
+[node name="_GRAPHICS_" type="TabBar" parent="VBoxContainer/TabContainer"]
 layout_mode = 2
 tab_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="TabContainer/_GRAPHICS_"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/_GRAPHICS_"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -93,24 +83,24 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -256.0
-offset_top = -135.5
+offset_top = -92.0
 offset_right = 256.0
-offset_bottom = 152.5
+offset_bottom = 92.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GridContainer" type="GridContainer" parent="TabContainer/_GRAPHICS_/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer"]
 layout_mode = 2
 theme_override_constants/v_separation = 24
 columns = 2
 
-[node name="DisplayModeLbl" type="Label" parent="TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
+[node name="DisplayModeLbl" type="Label" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "Display Mode"
 
-[node name="DisplayModeOpt" type="OptionButton" parent="TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
+[node name="DisplayModeOpt" type="OptionButton" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -125,23 +115,23 @@ popup/item_2/id = 2
 popup/item_3/text = "Borderless Full-screen"
 popup/item_3/id = 3
 
-[node name="VSyncLbl" type="Label" parent="TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
+[node name="VSyncLbl" type="Label" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "VSync"
 
-[node name="VSyncOpt" type="CheckButton" parent="TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
+[node name="VSyncOpt" type="CheckButton" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="WindowResolutionLbl" type="Label" parent="TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
+[node name="WindowResolutionLbl" type="Label" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "Window resolution"
 
-[node name="WindowResolutionOpt" type="OptionButton" parent="TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
+[node name="WindowResolutionOpt" type="OptionButton" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -151,21 +141,21 @@ popup/item_0/text = "640x480"
 popup/item_0/id = 0
 popup/item_1/text = "1024x768"
 popup/item_1/id = 1
-popup/item_2/text = "1080x720"
+popup/item_2/text = "1280x720"
 popup/item_2/id = 2
 popup/item_3/text = "1366x768"
 popup/item_3/id = 3
 popup/item_4/text = "1920x1080"
 popup/item_4/id = 4
 
-[node name="ShaderPaletteLbl" type="Label" parent="TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
+[node name="ShaderPaletteLbl" type="Label" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
 text = "Shader palette
 "
 
-[node name="ShaderPaletteOpt" type="OptionButton" parent="TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
+[node name="ShaderPaletteOpt" type="OptionButton" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -178,11 +168,12 @@ popup/item_1/id = 1
 popup/item_2/text = "Grayscale"
 popup/item_2/id = 2
 
-[node name="_SOUND_" type="TabBar" parent="TabContainer"]
+[node name="_SOUND_" type="TabBar" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 tab_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="TabContainer/_SOUND_"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/_SOUND_"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -190,24 +181,24 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -256.0
-offset_top = -135.5
+offset_top = -92.0
 offset_right = 256.0
-offset_bottom = 152.5
+offset_bottom = 92.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GridContainer" type="GridContainer" parent="TabContainer/_SOUND_/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer"]
 layout_mode = 2
 theme_override_constants/v_separation = 24
 columns = 2
 
-[node name="MasterSoundLbl" type="Label" parent="TabContainer/_SOUND_/MarginContainer/GridContainer"]
+[node name="MasterSoundLbl" type="Label" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "Master"
 
-[node name="MasterVolumeSlider" type="HSlider" parent="TabContainer/_SOUND_/MarginContainer/GridContainer"]
+[node name="MasterVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -215,36 +206,36 @@ max_value = 1.0
 step = 0.001
 tick_count = 11
 
-[node name="MusicSoundLbl" type="Label" parent="TabContainer/_SOUND_/MarginContainer/GridContainer"]
+[node name="MusicSoundLbl" type="Label" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "Music"
 
-[node name="MusicVolumeSlider" type="HSlider" parent="TabContainer/_SOUND_/MarginContainer/GridContainer"]
+[node name="MusicVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer"]
 layout_mode = 2
 max_value = 1.0
 step = 0.001
 tick_count = 11
 
-[node name="SFXSoundLbl" type="Label" parent="TabContainer/_SOUND_/MarginContainer/GridContainer"]
+[node name="SFXSoundLbl" type="Label" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "Sound FX"
 
-[node name="SFXVolumeSlider" type="HSlider" parent="TabContainer/_SOUND_/MarginContainer/GridContainer"]
+[node name="SFXVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer"]
 layout_mode = 2
 max_value = 1.0
 step = 0.001
 tick_count = 11
 
-[node name="_GAMEPLAY_" type="TabBar" parent="TabContainer"]
+[node name="_GAMEPLAY_" type="TabBar" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
 tab_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="TabContainer/_GAMEPLAY_"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/_GAMEPLAY_"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -252,24 +243,24 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -256.0
-offset_top = -135.5
+offset_top = -92.0
 offset_right = 256.0
-offset_bottom = 152.5
+offset_bottom = 92.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GridContainer" type="GridContainer" parent="TabContainer/_GAMEPLAY_/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer"]
 layout_mode = 2
 theme_override_constants/v_separation = 24
 columns = 2
 
-[node name="DisplayModeLbl" type="Label" parent="TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
+[node name="DisplayModeLbl" type="Label" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "Display Mode"
 
-[node name="DisplayModeOpt" type="OptionButton" parent="TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
+[node name="DisplayModeOpt" type="OptionButton" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -284,20 +275,16 @@ popup/item_2/id = 2
 popup/item_3/text = "Borderless Full-screen"
 popup/item_3/id = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-offset_left = 384.0
-offset_top = 512.0
-offset_right = 636.0
-offset_bottom = 552.0
 theme_override_constants/separation = 48
 
-[node name="ApplyButton" type="Button" parent="HBoxContainer"]
+[node name="ApplyButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Apply changes"
 
-[node name="BackButton" type="Button" parent="HBoxContainer"]
+[node name="BackButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Back"

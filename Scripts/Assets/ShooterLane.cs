@@ -42,33 +42,36 @@ public partial class ShooterLane : Area2D {
 	}
 
 	public override void _Input (InputEvent @event) {
-		if (@event is InputEventKey key) {
-			switch (key.Keycode) {
-				case Key.Space:
-					if (!isBallInside) {
-						break;
-					}
+		if (@event is not InputEventKey key) {
+			return;
+		}
 
-					if (key.Pressed && !buttonHolded) {
-						SetButtonHoldTimer();
-						break;
-					}
-
-
-					if (!key.Pressed) {
-
-						audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
-						float percButtonTime = (float)Mathf.Min(1, timeCountButtonHold / (double)MaxPowerHoldTime);
-						float hitPower = ShotterLanePower * Mathx.FuncSmooth(percButtonTime);
-
-						EmitSignal(SignalName.Impulse, currBall, Vector2.Up * hitPower);
-						if (percButtonTime >= 0.35f) {
-							audioComponent?.Play(ENOUGH_POWER, 0.1f);
-						}
-						DisableButtonHoldTimer();
-					}
+		switch (key.Keycode) {
+			case Key.Space:
+				if (!isBallInside) {
 					break;
-			}
+				}
+
+				if (key.Pressed && !buttonHolded) {
+					SetButtonHoldTimer();
+					break;
+				}
+
+				if (!key.Pressed) {
+
+					audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
+					float percButtonTime = (float)Mathf.Min(1, timeCountButtonHold / (double)MaxPowerHoldTime);
+					float hitPower = ShotterLanePower * Mathx.FuncSmooth(percButtonTime);
+
+					GD.Print($"ShooterLane.Action({Vector2.Up * hitPower})");
+
+					EmitSignal(SignalName.Impulse, currBall, Vector2.Up * hitPower);
+					if (percButtonTime >= 0.35f) {
+						audioComponent?.Play(ENOUGH_POWER, 0.1f);
+					}
+					DisableButtonHoldTimer();
+				}
+				break;
 		}
 	}
 

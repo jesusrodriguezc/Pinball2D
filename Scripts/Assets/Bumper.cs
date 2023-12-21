@@ -16,8 +16,8 @@ public partial class Bumper : StaticBody2D {
 	[Signal]
 	public delegate void ImpulseEventHandler (Node2D nodeAffected, Vector2 impulse);
 
-	[Export]
-	public float HitPower { get; set; }
+	[Export] public float HitPower { get; set; }
+	[Export] public float Score { get; set; }
 
 	public override void _Ready () {
 		_animationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
@@ -31,6 +31,10 @@ public partial class Bumper : StaticBody2D {
 		_spriteManager.ChangeTexture(0);
 
 		_scoreComponent = GetNodeOrNull<ScoreComponent>("ScoreComponent");
+
+		if (_scoreComponent != null) {
+			_scoreComponent.BaseScore = Score;
+		}
 		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
 		if (_audioComponent != null) {
 			_audioComponent.AddAudio(HIT, ResourceLoader.Load<AudioStream>("res://SFX/bumper_hit.wav"));

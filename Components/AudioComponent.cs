@@ -54,7 +54,6 @@ public partial class AudioComponent : Node
 		
 		audioPlayer.SetStream(AudioDictionary[name], name);
 		audioPlayer.Bus = audioBusName;
-		GD.Print($"[Audio bus for {name}]: {audioBusName} -> {audioPlayer.Bus}");
 		audioPlayer.Play(delay);
 
 	}

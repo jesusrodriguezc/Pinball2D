@@ -1,10 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://61hw8lynt53k"]
+[gd_scene load_steps=8 format=3 uid="uid://61hw8lynt53k"]
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_qxhib"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_yix0e"]
 [ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="4_ec1oo"]
-[ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Assets/Slingshot/slingshot.tscn" id="4_tdg6g"]
-[ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/trigger_area.tscn" id="5_xd2a3"]
+[ext_resource type="PackedScene" uid="uid://dnnucr2srvyrn" path="res://Assets/Shooter/shooter.tscn" id="5_ebsvo"]
 
 [sub_resource type="Gradient" id="Gradient_b81lh"]
 colors = PackedColorArray(0, 0.0470588, 0.301961, 1, 0, 0.0470588, 0.301961, 1)
@@ -15,28 +14,8 @@ width = 1280
 height = 720
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c2do7"]
-friction = 0.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rlgju"]
-size = Vector2(16, 16)
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pgxfe"]
-friction = 0.0
-bounce = 0.15
-
-[sub_resource type="Gradient" id="Gradient_4ut0w"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_hohox"]
-gradient = SubResource("Gradient_4ut0w")
-width = 10
-height = 32
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xxuiy"]
-size = Vector2(9, 34)
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_obvq1"]
-friction = 0.0
-bounce = 0.15
+rough = true
+absorbent = true
 
 [node name="Main" type="Node2D"]
 process_mode = 3
@@ -45,10 +24,10 @@ script = ExtResource("1_qxhib")
 Debug = true
 LivesLeft = 999
 
-[node name="Camera2D" type="Camera2D" parent="."]
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("GradientTexture2D_ox6ls")
+
+[node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="UI" parent="." instance=ExtResource("2_yix0e")]
 offset_left = -609.0
@@ -56,6 +35,11 @@ offset_top = -352.0
 offset_right = -545.0
 offset_bottom = -296.0
 metadata/_edit_use_anchors_ = true
+
+[node name="Shooter" parent="." node_paths=PackedStringArray("Target") instance=ExtResource("5_ebsvo")]
+position = Vector2(-217, 72)
+Target = NodePath("../Ball")
+ShootDirection = Vector2(0, -1)
 
 [node name="Ball" parent="." instance=ExtResource("4_ec1oo")]
 position = Vector2(-65, 64)
@@ -67,68 +51,9 @@ contact_monitor = true
 DebugPower = 5000
 MaxVelocity = 1000.0
 
-[node name="Slingshots" type="Node2D" parent="."]
-position = Vector2(-289, 56)
-
-[node name="Slingshot" parent="Slingshots" instance=ExtResource("4_tdg6g")]
-position = Vector2(144, 8)
-HitPower = 6000.0
-
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 collision_layer = 2
 physics_material_override = SubResource("PhysicsMaterial_c2do7")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PackedVector2Array(-281, 96, 271, 96, 271, -72, 239, -72, 239, 72, -249, 72, -249, -72, 271, -72, 271, -96, -281, -96)
-
-[node name="Entrada" parent="." instance=ExtResource("5_xd2a3")]
-position = Vector2(31, 56)
-scale = Vector2(0.298677, 2.3011)
-collision_layer = 2
-collision_mask = 1
-Type = 0
-outLayer = 4
-
-[node name="In" type="CollisionShape2D" parent="Entrada"]
-shape = SubResource("RectangleShape2D_rlgju")
-debug_color = Color(0.929412, 0, 0.12549, 0.419608)
-
-[node name="Seguro antifuga" parent="." instance=ExtResource("5_xd2a3")]
-position = Vector2(7, 56)
-scale = Vector2(0.36, 2.20551)
-collision_layer = 2
-collision_mask = 1
-Type = 0
-outLayer = 3
-
-[node name="In" type="CollisionShape2D" parent="Seguro antifuga"]
-shape = SubResource("RectangleShape2D_rlgju")
-debug_color = Color(0.929412, 0, 0.12549, 0.419608)
-
-[node name="Capa inferior" type="StaticBody2D" parent="."]
-position = Vector2(15, 0)
-collision_layer = 4
-collision_mask = 0
-physics_material_override = SubResource("PhysicsMaterial_pgxfe")
-
-[node name="Sprite2D" type="Sprite2D" parent="Capa inferior"]
-position = Vector2(55, 56)
-texture = SubResource("GradientTexture2D_hohox")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Capa inferior"]
-position = Vector2(55, 56)
-shape = SubResource("RectangleShape2D_xxuiy")
-
-[node name="Capa superior" type="StaticBody2D" parent="."]
-position = Vector2(23, 0)
-collision_layer = 8
-collision_mask = 0
-physics_material_override = SubResource("PhysicsMaterial_obvq1")
-
-[node name="Sprite2D2" type="Sprite2D" parent="Capa superior"]
-position = Vector2(79, 56)
-texture = SubResource("GradientTexture2D_hohox")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Capa superior"]
-position = Vector2(79, 56)
-shape = SubResource("RectangleShape2D_xxuiy")

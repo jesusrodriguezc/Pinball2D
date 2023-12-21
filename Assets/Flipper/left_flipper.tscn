@@ -5,9 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://bdijv5nxxbgx1" path="res://Assets/Flipper/flipper_left.png_normal.png" id="3_uqjmn"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="4_1283b"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7f8h3"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0v7j4"]
 friction = 0.1
-bounce = 0.15
+rough = true
+bounce = 0.1
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_7s777"]
 diffuse_texture = ExtResource("2_vqvb1")
@@ -18,7 +19,7 @@ polygon = PackedVector2Array(35, -10, 37, -10, 37, -9, 38, -9, 38, -7, 39, -7, 3
 
 [node name="AnimatableBody2D" type="AnimatableBody2D"]
 collision_layer = 2
-physics_material_override = SubResource("PhysicsMaterial_7f8h3")
+physics_material_override = SubResource("PhysicsMaterial_0v7j4")
 constant_angular_velocity = 0.174533
 script = ExtResource("1_id8jy")
 isLeftFlipper = true

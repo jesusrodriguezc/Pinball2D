@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=16 format=3 uid="uid://blsj5e3xangu2"]
+[gd_resource type="Theme" load_steps=15 format=3 uid="uid://blsj5e3xangu2"]
 
 [ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="1_vwfrc"]
 
@@ -31,8 +31,6 @@ bg_color = Color(0.137255, 0.137255, 0.137255, 1)
 expand_margin_left = 5.0
 expand_margin_right = 5.0
 
-[sub_resource type="ImageTexture" id="ImageTexture_nc3f4"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hvvrq"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5aikm"]
@@ -61,7 +59,6 @@ Button/styles/focus = SubResource("StyleBoxFlat_df5jp")
 Button/styles/hover = SubResource("StyleBoxFlat_fgpj6")
 Button/styles/normal = SubResource("StyleBoxFlat_j22bn")
 Button/styles/pressed = SubResource("StyleBoxFlat_vecov")
-CheckButton/icons/checked = SubResource("ImageTexture_nc3f4")
 CheckButton/styles/disabled = SubResource("StyleBoxEmpty_hvvrq")
 CheckButton/styles/focus = SubResource("StyleBoxEmpty_5aikm")
 CheckButton/styles/hover = SubResource("StyleBoxEmpty_1gris")

@@ -1,16 +1,17 @@
 using Godot;
 using Pinball.Scripts.Utils;
+using System;
 using System.Linq;
+using System.Reflection.Emit;
 using static PinballController;
 
-public partial class Ball : RigidBody2D {
+public partial class Ball : RigidBody2D, IPausable{
 	public enum Status {
 		GAMEOVER = -2,
 		DEAD = -1,
 		ON_SHOOTER_LANE = 0,
 		IDLE = 1,
 		MOVING = 2
-
 	}
 
 	[Signal]
@@ -30,8 +31,23 @@ public partial class Ball : RigidBody2D {
 	private AudioComponent _audioComponent;
 	private readonly StringName DEAD = "Dead";
 
+	internal Vector2 storedVelocity;
+	private Vector2 storedPosition;
+
 	public override void _Ready () {
 
+		GD.Print($"[Ready] CollisionMask = {CollisionMask} - ZIndex = {ZIndex}");
+
+		InitSignalConnections();
+
+		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
+		_audioComponent?.AddAudio(DEAD, ResourceLoader.Load<AudioStream>("res://SFX/deathzone_enter.wav"));
+		
+		initialPosition = GlobalPosition;
+		currentStatus = Status.IDLE;
+	}
+
+	private void InitSignalConnections () {
 		var bumpers = Nodes.findByClass<Bumper>(GetTree().Root);
 		foreach (var bumper in bumpers) {
 			bumper.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
@@ -49,27 +65,13 @@ public partial class Ball : RigidBody2D {
 
 		var deathZones = Nodes.findByClass<Deathzone>(GetTree().Root);
 		foreach (var deathZone in deathZones) {
-			deathZone.BodyEntered += _OnDeathzoneBodyEntered;
+			deathZone.BodyEntered += OnDeathzoneBodyEntered;
 		}
-
-		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
-		if (_audioComponent != null) {
-			_audioComponent.AddAudio(DEAD, ResourceLoader.Load<AudioStream>("res://SFX/deathzone_enter.wav"));
-
-		}
-
-		initialPosition = GlobalPosition;
-		currentStatus = Status.IDLE;
 	}
+
 	public override void _Input (InputEvent @event) {
-		if (@event is InputEventKey key) {
-			switch (key.Keycode) {
-				case Key.Enter:
-					if (key.Pressed && Instance.Debug) {
-						Reset();
-					}
-					break;
-			}
+		if (currentStatus.IsNotIn(Status.IDLE, Status.MOVING)) {
+			return;
 		}
 
 		if (@event is InputEventMouseButton mouseButton) {
@@ -86,6 +88,7 @@ public partial class Ball : RigidBody2D {
 		}
 
 		if (!GetCollisionMaskValue(5) && LinearVelocity.LengthSquared() > (MaxVelocity * MaxVelocity)) {
+			GD.Print("Max speed reached");
 			LinearVelocity = LinearVelocity.LimitLength(MaxVelocity);
 		}
 	}
@@ -103,7 +106,7 @@ public partial class Ball : RigidBody2D {
 
 	}
 
-	private void _OnDeathzoneBodyEntered (Node2D body) {
+	private void OnDeathzoneBodyEntered (Node2D body) {
 		if (body != this) return;
 
 		_audioComponent?.Play(DEAD, AudioComponent.SFX_BUS);
@@ -124,17 +127,22 @@ public partial class Ball : RigidBody2D {
 	public void SetLevel (int level) {
 		if (level == 0) { return; }
 
-		GD.Print($"[Pre-Ball.SetLevel({level})] CollisionMask = {CollisionMask} - ZIndex = {ZIndex}");
-
-		//var collisionMaskActual = CollisionMask;
 		CollisionMask &= 0b0011;
 
 		SetCollisionMaskValue(level, true);
 
 		ZIndex = LayerManager.GetZLevel(level);
 
-		GD.Print($"[Post-Ball.SetLevel({level})] CollisionMask = {CollisionMask} - ZIndex = {ZIndex}");
+	}
 
+	public void Pause () {
+		storedVelocity = LinearVelocity;
+		storedPosition = GlobalPosition;
 
+	}
+
+	public void Resume () {
+		LinearVelocity = storedVelocity;
+		GlobalPosition = storedPosition;
 	}
 }

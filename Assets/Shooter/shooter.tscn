@@ -1,0 +1,30 @@
+[gd_scene load_steps=7 format=3 uid="uid://dnnucr2srvyrn"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/Shooter.cs" id="1_7mpn5"]
+[ext_resource type="AudioStream" uid="uid://6on0becnnqx0" path="res://SFX/shooterlane_hit.wav" id="2_fr2u0"]
+[ext_resource type="AudioStream" uid="uid://c5tsamikog7v2" path="res://SFX/shooterlane_full.wav" id="3_1do4c"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ljivd"]
+size = Vector2(64, 64)
+
+[sub_resource type="Gradient" id="Gradient_hw1wo"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vdb08"]
+gradient = SubResource("Gradient_hw1wo")
+
+[node name="Shooter" type="Area2D"]
+script = ExtResource("1_7mpn5")
+HitAudio = ExtResource("2_fr2u0")
+MaxPowerAudio = ExtResource("3_1do4c")
+inputType = 1
+inputButton = 81
+HoldTime = 1.0
+HoldingForMaxPowerSound = 0.75
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ljivd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("GradientTexture2D_vdb08")

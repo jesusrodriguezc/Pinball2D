@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://dfujrtg01b34v"]
+[gd_scene load_steps=12 format=3 uid="uid://dfujrtg01b34v"]
 
 [ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_37sgk"]
 [ext_resource type="Script" path="res://Scripts/UI/MainMenu.cs" id="1_ik6wg"]
 [ext_resource type="PackedScene" uid="uid://cb7aph7p675a8" path="res://Escenas/GameScene.tscn" id="3_jx1nn"]
 [ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="3_oh02j"]
+[ext_resource type="PackedScene" uid="uid://xv5e2r5qk23p" path="res://Escenas/SettingsMenu.tscn" id="5_cr8la"]
 
 [sub_resource type="Gradient" id="Gradient_mxmr4"]
 
@@ -132,6 +133,19 @@ text = "Credits"
 custom_minimum_size = Vector2(256, 20)
 layout_mode = 2
 text = "Exit"
+
+[node name="SettingsMenu" parent="." instance=ExtResource("5_cr8la")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -384.0
+offset_top = -232.0
+offset_right = 320.0
+offset_bottom = 248.0
 
 [connection signal="pressed" from="Menu/StartButton" to="." method="OnStartButtonPressed"]
 [connection signal="pressed" from="Menu/OptionsButton" to="." method="OnOptionsButtonPressed"]
