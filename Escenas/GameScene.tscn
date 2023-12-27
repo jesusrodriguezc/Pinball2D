@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cb7aph7p675a8"]
+[gd_scene load_steps=32 format=3 uid="uid://cb7aph7p675a8"]
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_jf6fp"]
 [ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Assets/Map/Mapa.tscn" id="2_pj3pm"]
@@ -11,11 +11,13 @@
 [ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Assets/Flipper/left_flipper.tscn" id="8_khtso"]
 [ext_resource type="PackedScene" uid="uid://rvg8pn7803jr" path="res://Assets/Flipper/right_flipper.tscn" id="9_ee4xj"]
 [ext_resource type="PackedScene" uid="uid://c61raptelyibh" path="res://Assets/Deathzone.tscn" id="10_jrrat"]
-[ext_resource type="PackedScene" uid="uid://46ubn6t0slfa" path="res://Assets/Shooter/shooter_lane.tscn" id="11_pkgxp"]
+[ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/trigger_area.tscn" id="12_p47g8"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="12_uotgu"]
+[ext_resource type="AudioStream" uid="uid://6on0becnnqx0" path="res://SFX/shooterlane_hit.wav" id="13_1riy5"]
 [ext_resource type="PackedScene" uid="uid://ddcmg3477qnnl" path="res://Escenas/PauseMenu.tscn" id="13_fcjr0"]
 [ext_resource type="PackedScene" uid="uid://dnnucr2srvyrn" path="res://Assets/Shooter/shooter.tscn" id="13_yfwst"]
 [ext_resource type="PackedScene" uid="uid://xv5e2r5qk23p" path="res://Escenas/SettingsMenu.tscn" id="14_5vdku"]
+[ext_resource type="AudioStream" uid="uid://c5tsamikog7v2" path="res://SFX/shooterlane_full.wav" id="14_702jj"]
 [ext_resource type="Texture2D" uid="uid://bu5xwoo7sgbjn" path="res://Assets/Ball/ball.png" id="16_mglgc"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="17_tc5xm"]
 
@@ -41,7 +43,7 @@ height = 720
 size = Vector2(456, 17)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7k5xa"]
-size = Vector2(26, 18)
+size = Vector2(40, 16)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_5fy75"]
 friction = 0.0
@@ -237,21 +239,51 @@ RotationFrameDuration = 8.0
 position = Vector2(68, 205.5)
 shape = SubResource("RectangleShape2D_s12rt")
 
-[node name="ShooterLane2" parent="." instance=ExtResource("11_pkgxp")]
-position = Vector2(-89, 99)
-script = null
+[node name="Kickers" type="Node" parent="."]
 
-[node name="Shooter" parent="." node_paths=PackedStringArray("Target") instance=ExtResource("13_yfwst")]
-MaxHitPower = 10000
-Target = NodePath("../Ball")
-ShootDirection = Vector2(0, -1)
+[node name="ShooterKicker" parent="Kickers" node_paths=PackedStringArray("Target") instance=ExtResource("12_p47g8")]
+collision_layer = 2
+collision_mask = 1
+input_pickable = false
+Type = 0
 inputButton = 32
-HoldTime = 2.0
-HoldingForMaxPowerSound = 0.7
+Behaviour = 3
+Target = NodePath("../../Ball")
+triggerOnEnter = true
+HoldingTime = 1.5
 
-[node name="CollisionArea" type="CollisionShape2D" parent="Shooter"]
-position = Vector2(229, 305)
+[node name="CollisionArea" type="CollisionShape2D" parent="Kickers/ShooterKicker"]
+position = Vector2(867, 665)
 shape = SubResource("RectangleShape2D_7k5xa")
+
+[node name="Kicker" parent="Kickers/ShooterKicker" instance=ExtResource("13_yfwst")]
+position = Vector2(867, 665)
+HitAudio = ExtResource("13_1riy5")
+MaxPowerAudio = ExtResource("14_702jj")
+MaxHitPower = 10000
+ShootDirection = Vector2(0, -1)
+HoldingForMaxPowerSound = 0.75
+
+[node name="LeftKicker" parent="Kickers" node_paths=PackedStringArray("Target") instance=ExtResource("12_p47g8")]
+collision_layer = 2
+collision_mask = 1
+Type = 0
+Behaviour = 1
+Target = NodePath("../../Ball")
+triggerOnEnter = true
+WaitingTime = 1.0
+
+[node name="CollisionArea" type="CollisionShape2D" parent="Kickers/LeftKicker"]
+position = Vector2(389, 558)
+shape = SubResource("RectangleShape2D_7k5xa")
+
+[node name="Kicker" parent="Kickers/LeftKicker" instance=ExtResource("13_yfwst")]
+position = Vector2(389, 558)
+HitAudio = ExtResource("13_1riy5")
+MaxPowerAudio = ExtResource("14_702jj")
+MaxHitPower = 10000
+ShootDirection = Vector2(0, -1)
+HoldingForMaxPowerSound = 0.75
 
 [node name="MainLight" type="DirectionalLight2D" parent="."]
 light_mask = 6

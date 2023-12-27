@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://cwebqd2jf65fg"]
+[gd_scene load_steps=18 format=3 uid="uid://cwebqd2jf65fg"]
 
 [ext_resource type="Texture2D" uid="uid://dwe7jn07kiokn" path="res://Assets/Map/suelo_planta_superior.png" id="2_3xe2r"]
 [ext_resource type="Shader" path="res://Shaders/Outline.gdshader" id="3_ygyxk"]
 [ext_resource type="Texture2D" uid="uid://rv2aw4hcncwk" path="res://Assets/Map/borde_izquierdo.png" id="4_w0n3p"]
 [ext_resource type="Texture2D" uid="uid://dmcxkhui2liup" path="res://Assets/Map/borde_derecho.png" id="5_2oot1"]
 [ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/trigger_area.tscn" id="6_8fj8t"]
+[ext_resource type="PackedScene" uid="uid://bq026lg6n6o7t" path="res://Assets/Actionables/LayerSwapper.tscn" id="6_iagc4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hpdk4"]
 shader = ExtResource("3_ygyxk")
@@ -99,7 +100,7 @@ physics_material_override = SubResource("PhysicsMaterial_x1ufk")
 
 [node name="Borde izquierdo" type="CollisionPolygon2D" parent="Bordes permanentes"]
 position = Vector2(0, -2)
-polygon = PackedVector2Array(0, 353, -312, 353, -303, -349, 1, -349, 0, -314, -48, -313, -84, -306, -96, -303, -128, -302, -133, -317, -139, -326, -148, -333, -156, -338, -166, -341, -175, -342, -184, -341, -192, -339, -202, -334, -210, -327, -218, -318, -222, -308, -224, -297, -224, -286, -221, -275, -215, -266, -205, -254, -215, -240, -220, -231, -225, -220, -228, -213, -232, -204, -235, -195, -235, -183, -248, -182, -257, -176, -269, -166, -276, -152, -281, -136, -285, -115, -285, -49, -283, -43, -281, -40, -277, -38, -273, -37, -273, -34, -281, -31, -284, -23, -281, -16, -273, -12, -273, -9, -280, -5, -284, 6, -284, 18, -280, 27, -273, 33, -265, 36, -256, 38, -235, 42, -235, 53, -243, 53, -243, 48, -266, 44, -266, 172, -140, 235, -140, 313, 0, 314)
+polygon = PackedVector2Array(0, 353, -312, 353, -303, -349, 1, -349, 0, -314, -48, -313, -84, -306, -96, -303, -128, -302, -133, -317, -139, -326, -148, -333, -156, -338, -166, -341, -175, -342, -184, -341, -192, -339, -202, -334, -210, -327, -218, -318, -222, -308, -224, -297, -224, -286, -221, -275, -215, -266, -205, -254, -215, -240, -220, -231, -225, -220, -228, -213, -232, -204, -235, -195, -235, -183, -248, -182, -257, -176, -269, -166, -276, -152, -281, -136, -285, -115, -285, -49, -283, -43, -281, -40, -277, -38, -273, -37, -273, -34, -281, -31, -284, -23, -281, -16, -273, -12, -273, -9, -280, -5, -284, 6, -284, 18, -280, 27, -273, 33, -265, 36, -256, 38, -235, 42, -235, 53, -243, 53, -243, 48, -266, 44, -266, 172, -266, 201, -251, 205, -236, 201, -236, 187, -140, 235, -140, 313, 0, 314)
 
 [node name="Barrera slingshot izquierdo" type="CollisionPolygon2D" parent="Bordes permanentes"]
 polygon = PackedVector2Array(-239, 86, -239, 128, -83, 206, -81, 202, -235, 125, -235, 86)
@@ -266,11 +267,14 @@ scale = Vector2(0.298677, 2.3011)
 collision_layer = 2
 collision_mask = 1
 Type = 0
-outLayer = 4
+triggerOnEnter = true
 
 [node name="In" type="CollisionShape2D" parent="Triggers/Rampa_in"]
 shape = SubResource("RectangleShape2D_ymlyk")
 debug_color = Color(0.929412, 0, 0.12549, 0.419608)
+
+[node name="LayerSwapper" parent="Triggers/Rampa_in" instance=ExtResource("6_iagc4")]
+outLayer = 4
 
 [node name="Rampa_out" parent="Triggers" instance=ExtResource("6_8fj8t")]
 position = Vector2(419, 450)
@@ -278,11 +282,14 @@ rotation = 1.57079
 scale = Vector2(0.24, 1.49145)
 collision_layer = 2
 collision_mask = 1
-outLayer = 3
+Type = 0
 
 [node name="In" type="CollisionShape2D" parent="Triggers/Rampa_out"]
 shape = SubResource("RectangleShape2D_ymlyk")
 debug_color = Color(0.929412, 0, 0.12549, 0.419608)
+
+[node name="LayerSwapper" parent="Triggers/Rampa_out" instance=ExtResource("6_iagc4")]
+outLayer = 3
 
 [node name="Rampa_in_noenter" parent="Triggers" instance=ExtResource("6_8fj8t")]
 position = Vector2(519, 285)
@@ -291,10 +298,13 @@ scale = Vector2(0.83019, 2.20551)
 collision_layer = 2
 collision_mask = 1
 Type = 0
-outLayer = 3
+triggerOnEnter = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Triggers/Rampa_in_noenter"]
 polygon = PackedVector2Array(-2.25604, 9.07377, 8.53338, 2.47565, 9.37621, -6.24009, -0.108322, -9.2477, 3.61508, -14.0557, 22.3531, -7.59546, 19.4311, 5.12522, 5.12224, 13.7744)
+
+[node name="LayerSwapper" parent="Triggers/Rampa_in_noenter" instance=ExtResource("6_iagc4")]
+outLayer = 3
 
 [node name="Shooter_Lane_full" parent="Triggers" instance=ExtResource("6_8fj8t")]
 position = Vector2(691, 56)
@@ -303,22 +313,28 @@ scale = Vector2(0.36, 1.64551)
 collision_layer = 2
 collision_mask = 1
 Type = 0
-outLayer = 3
+triggerOnEnter = true
 
 [node name="In" type="CollisionShape2D" parent="Triggers/Shooter_Lane_full"]
 shape = SubResource("RectangleShape2D_ymlyk")
 debug_color = Color(0.929412, 0, 0.12549, 0.419608)
+
+[node name="LayerSwapper" parent="Triggers/Shooter_Lane_full" instance=ExtResource("6_iagc4")]
+outLayer = 3
 
 [node name="Shooter_Lane_escape" parent="Triggers" instance=ExtResource("6_8fj8t")]
 position = Vector2(838, 408)
 scale = Vector2(2.32, 1.20551)
 collision_layer = 2
 collision_mask = 1
-outLayer = 3
+Type = 0
 
 [node name="In" type="CollisionShape2D" parent="Triggers/Shooter_Lane_escape"]
 shape = SubResource("RectangleShape2D_ymlyk")
 debug_color = Color(0.929412, 0, 0.12549, 0.419608)
+
+[node name="LayerSwapper" parent="Triggers/Shooter_Lane_escape" instance=ExtResource("6_iagc4")]
+outLayer = 3
 
 [node name="Shooter_Lane_empty" parent="Triggers" instance=ExtResource("6_8fj8t")]
 position = Vector2(871, 661)
@@ -326,8 +342,11 @@ scale = Vector2(1.16, 0.605511)
 collision_layer = 2
 collision_mask = 1
 Type = 0
-outLayer = 5
+triggerOnEnter = true
 
 [node name="In" type="CollisionShape2D" parent="Triggers/Shooter_Lane_empty"]
 shape = SubResource("RectangleShape2D_ymlyk")
 debug_color = Color(0.929412, 0, 0.12549, 0.419608)
+
+[node name="LayerSwapper" parent="Triggers/Shooter_Lane_empty" instance=ExtResource("6_iagc4")]
+outLayer = 5
