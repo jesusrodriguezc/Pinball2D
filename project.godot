@@ -58,6 +58,7 @@ Pause={
 2d_physics/layer_3="Zona baja"
 2d_physics/layer_4="Planta 1a"
 2d_physics/layer_5="ShooterLane"
+2d_physics/layer_6="Left shooter"
 
 [physics]
 

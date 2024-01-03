@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://p5ihd7ojsajs"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/LifeModifier.cs" id="1_sb6lg"]
+[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="2_nkkbt"]
+
+[node name="LifeModifier" type="Node2D"]
+script = ExtResource("1_sb6lg")
+
+[node name="AudioComponent" parent="." instance=ExtResource("2_nkkbt")]

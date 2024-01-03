@@ -9,7 +9,7 @@ using static Godot.HttpRequest;
 namespace Pinball.Scripts.Utils {
 	public static class Nodes {
 
-		public static List<T> findByClass<T> (Node node) where T : Node {
+		public static List<T> findByClass<T> (Node node){
 			List<T> result = new List<T>();
 			if (node is T nodeT) {
 				result.Add(nodeT);

@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class BonusLane : Area2D {
+public partial class BonusLane : Area2D, IActionable {
 	private AnimationPlayer _animationPlayer;
 	private AudioComponent _audioComponent;
 
@@ -8,6 +8,7 @@ public partial class BonusLane : Area2D {
 
 	public bool Active { get; private set; }
 	public bool Blocked { get; set; } = false;
+	public bool IsCollisionEnabled { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
 
@@ -18,7 +19,7 @@ public partial class BonusLane : Area2D {
 		if (_audioComponent != null) {
 			_audioComponent.AddAudio(SWITCH, ResourceLoader.Load<AudioStream>("res://SFX/bonuslane_switch.wav"));
 		}
-		BodyEntered += ChangeStatus;
+		BodyEntered += (node) => Action(new EventData() { Sender = node});
 
 	}
 
@@ -57,5 +58,29 @@ public partial class BonusLane : Area2D {
 	public void Reset () {
 		Blocked = false;
 		Disable();
+	}
+
+	public void Action (EventData data) {
+		if (!IsCollisionEnabled) {
+			return;
+		}
+
+		if (data.Sender is not IActor) {
+			return;
+		}
+
+		if (Blocked) {
+			return;
+		}
+
+		if (Active) {
+			Disable();
+		} else {
+			Enable();
+		}
+	}
+
+	public void EnableCollision (bool enable) {
+		IsCollisionEnabled = enable;
 	}
 }

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class PauseMenu : Control, IPausable {
+public partial class PauseMenu : Control {
 	private SceneSwitcher sceneSwitcher;
 
 	public override void _Ready () {
@@ -24,11 +24,4 @@ public partial class PauseMenu : Control, IPausable {
 		GetTree().Quit();
 	}
 
-	public void Pause () {
-		Show();
-	}
-
-	public void Resume () {
-		Hide();
-	}
 }

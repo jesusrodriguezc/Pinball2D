@@ -1,8 +1,9 @@
 ﻿using Godot;
 using Pinball.Utils;
+using System.Collections.Generic;
 
 [Tool]
-public partial class Slingshot : StaticBody2D {
+public partial class Slingshot : StaticBody2D, IActionable {
 	private AnimationPlayer _animationPlayer;
 	private ScoreComponent _scoreComponent;
 	private AudioComponent _audioComponent;
@@ -29,6 +30,8 @@ public partial class Slingshot : StaticBody2D {
 	/// </summary>
 	[Export]
 	public bool EvenlyDistributedPower { get; set; }
+	public bool IsCollisionEnabled { get ; set; }
+
 	public override void _Ready () {
 		_animationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
 		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
@@ -46,38 +49,11 @@ public partial class Slingshot : StaticBody2D {
 
 		collisionArea = GetNodeOrNull<Area2D>("CollisionArea");
 
-		collisionArea.BodyEntered += _OnCollision;
-		collisionArea.BodyExited += _OnRelease;
+		collisionArea.BodyEntered += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { ITrigger.ENTERING, true }, {ITrigger.ACTIVATOR, node } } }); ;
+		collisionArea.BodyExited += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { ITrigger.ENTERING, false }, {ITrigger.ACTIVATOR, node } } }); ;
 
 		perfectDirection = Transform.BasisXform(Vector2.Up);
 		horizontal = Transform.BasisXform(Vector2.Left);
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process (double delta) {
-	}
-
-	private void _OnCollision (Node node) {
-
-		if (node.GetType() != typeof(Ball)) {
-			return;
-		}
-
-		Ball currBall = (Ball)node;
-		if (PinballController.Instance.Ball != currBall) {
-			GD.PrintErr("La pelota no esta en la lista de pelotas.");
-			return;
-		}
-
-		// Calculamos el vector entre la bola y el bumper.
-
-		lastDirImpulso = CalculateImpulseDirection(currBall);
-		_animationPlayer?.Play("on_collision");
-		_audioComponent?.Play(CLICK, AudioComponent.SFX_BUS);
-		_audioComponent?.Play(HIT, 0.1f);
-		EmitSignal(SignalName.Impulse, currBall, lastDirImpulso * HitPower);
-		_scoreComponent?.AddScore();
-
 	}
 
 	private Vector2 CalculateImpulseDirection (Node2D hittedElement) {
@@ -98,7 +74,41 @@ public partial class Slingshot : StaticBody2D {
 		return (golpeRecto + golpeLateral) / 2f;
 	}
 
-	private void _OnRelease (Node node) {
+	public void Action (EventData data) {
+		if (!IsCollisionEnabled) {
+			return;
+		}
+
+		bool isEntering = false;
+		if (data.Parameters.TryGetValue(ITrigger.ENTERING, out var entering)) {
+			isEntering = (bool)entering;
+		}
+
+		if (isEntering) {
+			Collision(data.Sender);
+		} else {
+			Release(data.Sender);
+		}
+	}
+
+	private void Collision (Node2D node) {
+
+		if (node is not IActor) {
+			return;
+		}
+
+		// Calculamos el vector entre la bola y el bumper.
+
+		lastDirImpulso = CalculateImpulseDirection(node);
+		_animationPlayer?.Play("on_collision");
+		_audioComponent?.Play(CLICK, AudioComponent.SFX_BUS);
+		_audioComponent?.Play(HIT, 0.1f);
+		EmitSignal(SignalName.Impulse, node, lastDirImpulso * HitPower);
+		_scoreComponent?.AddScore();
+
+	}
+
+	private void Release (Node2D node) {
 		// Replace with function body.
 
 		if (node.GetType() != typeof(Ball)) {
@@ -113,7 +123,9 @@ public partial class Slingshot : StaticBody2D {
 		_animationPlayer?.Play("on_release");
 
 	}
-
+	public void EnableCollision (bool enable) {
+		IsCollisionEnabled = enable;
+	}
 }
 
 

@@ -1,15 +1,18 @@
-[gd_scene load_steps=17 format=3 uid="uid://61hw8lynt53k"]
+[gd_scene load_steps=21 format=3 uid="uid://61hw8lynt53k"]
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_qxhib"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_yix0e"]
 [ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="4_ec1oo"]
-[ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/trigger_area.tscn" id="4_qnxv0"]
+[ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/TriggerArea.tscn" id="4_qnxv0"]
 [ext_resource type="AudioStream" uid="uid://dqul6ym6rlnyy" path="res://SFX/flipper_press.wav" id="5_7gm22"]
-[ext_resource type="PackedScene" uid="uid://dnnucr2srvyrn" path="res://Assets/Shooter/shooter.tscn" id="5_ebsvo"]
+[ext_resource type="PackedScene" uid="uid://dnnucr2srvyrn" path="res://Assets/Actionables/Shooter.tscn" id="5_ebsvo"]
 [ext_resource type="PackedScene" uid="uid://bbn3ape6o6pht" path="res://Assets/Door/door.tscn" id="6_lu3wx"]
 [ext_resource type="AudioStream" uid="uid://rgn8mjgwmcor" path="res://SFX/bumper_hit.wav" id="6_tcbl3"]
 [ext_resource type="AudioStream" uid="uid://iv0k4qd6n2id" path="res://SFX/bonuslane_switch.wav" id="7_6ucvd"]
 [ext_resource type="PackedScene" uid="uid://bq026lg6n6o7t" path="res://Assets/Actionables/LayerSwapper.tscn" id="10_1k8i3"]
+[ext_resource type="PackedScene" uid="uid://b2k5k6gh6ggy7" path="res://Assets/Bumper/bumper.tscn" id="11_qglvh"]
+[ext_resource type="PackedScene" uid="uid://bacfc0s5fsli" path="res://Assets/Actionables/Teleport.tscn" id="12_5gkhb"]
+[ext_resource type="PackedScene" uid="uid://b6ib76heth48f" path="res://Assets/Actionables/WaitingNode.tscn" id="13_hmqbj"]
 
 [sub_resource type="Gradient" id="Gradient_b81lh"]
 colors = PackedColorArray(0, 0.0470588, 0.301961, 1, 0, 0.0470588, 0.301961, 1)
@@ -32,6 +35,9 @@ size = Vector2(32, 56)
 rough = true
 absorbent = true
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i3iuj"]
+size = Vector2(40, 40)
+
 [node name="Main" type="Node2D"]
 process_mode = 3
 position = Vector2(640, 360)
@@ -53,11 +59,12 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Test Door" parent="." node_paths=PackedStringArray("Target") instance=ExtResource("4_qnxv0")]
 position = Vector2(-273, 112)
+collision_layer = 2
 collision_mask = 1
 Type = 0
+Behaviour = 1
 Target = NodePath("../Ball")
-triggerOnEnter = true
-WaitingTime = 0.5
+WaitingTime = 2.0
 
 [node name="ColorRect" type="ColorRect" parent="Test Door"]
 offset_left = 16.0
@@ -87,11 +94,11 @@ pivot_offset = Vector2(0, 80)
 color = Color(0.439216, 0.439216, 0.439216, 1)
 
 [node name="Test Shooter" parent="." node_paths=PackedStringArray("Target") instance=ExtResource("4_qnxv0")]
+collision_layer = 2
 collision_mask = 1
 Type = 0
 Behaviour = 1
 Target = NodePath("../Ball")
-triggerOnEnter = true
 WaitingTime = 1.0
 
 [node name="ColorRect" type="ColorRect" parent="Test Shooter"]
@@ -119,16 +126,16 @@ max_contacts_reported = 10
 contact_monitor = true
 DebugPower = 500
 MaxVelocity = 1000.0
+currentLayer = 2
 
 [node name="Test LayerSwapper" parent="." instance=ExtResource("4_qnxv0")]
 position = Vector2(128, 144)
 collision_layer = 2
 collision_mask = 1
 Type = 0
-triggerOnEnter = true
 
 [node name="LayerSwapper" parent="Test LayerSwapper" instance=ExtResource("10_1k8i3")]
-outLayer = 4
+outLayer = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Test LayerSwapper"]
 position = Vector2(16, 20)
@@ -146,10 +153,9 @@ position = Vector2(264, 144)
 collision_layer = 2
 collision_mask = 1
 Type = 0
-triggerOnEnter = true
 
 [node name="LayerSwapper" parent="Test LayerSwapper2" instance=ExtResource("10_1k8i3")]
-outLayer = 3
+outLayer = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Test LayerSwapper2"]
 position = Vector2(16, 20)
@@ -203,3 +209,37 @@ offset_top = 192.0
 offset_right = 383.0
 offset_bottom = 256.0
 color = Color(0, 0, 0, 1)
+
+[node name="Bumper" parent="." instance=ExtResource("11_qglvh")]
+z_index = 60
+position = Vector2(208, 168)
+collision_layer = 4
+
+[node name="Test Teleport" type="Node2D" parent="."]
+position = Vector2(0, 152)
+
+[node name="Entrada" parent="Test Teleport" instance=ExtResource("4_qnxv0")]
+position = Vector2(-24, 8)
+collision_mask = 1
+Type = 0
+WaitingTime = 0.5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Test Teleport/Entrada"]
+position = Vector2(12, 12)
+shape = SubResource("RectangleShape2D_i3iuj")
+
+[node name="ColorRect" type="ColorRect" parent="Test Teleport/Entrada"]
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="Teleport" parent="Test Teleport/Entrada" instance=ExtResource("12_5gkhb")]
+position = Vector2(-48, -192)
+
+[node name="WaitingNode" parent="Test Teleport/Entrada" instance=ExtResource("13_hmqbj")]
+waitingTime = 0.05
+
+[node name="Shooter" parent="Test Teleport/Entrada/WaitingNode" instance=ExtResource("5_ebsvo")]
+MaxHitPower = 5000
+ShootDirection = Vector2(-1, 0)

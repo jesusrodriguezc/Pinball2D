@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Assets/Shooter.cs" id="1_7mpn5"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="2_r4cne"]
 
-[node name="Shooter" type="Area2D"]
+[node name="Shooter" type="Node2D"]
 script = ExtResource("1_7mpn5")
 
 [node name="AudioComponent" parent="." instance=ExtResource("2_r4cne")]

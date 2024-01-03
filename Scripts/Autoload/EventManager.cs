@@ -1,4 +1,5 @@
 ﻿using Godot;
+using Pinball.Scripts.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +16,10 @@ public partial class EventManager : Node {
 
 	public enum EventType {
 		TRIGGER,
-		ERROR
+		ERROR,
+		ENABLE,
+		DISABLE,
+		STOP
 	}
 
 	public void SendMessage(Node2D sender, Node2D[] receivers, EventType eventType, Dictionary<StringName, object> args) {
@@ -31,17 +35,58 @@ public partial class EventManager : Node {
 
 		switch (eventType) {
 			case EventType.TRIGGER:
-				foreach(var receiver in receivers) {
-					IActionable actionable = receiver as IActionable;
-					if (actionable == null) {
+
+				foreach (var receiver in receivers) {
+					if (receiver is not IActionable actionable) {
 						continue;
 					}
-
-					GD.Print($"[SendMessage()]: actionable.Action({sender.Name}, {args?.Count});");
 
 					actionable.Action(new EventData() { Sender = sender, Parameters = args });
 				}
 				break;
+			case EventType.ENABLE:
+				foreach (var receiver in receivers) {
+					if (receiver is not CollisionObject2D collisionObj) {
+						continue;
+					}
+
+					if (!collisionObj.HasMethod("EnableCollision")) {
+						continue;
+					}
+
+					Nodes.SecureCall(collisionObj, "EnableCollision", true);
+				}
+				break;
+			case EventType.DISABLE:
+				foreach (var receiver in receivers) {
+					if (receiver is not CollisionObject2D collisionObj) {
+						continue;
+					}
+
+					if (!collisionObj.HasMethod("EnableCollision")) {
+						continue;
+					}
+
+					Nodes.SecureCall(collisionObj, "EnableCollision", false);
+				}
+				break;
+			case EventType.STOP:
+				foreach (var receiver in receivers) {
+					if (receiver is not ITrigger trigger) {
+						continue;
+					}
+
+					GD.Print($"Trigger {receiver.Name} notified of stop event");
+
+					trigger.OnTargetStopped(sender);
+				}
+
+				break;
+			case EventType.ERROR:
+			default:
+				GD.PrintErr($"{sender.Name} send a message of type {eventType}. Event type not provided.");
+				break;
+
 
 		}
 

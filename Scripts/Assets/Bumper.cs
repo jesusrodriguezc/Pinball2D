@@ -1,6 +1,7 @@
 using Godot;
+using System.Collections.Generic;
 
-public partial class Bumper : StaticBody2D {
+public partial class Bumper : StaticBody2D, IActionable  {
 	private Area2D _collisionArea;
 	private AnimationPlayer _animationPlayer;
 
@@ -13,18 +14,19 @@ public partial class Bumper : StaticBody2D {
 	public readonly StringName HIT = "Hit";
 
 
-	[Signal]
-	public delegate void ImpulseEventHandler (Node2D nodeAffected, Vector2 impulse);
+	[Signal] public delegate void ImpulseEventHandler (Node2D nodeAffected, Vector2 impulse);
 
 	[Export] public float HitPower { get; set; }
 	[Export] public float Score { get; set; }
+	public bool IsCollisionEnabled { get; set; } = true;
 
 	public override void _Ready () {
 		_animationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
 
 		_collisionArea = GetNode<Area2D>("CollisionArea");
-		_collisionArea.BodyEntered += _OnCollision;
-		_collisionArea.BodyExited += _OnRelease;
+
+		_collisionArea.BodyEntered += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { ITrigger.ENTERING, true }, { ITrigger.ACTIVATOR, node } } });
+		_collisionArea.BodyExited += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { ITrigger.ENTERING, false }, { ITrigger.ACTIVATOR, node } } });
 		_collisionArea.CollisionLayer = CollisionLayer;
 
 		_spriteManager = GetNodeOrNull<SpriteManagerComponent>("SpriteManagerComponent");
@@ -42,50 +44,49 @@ public partial class Bumper : StaticBody2D {
 
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process (double delta) {
+	public void Action (EventData data) {
+
+		GD.Print($"Funciona? {IsCollisionEnabled}");
+		if (!IsCollisionEnabled) {
+			return;
+		}
+		bool isEntering = false;
+		if (data.Parameters.TryGetValue(ITrigger.ENTERING, out var entering)) {
+			isEntering = (bool) entering;
+		}
+
+		if (isEntering) {
+			Collision(data.Sender);
+		}
+		else {
+			Release(data.Sender);
+		}
 	}
+	private void Collision (Node2D node) {
 
-	private void _OnCollision (Node node) {
-
-		if (node.GetType() != typeof(Ball)) {
+		if (node is not IActor) {
 			return;
 		}
 
-		Ball currBall = (Ball)node;
-		if (PinballController.Instance.Ball != currBall) {
-			GD.PrintErr("La pelota no esta en la lista de pelotas.");
-			return;
-		}
-
-		Vector2 dirImpulso = (currBall.GlobalPosition - GlobalPosition).Normalized();
+		Vector2 dirImpulso = (node.GlobalPosition - GlobalPosition).Normalized();
 
 		_animationPlayer?.Play("on_collision");
 		_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
-		EmitSignal(SignalName.Impulse, currBall, dirImpulso * HitPower);
-		AddScore();
-	}
-
-	public void AddScore() {
 		_scoreComponent?.AddScore();
+		EmitSignal("Impulse", node, dirImpulso * HitPower);
 	}
 
-	private void _OnRelease (Node node) {
-		// Replace with function body.
+	private void Release (Node2D node) {
 
-		if (node.GetType() != typeof(Ball)) {
+		if (node is not IActor actor) {
 			return;
-		}
-
-		Ball currBall = (Ball)node;
-		if (PinballController.Instance.Ball != currBall) {
-			GD.Print("La pelota no esta en la lista de pelotas.");
 		}
 
 		_animationPlayer?.Play("on_release");
 	}
 
-
-
+	public void EnableCollision(bool enable) {
+		IsCollisionEnabled = enable;
+	}
 }
 

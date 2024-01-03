@@ -39,6 +39,8 @@ public partial class PinballController : Node {
 
 	public override void _Ready () {
 		_instance = this;
+		LayerManager.UpdateActionables(this, 0, true);
+
 		sceneSwitcher = GetNode<SceneSwitcher>("/root/SceneSwitcher");
 
 		Ball = GetChildren().OfType<Ball>().ToList().First();
@@ -74,10 +76,6 @@ public partial class PinballController : Node {
 
 	public void OnLiveLost(Ball ball) {
 
-		if (LivesLeft > 0) {
-			LivesLeft--;
-		}
-
 		if (LivesLeft <= 0) {
 			GD.Print("Hemos perdido");
 			Ball.currentStatus = Ball.Status.GAMEOVER;
@@ -90,7 +88,7 @@ public partial class PinballController : Node {
 	}
 
 	internal void PauseGame () {
-		pauseMenu.Pause();
+		pauseMenu.Show();
 		Ball.Pause();
 		Engine.TimeScale = 0f;
 	}
@@ -98,7 +96,7 @@ public partial class PinballController : Node {
 	internal void ResumeGame () {
 		Engine.TimeScale = 1f;
 		Ball.Resume();
-		pauseMenu.Resume();
+		pauseMenu.Hide();
 	}
 }
 

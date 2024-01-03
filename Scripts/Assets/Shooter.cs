@@ -3,7 +3,7 @@ using Pinball.Utils;
 using System;
 using System.Collections.Generic;
 
-public partial class Shooter : Area2D, IActionable {
+public partial class Shooter : Node2D, IActionable {
 
 	public enum InputType {
 		WAIT_KEY,
@@ -16,7 +16,6 @@ public partial class Shooter : Area2D, IActionable {
 
 	#region Audio
 	private AudioComponent audioComponent;
-	private TriggerArea triggerArea;
 	public readonly StringName HIT = "Hit";
 	public readonly StringName MAX_POWER = "MAX_POWER";
 
@@ -25,7 +24,9 @@ public partial class Shooter : Area2D, IActionable {
 
 	#endregion
 	[Export] public int MaxHitPower { get; set; }
+	public bool IsCollisionEnabled { get; set; } = true;
 
+	[Export] public bool MantainDirection;
 	[Export] public Vector2 ShootDirection;
 	bool shootIntoTarget;
 
@@ -38,13 +39,11 @@ public partial class Shooter : Area2D, IActionable {
 	public override void _Ready () {
 
 		audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
-		triggerArea = GetNode<TriggerArea>("../");
 
 		if (HitAudio != null) audioComponent?.AddAudio(HIT, HitAudio);
 		if (MaxPowerAudio != null) audioComponent?.AddAudio(MAX_POWER, MaxPowerAudio);
+		ShootDirection = ShootDirection.Normalized();
 		shootIntoTarget = (ShootDirection == Vector2.Zero);
-
-		if (HoldingForMaxPowerSound <= 0f) HoldingForMaxPowerSound = triggerArea?.HoldingTime ?? 0d;
 
 		QueueRedraw();
 	}
@@ -55,17 +54,22 @@ public partial class Shooter : Area2D, IActionable {
 
 	public void Action(EventData data) {
 
-		//object holdPercObj;
+		GD.Print($"{data.Sender.Name} -> {Name}.Action()");
+		RigidBody2D target = (RigidBody2D)data.Parameters[ITrigger.ACTIVATOR];
 		float holdPerc = 1f;
-		if (data.Parameters != null && data.Parameters.TryGetValue(ITrigger.HoldPercentage, out var holdPercObj)) {
+		if (data.Parameters != null && data.Parameters.TryGetValue(ITrigger.HOLD_PERCENTAGE, out var holdPercObj)) {
 			holdPerc = (float)holdPercObj;
 		} 
 
-		if (shootIntoTarget) {
-			ShootDirection = GlobalPosition - triggerArea.Target.Position;
+		if (shootIntoTarget && !MantainDirection) {
+			ShootDirection = (GlobalPosition - target.GlobalPosition).Normalized();
 		}
 
-		if (triggerArea.Target is not RigidBody2D TargetPhys) {
+		if (MantainDirection) {
+			ShootDirection = target.LinearVelocity.Normalized();
+		}
+
+		if (target is not RigidBody2D TargetPhys) {
 			return;
 		}
 
@@ -79,5 +83,9 @@ public partial class Shooter : Area2D, IActionable {
 		audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
 
 
+	}
+
+	public void EnableCollision (bool enable) {
+		IsCollisionEnabled = enable;
 	}
 }

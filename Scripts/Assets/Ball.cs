@@ -5,18 +5,18 @@ using System.Linq;
 using System.Reflection.Emit;
 using static PinballController;
 
-public partial class Ball : RigidBody2D, IPausable{
+public partial class Ball : RigidBody2D, IActor{
 	public enum Status {
 		GAMEOVER = -2,
 		DEAD = -1,
-		ON_SHOOTER_LANE = 0,
-		IDLE = 1,
-		MOVING = 2
+		IDLE = 0,
+		MOVING = 1
 	}
 
 	[Signal]
 	public delegate void DeathEventHandler (Ball ball);
 
+	private EventManager eventManager;
 	[Export]
 	public int DebugPower { get; set; } = 3000;
 	private bool DebugTeleport = false;
@@ -26,6 +26,7 @@ public partial class Ball : RigidBody2D, IPausable{
 
 
 	public Status currentStatus;
+	[Export] private LayerId currentLayer;
 
 	private Vector2 initialPosition;
 	private AudioComponent _audioComponent;
@@ -36,6 +37,8 @@ public partial class Ball : RigidBody2D, IPausable{
 
 	public override void _Ready () {
 
+
+		eventManager = GetNodeOrNull<EventManager>("/root/EventManager");
 		GD.Print($"[Ready] CollisionMask = {CollisionMask} - ZIndex = {ZIndex}");
 
 		InitSignalConnections();
@@ -45,6 +48,10 @@ public partial class Ball : RigidBody2D, IPausable{
 		
 		initialPosition = GlobalPosition;
 		currentStatus = Status.IDLE;
+
+		GD.Print($"CollisionLayer: {CollisionMask} -> currentLayer: {currentLayer}");
+		SetLevel(currentLayer);
+
 	}
 
 	private void InitSignalConnections () {
@@ -61,11 +68,6 @@ public partial class Ball : RigidBody2D, IPausable{
 		var shooterLanes = Nodes.findByClass<ShooterLane>(GetTree().Root);
 		foreach (var shooterLane in shooterLanes) {
 			shooterLane.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
-		}
-
-		var deathZones = Nodes.findByClass<Deathzone>(GetTree().Root);
-		foreach (var deathZone in deathZones) {
-			deathZone.BodyEntered += OnDeathzoneBodyEntered;
 		}
 	}
 
@@ -84,12 +86,22 @@ public partial class Ball : RigidBody2D, IPausable{
 	public override void _PhysicsProcess (double delta) {
 		if (currentStatus == Status.DEAD && Instance.LivesLeft > 0) {
 			Reset();
-			currentStatus = Status.ON_SHOOTER_LANE;
+			currentStatus = Status.IDLE;
 		}
 
 		if (!GetCollisionMaskValue(5) && LinearVelocity.LengthSquared() > (MaxVelocity * MaxVelocity)) {
-			GD.Print("Max speed reached");
 			LinearVelocity = LinearVelocity.LimitLength(MaxVelocity);
+		}
+
+		if (LinearVelocity.LengthSquared() < 0.1f) {
+			if (currentStatus == Status.MOVING) {
+				currentStatus = Status.IDLE;
+				//NotifyStoppingStatus();
+			}
+		} else {
+			if (currentStatus == Status.IDLE) {
+				currentStatus = Status.MOVING;
+			}
 		}
 	}
 
@@ -106,8 +118,7 @@ public partial class Ball : RigidBody2D, IPausable{
 
 	}
 
-	private void OnDeathzoneBodyEntered (Node2D body) {
-		if (body != this) return;
+	public void Die () {
 
 		_audioComponent?.Play(DEAD, AudioComponent.SFX_BUS);
 
@@ -119,13 +130,19 @@ public partial class Ball : RigidBody2D, IPausable{
 	}
 
 	private void Reset () {
-		LinearVelocity = Vector2.Zero;
-		GlobalPosition = initialPosition;
-
+		Teleport(initialPosition, Vector2.Zero);
 	}
 
-	public void SetLevel (int level) {
-		if (level == 0) { return; }
+	public void Teleport(Vector2 position, Vector2 velocity) {
+		LinearVelocity = velocity;
+		GlobalPosition = position;
+	}
+
+	public void SetLevel (LayerId layerId) {
+
+		int level = LayerManager.LayerId2Int(layerId);
+		currentLayer = layerId;
+		if (level == -1) { return; }
 
 		CollisionMask &= 0b0011;
 
@@ -133,8 +150,11 @@ public partial class Ball : RigidBody2D, IPausable{
 
 		ZIndex = LayerManager.GetZLevel(level);
 
+		eventManager.SendMessage(this, LayerManager.GetActionablesFromLayer(layerId, GetTree().Root), EventManager.EventType.DISABLE, null);
+
 	}
 
+	#region IActor definitions
 	public void Pause () {
 		storedVelocity = LinearVelocity;
 		storedPosition = GlobalPosition;
@@ -145,4 +165,10 @@ public partial class Ball : RigidBody2D, IPausable{
 		LinearVelocity = storedVelocity;
 		GlobalPosition = storedPosition;
 	}
+
+	// No es necesario de momento.
+	public void NotifyStoppingStatus() {
+		eventManager.SendMessage(this, LayerManager.GetActionablesFromLayer(currentLayer, GetTree().Root), EventManager.EventType.STOP, null);
+	}
+	#endregion
 }

@@ -51,6 +51,8 @@ public partial class Door : AnimatableBody2D, IActionable {
 
 	private float _t = 0.0f;
 
+	public bool IsCollisionEnabled { get; set; } = true;
+
 	public override void _Ready () {
 		switch (InitialStatus) {
 			case DoorStatus.OPENED:
@@ -213,6 +215,10 @@ public partial class Door : AnimatableBody2D, IActionable {
 		CurrentStatus = DoorStatus.OPENING;
 
 		AudioComponent?.Play(OPEN, AudioComponent.SFX_BUS);
+	}
+
+	public void EnableCollision (bool enable) {
+		IsCollisionEnabled = enable;
 	}
 }
 

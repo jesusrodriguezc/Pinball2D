@@ -7,11 +7,11 @@ using System.Linq;
 using static EventManager;
 using static ITrigger;
 using static Shooter;
+using static TriggerBehaviour;
 //using System.Collections.Generic;
 
 public partial class TriggerArea : Area2D, ITrigger {
-
-
+	private const float STILL_ELEMENT_MAX_VELOCITY = 0.1f;
 	[Export] public EventType Type;
 
 	[ExportGroup("Input")]
@@ -19,14 +19,15 @@ public partial class TriggerArea : Area2D, ITrigger {
 	private bool isButtonHolded;
 
 	[ExportGroup("Trigger")]
-	[Export] public TriggerBehaviour Behaviour;
+	[Export] public TriggerBehaviourId Behaviour;
+	private TriggerBehaviour behaviourInfo;
+
 	[Export] public Node2D Target;
 	private bool preassignedTarget;
 	[Export] public Node2D[] triggeredNodes;
 	[Export] public bool triggerOnEnter;
 	private EventManager eventManager;
 	private List<Node2D> NodesInside = new();
-
 
 	private Timer holdTimer;
 	[Export] public double HoldingTime;
@@ -52,15 +53,9 @@ public partial class TriggerArea : Area2D, ITrigger {
 				GD.PrintErr($"TriggerArea ({Name}) has no triggered elements defined");
 			}
 
-			foreach(var node in triggeredNodes) {
-				GD.Print($"{Name} of type {node.GetType()}");
-			}
 			triggeredNodes = triggeredNodes.Where(node => node is IActionable).ToArray();
 			if (triggeredNodes.Length == 0) {
-				GD.PrintErr($"TriggerArea ({Name}) has no triggered elements defined 124321");
-			}
-			foreach (var node in triggeredNodes) {
-				GD.Print($"Nodo {node.Name} enlazado a {Name}");
+				GD.PrintErr($"TriggerArea ({Name}) has no triggered actionables defined.");
 			}
 		}
 
@@ -81,18 +76,32 @@ public partial class TriggerArea : Area2D, ITrigger {
 		}
 
 		switch (Behaviour) {
-			case TriggerBehaviour.STAY_AND_PRESS_KEY:
+			case TriggerBehaviourId.STAY_AND_PRESS_KEY:
 				ProcessPress(key.Pressed);
 				break;
-			case TriggerBehaviour.STAY_AND_HOLD_KEY:
+			case TriggerBehaviourId.STAY_AND_HOLD_KEY:
 				ProcessHold(key.Pressed);
 				break;
-			case TriggerBehaviour.STAY_PRESS_AND_WAIT:
+			case TriggerBehaviourId.STAY_PRESS_AND_WAIT:
 				ProcessPressWait(key.Pressed);
 				break;
-			case TriggerBehaviour.STAY_HOLD_AND_WAIT:
+			case TriggerBehaviourId.STAY_HOLD_AND_WAIT:
 				ProcessHoldWait(key.Pressed);
 				break;
+			case TriggerBehaviourId.STAY_AND_WAIT:
+				break;
+
+			case TriggerBehaviourId.STILL_STAY_AND_WAIT:
+				break;
+			case TriggerBehaviourId.STILL_STAY_AND_PRESS_KEY:
+				break;
+			case TriggerBehaviourId.STILL_STAY_PRESS_AND_WAIT:
+				break;
+			case TriggerBehaviourId.STILL_STAY_AND_HOLD_KEY:
+				break;
+			case TriggerBehaviourId.STILL_STAY_HOLD_AND_WAIT:
+				break;
+			case TriggerBehaviourId.INSTANTANEOUS:
 			default:
 				GD.PrintErr($"Should not be here. BehaviourType {Behaviour} in _Input()");
 				break;
@@ -101,28 +110,31 @@ public partial class TriggerArea : Area2D, ITrigger {
 
 	private void OnObjectEntered (Node2D node) {
 
-		GD.Print($"{node.Name} : Hi {Name}. I want to enter ");
-
 		Target ??= node;
 
 		if (Target != node) {
 			return;
 		}
 
-
 		NodesInside.Add(node);
-
-		GD.Print($"{node.Name} just entered {Name} area. Nodes inside: {NodesInside.Count}");
 
 		if (!triggerOnEnter) {
 			return;
 		}
 
+		if (node is not RigidBody2D collisionObject2D) {
+			return;
+		}
+
+		if (collisionObject2D.LinearVelocity.Length() < STILL_ELEMENT_MAX_VELOCITY) {
+			GD.Print("Elemento {collisionObject2D.Name} parado.");
+		}
+		
 		switch (Behaviour) {
-			case TriggerBehaviour.INSTANTANEOUS:
+			case TriggerBehaviourId.INSTANTANEOUS:
 				ProcessInstantaneous();
 				break;
-			case TriggerBehaviour.STAY_AND_WAIT:
+			case TriggerBehaviourId.STAY_AND_WAIT:
 				ProcessWait();
 				break;
 		}
@@ -137,11 +149,9 @@ public partial class TriggerArea : Area2D, ITrigger {
 		holdTimer?.Stop();
 		waitTimer?.Stop();
 
-		GD.Print($"{node.Name} just exited {Name} area");
-
 		NodesInside.Remove(node);
 
-		if (!preassignedTarget && Behaviour != TriggerBehaviour.INSTANTANEOUS) {
+		if (!preassignedTarget && Behaviour != TriggerBehaviourId.INSTANTANEOUS) {
 			Target = null;
 		}
 
@@ -150,10 +160,10 @@ public partial class TriggerArea : Area2D, ITrigger {
 		}
 
 		switch (Behaviour) {
-			case TriggerBehaviour.INSTANTANEOUS:
+			case TriggerBehaviourId.INSTANTANEOUS:
 				ProcessInstantaneous();
 				break;
-			case TriggerBehaviour.STAY_AND_WAIT:
+			case TriggerBehaviourId.STAY_AND_WAIT:
 				ProcessWait();
 				break;
 		}
@@ -166,6 +176,8 @@ public partial class TriggerArea : Area2D, ITrigger {
 		BodyEntered += OnObjectEntered;
 		BodyExited += OnObjectExited;
 
+		behaviourInfo = new TriggerBehaviour(Behaviour);
+
 		if (HoldingTime > 0) {
 			holdTimer = new Timer {
 				OneShot = true,
@@ -174,8 +186,7 @@ public partial class TriggerArea : Area2D, ITrigger {
 			AddChild(holdTimer);
 		}
 		else {
-			if (Behaviour == TriggerBehaviour.STAY_HOLD_AND_WAIT) Behaviour = TriggerBehaviour.STAY_PRESS_AND_WAIT;
-			if (Behaviour == TriggerBehaviour.STAY_AND_HOLD_KEY) Behaviour = TriggerBehaviour.STAY_AND_PRESS_KEY;
+			behaviourInfo.HoldButton = false;
 		}
 
 		if (WaitingTime > 0) {
@@ -186,44 +197,66 @@ public partial class TriggerArea : Area2D, ITrigger {
 			AddChild(waitTimer);
 		}
 		else {
-			if (Behaviour == TriggerBehaviour.STAY_HOLD_AND_WAIT) Behaviour = TriggerBehaviour.STAY_AND_HOLD_KEY;
-			if (Behaviour == TriggerBehaviour.STAY_PRESS_AND_WAIT) Behaviour = Behaviour = TriggerBehaviour.STAY_AND_PRESS_KEY;
-			if (Behaviour == TriggerBehaviour.STAY_AND_WAIT) Behaviour = Behaviour = TriggerBehaviour.INSTANTANEOUS;
+			behaviourInfo.WaitInArea = false;
 		}
 
-		switch (Behaviour) {
-			case TriggerBehaviour.INSTANTANEOUS:
-				if (triggerOnEnter) {
-					BodyEntered += (node) => Trigger(new Dictionary<StringName, object> { { Instantaneous, true } });
-				} else {
-					BodyExited += (node) => Trigger(new Dictionary<StringName, object> { { Instantaneous, true } });
-				}
-				break;
-			case TriggerBehaviour.STAY_AND_WAIT:
-				waitTimer.Timeout += () => Trigger();
-				break;
-			case TriggerBehaviour.STAY_AND_PRESS_KEY: break;
-			case TriggerBehaviour.STAY_AND_HOLD_KEY:
-				holdTimer.Timeout += () => Trigger();
-				break;
-			case TriggerBehaviour.STAY_PRESS_AND_WAIT:
-				waitTimer.Timeout += () => Trigger();
-				break;
-			case TriggerBehaviour.STAY_HOLD_AND_WAIT:
-				holdTimer.Timeout += () => waitTimer.Start();
-				waitTimer.Timeout += () => Trigger();
-				break;
-
+		if (behaviourInfo.WaitInArea) {
+			waitTimer.Timeout += () => AfterWaiting();
 		}
 
+		if (behaviourInfo.HoldButton) {
+
+			holdTimer.Timeout += () => AfterHolding();
+		}
+	}
+	public void AfterWaiting() {
+		if (!behaviourInfo.WaitInArea) {
+			return;
+		}
+
+		GD.Print($"{Name}.AfterWaiting()");
+		Trigger();
+	}
+	public void AfterHolding() {
+		if (!behaviourInfo.HoldButton) {
+			return;
+		}
+
+		if (behaviourInfo.WaitInArea) {
+			waitTimer.Start();
+			return;
+		}
+
+		GD.Print($"{Name}.AfterHolding()");
+		Trigger();
 	}
 
-	// Si lo encuentra y es instantaneo, debe ser true.
-	// Si no lo encuentra, debe ser true.
-	// Si lo encuentra y no es instantaneo, debe ser false.
+	public void AfterStopping () {
+		
+		if (!behaviourInfo.Stopped) {
+			return;
+		}
+
+		if (behaviourInfo.HoldButton) {
+			holdTimer.Start();
+			return;
+		}
+
+		if (behaviourInfo.WaitInArea) {
+			waitTimer.Start();
+			return;
+		}
+
+		if (!behaviourInfo.Stopped) {
+			return;
+		}
+
+		GD.Print($"{Name}.AfterStopping()");
+		Trigger();
+	}
 	public void Trigger(Dictionary<StringName, object> args = null) {
 		object isInstantaneousObj = null;
-		bool isInstantaneous = args?.TryGetValue(Instantaneous, out isInstantaneousObj) ?? false;
+		bool isInstantaneous = args?.TryGetValue(INSTANTANEOUS, out isInstantaneousObj) ?? false;
 		if (isInstantaneous) {
 			isInstantaneous = (bool)isInstantaneousObj;
 		}
@@ -237,19 +270,28 @@ public partial class TriggerArea : Area2D, ITrigger {
 			NodesInside.Remove(Target);
 		}
 
-		if (!preassignedTarget && Behaviour == TriggerBehaviour.INSTANTANEOUS) {
+		if (!preassignedTarget && Behaviour == TriggerBehaviourId.INSTANTANEOUS) {
 			Target = null;
 		}
 
+		if (args == null) {
+			args = new Dictionary<StringName, object>();
+		}
+
+		if (!args.TryGetValue(ACTIVATOR, out var _))
+		{
+			args[ACTIVATOR] = Target;
+		}
+		
+		GD.Print($" -- {Name} TRIGGERED by {((Node2D)args[ACTIVATOR]).Name} -- ");
 		eventManager.SendMessage(this, triggeredNodes, Type, args);		
 	}
 
-
-
 	public void ProcessInstantaneous() {
-		Trigger();
+		Trigger(new Dictionary<StringName, object>() { { INSTANTANEOUS, true }, { ACTIVATOR, Target} });
 	}
 	public void ProcessWait () {
+		GD.Print($"{Name}.ProcessWait()");
 		if (waitTimer.TimeLeft == 0) {
 			waitTimer.Start();
 		}
@@ -275,7 +317,7 @@ public partial class TriggerArea : Area2D, ITrigger {
 				float holdPerc = (float)Mathf.Min(1, (HoldingTime - timeLeft) / HoldingTime);
 				
 
-				Trigger(new Dictionary<StringName, object> { { ITrigger.HoldPercentage, holdPerc } });
+				Trigger(new Dictionary<StringName, object> { { HOLD_PERCENTAGE, holdPerc } });
 
 			}
 		}
@@ -287,6 +329,22 @@ public partial class TriggerArea : Area2D, ITrigger {
 	}
 	public void ProcessHoldWait (bool isPressed) {
 		ProcessHold(isPressed);
+	}
+
+	public void OnTargetStopped (Node2D node) {
+		if (node == null) {
+			return;
+		}
+
+		if (node != Target) {
+			return;
+		}
+
+		if (!behaviourInfo.Stopped) {
+			return;
+		}
+
+		AfterStopping();
 	}
 
 	#endregion Behaviour
