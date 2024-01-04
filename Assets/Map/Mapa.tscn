@@ -14,7 +14,7 @@ shader_parameter/line_thickness = 0.5
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_upjr5"]
 friction = 0.0
-bounce = 0.15
+bounce = 0.75
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gpckx"]
 size = Vector2(4, 253)

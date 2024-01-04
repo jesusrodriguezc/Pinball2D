@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pinball.Components {
 	public partial class ShaderPlaceholder: Node {
+		private ColorRect shaderContainer;
 		private ShaderMaterial shader;
 		public CompressedTexture2D Palette { 
 			get { return (CompressedTexture2D) shader.GetShaderParameter("palette"); } 
@@ -14,10 +15,17 @@ namespace Pinball.Components {
 		}
 		public override void _Ready () {
 			var settings = GetNode<SettingsManager>("/root/SettingsManager");
-			shader = GetNode<ColorRect>("CanvasLayer/ColorRect")?.Material as ShaderMaterial;
+			shaderContainer = GetNode<ColorRect>("CanvasLayer/ColorRect") as ColorRect;
+			shaderContainer.Visible = false;
+			shader = shaderContainer?.Material as ShaderMaterial;
 
 			Palette = (CompressedTexture2D)GD.Load(settings.settingsData.GetPaletteURL());
 
+
+		}
+
+		public void Apply () {
+			shaderContainer.Visible = true;
 
 		}
 	}

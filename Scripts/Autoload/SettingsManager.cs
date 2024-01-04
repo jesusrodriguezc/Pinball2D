@@ -14,7 +14,7 @@ public partial class SettingsManager : Node {
 	private SaveManager saveManager;
 	public SettingsData settingsData;
 	private ShaderPlaceholder shaderPlaceholder;
-	private GlobalAudioSystem audioSystem;
+	private AudioComponent audioSystem;
 	public override void _Ready () {
 		saveManager = GetNode<SaveManager>("/root/SaveManager");
 		
@@ -25,7 +25,7 @@ public partial class SettingsManager : Node {
 		ApplySettings();
 
 		shaderPlaceholder = GetNodeOrNull<ShaderPlaceholder>("/root/ShaderPlaceholder");
-		audioSystem = GetNodeOrNull<GlobalAudioSystem>("/root/GlobalAudioSystem");
+		audioSystem = GetNodeOrNull<AudioComponent>("/root/GlobalAudioSystem");
 	}
 
 	private void ApplySettings () {

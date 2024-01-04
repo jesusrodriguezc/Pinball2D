@@ -6,9 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 public partial class SceneSwitcher : Node {
+	private AnimationPlayer animationPlayer;
+
 	public Node CurrentScene { get; set; }
 
 	public override void _Ready () {
+		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		Viewport root = GetTree().Root;
 		CurrentScene = root.GetChild(root.GetChildCount() - 1);
 	}
@@ -23,7 +26,7 @@ public partial class SceneSwitcher : Node {
 		// The solution is to defer the load to a later time, when
 		// we can be sure that no code from the current scene is running:
 
-		CallDeferred(MethodName.DeferredGotoScene, path);
+		CallDeferred(MethodName.DeferredGotoScene2, path);
 	}
 
 	public void DeferredGotoScene (string path) {
@@ -41,6 +44,18 @@ public partial class SceneSwitcher : Node {
 
 		// Optionally, to make it compatible with the SceneTree.change_scene_to_file() API.
 		GetTree().CurrentScene = CurrentScene;
+	}
+
+	public async void DeferredGotoScene2 (string path) {
+		animationPlayer.Play("fade_in");
+		await ToSignal(animationPlayer, "animation_finished");
+
+		GetTree().ChangeSceneToFile(path);
+
+		animationPlayer.Play("fade_out");
+
+
+
 	}
 }
 

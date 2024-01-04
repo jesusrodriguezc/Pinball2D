@@ -82,11 +82,12 @@ texture = SubResource("GradientTexture2D_o8sb2")
 
 [node name="Suelo" type="Sprite2D" parent="."]
 z_index = 25
-scale = Vector2(0.48125, 0.966667)
+position = Vector2(-4.00003, 0.500013)
+scale = Vector2(0.48125, 0.970833)
 texture = SubResource("GradientTexture2D_ox6ls")
 
 [node name="Mapa" parent="." instance=ExtResource("2_pj3pm")]
-position = Vector2(0, 0)
+position = Vector2(-1, 0)
 metadata/_edit_horizontal_guides_ = []
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -284,7 +285,6 @@ shape = SubResource("RectangleShape2D_7k5xa")
 [node name="Kicker" parent="Kickers/ShooterKicker" instance=ExtResource("13_yfwst")]
 position = Vector2(867, 665)
 HitAudio = ExtResource("13_1riy5")
-MaxPowerAudio = ExtResource("14_702jj")
 MaxHitPower = 6000
 ShootDirection = Vector2(0, -1)
 HoldingForMaxPowerSound = 0.5
@@ -303,8 +303,7 @@ shape = SubResource("RectangleShape2D_7k5xa")
 
 [node name="Kicker" parent="Kickers/LeftKicker" instance=ExtResource("13_yfwst")]
 position = Vector2(389, 558)
-HitAudio = ExtResource("13_1riy5")
-MaxPowerAudio = ExtResource("14_702jj")
+HitAudio = ExtResource("14_702jj")
 MaxHitPower = 10000
 ShootDirection = Vector2(0, -1)
 HoldingForMaxPowerSound = 0.75
@@ -321,35 +320,35 @@ position = Vector2(416, 168)
 [node name="LayerSwapperLK2" parent="Kickers/LeftKicker/WaitingNode" instance=ExtResource("16_oeoae")]
 outLayer = 4
 
-[node name="RightKicker" parent="." instance=ExtResource("12_p47g8")]
-position = Vector2(200, 208)
+[node name="RightKicker" parent="Kickers" instance=ExtResource("12_p47g8")]
+position = Vector2(840, 568)
 collision_layer = 2
 collision_mask = 1
 Type = 0
 Behaviour = 1
 WaitingTime = 2.0
 
-[node name="CollisionArea" type="CollisionShape2D" parent="RightKicker"]
+[node name="CollisionArea" type="CollisionShape2D" parent="Kickers/RightKicker"]
 position = Vector2(-2, 5)
 shape = SubResource("RectangleShape2D_8ecuv")
 
-[node name="Kicker" parent="RightKicker" instance=ExtResource("13_yfwst")]
-HitAudio = ExtResource("13_1riy5")
+[node name="Kicker" parent="Kickers/RightKicker" instance=ExtResource("13_yfwst")]
+HitAudio = ExtResource("14_702jj")
 MaxHitPower = 10000
 ShootDirection = Vector2(0, -1)
 HoldingForMaxPowerSound = 0.75
 
-[node name="WaitingNode" parent="RightKicker" instance=ExtResource("17_4gw3y")]
+[node name="WaitingNode" parent="Kickers/RightKicker" instance=ExtResource("17_4gw3y")]
 waitingTime = 0.25
 
-[node name="LayerSwapperRK" parent="RightKicker/WaitingNode" instance=ExtResource("16_oeoae")]
+[node name="LayerSwapperRK" parent="Kickers/RightKicker/WaitingNode" instance=ExtResource("16_oeoae")]
 position = Vector2(-840, -568)
 outLayer = 2
 
-[node name="WaitingNode2" parent="RightKicker/WaitingNode" instance=ExtResource("17_4gw3y")]
+[node name="WaitingNode2" parent="Kickers/RightKicker/WaitingNode" instance=ExtResource("17_4gw3y")]
 waitingTime = 1.0
 
-[node name="LayerSwaperRK2" parent="RightKicker/WaitingNode/WaitingNode2" instance=ExtResource("16_oeoae")]
+[node name="LayerSwaperRK2" parent="Kickers/RightKicker/WaitingNode/WaitingNode2" instance=ExtResource("16_oeoae")]
 outLayer = 4
 
 [node name="MainLight" type="DirectionalLight2D" parent="."]

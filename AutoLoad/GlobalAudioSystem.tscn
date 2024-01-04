@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://drojyy35wkc6p"]
-
-[ext_resource type="Script" path="res://Scripts/Autoload/GlobalAudioSystem.cs" id="1_4142p"]
-[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="2_2a75a"]
-
-[node name="GlobalAudioSystem" type="Node"]
-script = ExtResource("1_4142p")
-
-[node name="AudioComponent" parent="." instance=ExtResource("2_2a75a")]

@@ -1,0 +1,6 @@
+Rampa_in ON_ENTER 4
+Rampa_out ON_EXIT 3
+Rampa_in_noenter ON_ENTER 3
+Shooter_Lane_Full ON_ENTER 3
+Shooter_Lane_Escape ON_EXIT 3
+Shooter_Lane_Empty ON_ENTER 5
