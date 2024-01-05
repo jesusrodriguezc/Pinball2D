@@ -55,19 +55,9 @@ public partial class Ball : RigidBody2D, IActor{
 	}
 
 	private void InitSignalConnections () {
-		var bumpers = Nodes.findByClass<Bumper>(GetTree().Root);
-		foreach (var bumper in bumpers) {
-			bumper.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
-		}
-
-		var slingshots = Nodes.findByClass<Slingshot>(GetTree().Root);
-		foreach (var slingshot in slingshots) {
-			slingshot.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
-		}
-
-		var shooterLanes = Nodes.findByClass<ShooterLane>(GetTree().Root);
-		foreach (var shooterLane in shooterLanes) {
-			shooterLane.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
+		var rebounds = Nodes.findByClass<ReboundBase>(GetTree().Root);
+		foreach (var rebound in rebounds) {
+			rebound.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
 		}
 	}
 

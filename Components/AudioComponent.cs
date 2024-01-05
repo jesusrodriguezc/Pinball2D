@@ -58,6 +58,9 @@ public partial class AudioComponent : Node
 
 	}
 
+	public bool HasAudio(String name) {
+		return AudioDictionary.ContainsKey(name);
+	}
 	public bool IsPlayingOrQueued(StringName name) {
 		if (name == null || !AudioDictionary.TryGetValue(name, out var audio)) {
 			return false;

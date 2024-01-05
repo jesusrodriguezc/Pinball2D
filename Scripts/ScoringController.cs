@@ -14,9 +14,6 @@ public partial class ScoringController : Node {
 	public ScoringController (Node owner) {
 		_owner = owner;
 
-		// Necesito encontrar los scoreComponents (dentro de los componentes) y BonusInfo (dentro de los BonusLane).
-		// Podría buscar todos los componentes y todas las bonusLane, obtener lo que necesito y aplicarles el comando cuando llegue la señal.
-
 		scoreComponents = Nodes.findByClass<ScoreComponent>(_owner);
 		scoreComponents.ForEach(scoreComponent => { scoreComponent.Score += (points) => AddScore(points); });
 

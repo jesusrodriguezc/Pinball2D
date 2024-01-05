@@ -147,7 +147,7 @@ public partial class Door : AnimatableBody2D, IActionable {
 		}
 
 		GD.Print($"{Name}.Action(). ActionQueue.Count = {ActionQueue.Count}");
-		if (ActionQueue.Count > 1 || (ActionQueue.Count <= 1 && waitTimer.TimeLeft > 0)) {
+		if (ActionQueue.Count > 1 || (ActionQueue.Count <= 1 && waitTimer != null && waitTimer.TimeLeft > 0)) {
 			return;
 		}
 

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3qi8eycesa21"]
+
+[ext_resource type="PackedScene" uid="uid://cy3dvu3unu2uo" path="res://Components/ScoreComponent.tscn" id="1_qf5wm"]
+[ext_resource type="Script" path="res://Scripts/Assets/ScoreModifier.cs" id="1_xo14i"]
+
+[node name="ScoreModifier" type="Node2D"]
+script = ExtResource("1_xo14i")
+
+[node name="ScoreComponent" parent="." instance=ExtResource("1_qf5wm")]

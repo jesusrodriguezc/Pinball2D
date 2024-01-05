@@ -21,11 +21,6 @@ public partial class ScoreComponent : Node {
 	public double CurrentScore { get { return BaseScore * Multiplier; } }
 	public Dictionary<StringName, double> currentBonus = new Dictionary<StringName, double>();
 
-	public override void _Ready () {
-		Owner = GetParent<StaticBody2D>();
-		
-	}
-
 	public void AddScore() {
 		EmitSignal(SignalName.Score, CurrentScore);
 

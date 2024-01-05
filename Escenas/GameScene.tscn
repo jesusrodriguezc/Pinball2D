@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://cb7aph7p675a8"]
+[gd_scene load_steps=40 format=3 uid="uid://cb7aph7p675a8"]
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_jf6fp"]
 [ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Assets/Map/Mapa.tscn" id="2_pj3pm"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Assets/Slingshot/slingshot.tscn" id="5_wm3ia"]
 [ext_resource type="PackedScene" uid="uid://8wbtmaw03d7i" path="res://Assets/BonusLane/LaneBonusGroup.tscn" id="6_sjfye"]
 [ext_resource type="PackedScene" uid="uid://b3k8b7kbea58p" path="res://Assets/BonusLane/bonus_lane.tscn" id="7_87ocl"]
+[ext_resource type="PackedScene" uid="uid://c7bo5nf411ybk" path="res://Assets/Slingshot/rebound.tscn" id="7_wpwg3"]
 [ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Assets/Flipper/left_flipper.tscn" id="8_khtso"]
 [ext_resource type="PackedScene" uid="uid://rvg8pn7803jr" path="res://Assets/Flipper/right_flipper.tscn" id="9_ee4xj"]
 [ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/TriggerArea.tscn" id="12_p47g8"]
@@ -21,8 +22,10 @@
 [ext_resource type="Texture2D" uid="uid://bu5xwoo7sgbjn" path="res://Assets/Ball/ball.png" id="16_mglgc"]
 [ext_resource type="PackedScene" uid="uid://bq026lg6n6o7t" path="res://Assets/Actionables/LayerSwapper.tscn" id="16_oeoae"]
 [ext_resource type="PackedScene" uid="uid://b6ib76heth48f" path="res://Assets/Actionables/WaitingNode.tscn" id="17_4gw3y"]
+[ext_resource type="PackedScene" uid="uid://b3qi8eycesa21" path="res://Assets/Actionables/ScoreModifier.tscn" id="17_ab7x8"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="17_tc5xm"]
 [ext_resource type="PackedScene" uid="uid://bacfc0s5fsli" path="res://Assets/Actionables/Teleport.tscn" id="18_jgni7"]
+[ext_resource type="PackedScene" uid="uid://bbn3ape6o6pht" path="res://Assets/Actionables/Door.tscn" id="18_vwigw"]
 
 [sub_resource type="Gradient" id="Gradient_ivc7w"]
 
@@ -46,7 +49,10 @@ height = 720
 size = Vector2(280, 17)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7k5xa"]
-size = Vector2(40, 16)
+size = Vector2(40, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3rgab"]
+size = Vector2(51.8875, 8)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ecuv"]
 size = Vector2(24, 10)
@@ -115,28 +121,24 @@ z_index = 40
 position = Vector2(587, 188)
 collision_layer = 4
 HitPower = 2500.0
-Score = 500.0
 
 [node name="ReentryBumper2" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
 position = Vector2(665, 179)
 collision_layer = 4
 HitPower = 2500.0
-Score = 500.0
 
 [node name="ReentryBumper3" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
 position = Vector2(632, 241)
 collision_layer = 4
 HitPower = 2500.0
-Score = 500.0
 
 [node name="RoundBumper" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
 position = Vector2(460, 59)
 collision_layer = 4
 HitPower = 2500.0
-Score = 500.0
 
 [node name="RampBumper" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 65
@@ -162,48 +164,37 @@ collision_layer = 8
 HitPower = 1500.0
 Score = 1500.0
 
-[node name="Slingshots" type="Node" parent="."]
+[node name="Rebounds" type="Node" parent="."]
 
-[node name="Slingshot" parent="Slingshots" instance=ExtResource("5_wm3ia")]
+[node name="Slingshot" parent="Rebounds" instance=ExtResource("5_wm3ia")]
 z_index = 40
 position = Vector2(524, 477)
 rotation = 1.13446
 collision_layer = 4
 HitPower = 6000.0
-Score = 500.0
 
-[node name="MiniSlingshot" parent="Slingshots" instance=ExtResource("5_wm3ia")]
+[node name="Rebound" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
-position = Vector2(506, 210)
-rotation = 0.804625
-scale = Vector2(0.226683, 0.137175)
+position = Vector2(502, 217)
 collision_layer = 4
-HitPower = 6000.0
-Score = 500.0
-EvenlyDistributedPower = true
 
-[node name="MiniSlingshot2" parent="Slingshots" instance=ExtResource("5_wm3ia")]
+[node name="Rebound2" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
-position = Vector2(751, 223)
-rotation = -1.26178
-scale = Vector2(0.226683, 0.137175)
+position = Vector2(754, 227)
 collision_layer = 4
-HitPower = 6000.0
-Score = 500.0
-EvenlyDistributedPower = true
 
-[node name="Slingshot2" parent="Slingshots" instance=ExtResource("5_wm3ia")]
+[node name="Slingshot2" parent="Rebounds" instance=ExtResource("5_wm3ia")]
 z_index = 40
 position = Vector2(757, 476)
 rotation = -1.13446
 scale = Vector2(-1, 1)
 collision_layer = 4
 HitPower = 6000.0
-Score = 500.0
 
 [node name="ReentryLaneBonus" parent="." node_paths=PackedStringArray("elements") instance=ExtResource("6_sjfye")]
 z_index = 30
 BName = &"ReentryLane"
+Duration = 60.0
 elements = [NodePath("../Bumpers/ReentryBumper"), NodePath("../Bumpers/ReentryBumper2"), NodePath("../Bumpers/ReentryBumper3")]
 
 [node name="ReentryLane" parent="ReentryLaneBonus" instance=ExtResource("7_87ocl")]
@@ -222,6 +213,7 @@ collision_layer = 4
 z_index = 55
 position = Vector2(-242, -96)
 BName = &"RampLane"
+Duration = 60.0
 elements = [NodePath("../Bumpers/RampBumper"), NodePath("../Bumpers/RampBumper2"), NodePath("../Bumpers/RampBumper3")]
 
 [node name="RampLane" parent="RampLaneBonus" instance=ExtResource("7_87ocl")]
@@ -298,27 +290,53 @@ Target = NodePath("../../Ball")
 WaitingTime = 2.0
 
 [node name="CollisionArea" type="CollisionShape2D" parent="Kickers/LeftKicker"]
-position = Vector2(389, 558)
+position = Vector2(389, 561)
 shape = SubResource("RectangleShape2D_7k5xa")
-
-[node name="Kicker" parent="Kickers/LeftKicker" instance=ExtResource("13_yfwst")]
-position = Vector2(389, 558)
-HitAudio = ExtResource("14_702jj")
-MaxHitPower = 10000
-ShootDirection = Vector2(0, -1)
-HoldingForMaxPowerSound = 0.75
 
 [node name="LayerSwapperLK" parent="Kickers/LeftKicker" instance=ExtResource("16_oeoae")]
 outLayer = 32
 
-[node name="WaitingNode" parent="Kickers/LeftKicker" instance=ExtResource("17_4gw3y")]
-waitingTime = 0.2
+[node name="Kicker" parent="Kickers/LeftKicker" instance=ExtResource("13_yfwst")]
+position = Vector2(389, 558)
+HitAudio = ExtResource("14_702jj")
+MaxHitPower = 20000
+ShootDirection = Vector2(0, -1)
+HoldingForMaxPowerSound = 0.75
 
-[node name="Teleport" parent="Kickers/LeftKicker/WaitingNode" instance=ExtResource("18_jgni7")]
-position = Vector2(416, 168)
+[node name="ScoreModifier" parent="Kickers/LeftKicker" instance=ExtResource("17_ab7x8")]
+BaseScore = 20000.0
+
+[node name="WaitingNode" parent="Kickers/LeftKicker" instance=ExtResource("17_4gw3y")]
+waitingTime = 0.25
 
 [node name="LayerSwapperLK2" parent="Kickers/LeftKicker/WaitingNode" instance=ExtResource("16_oeoae")]
 outLayer = 4
+
+[node name="Teleport" parent="Kickers/LeftKicker/WaitingNode" instance=ExtResource("18_jgni7")]
+position = Vector2(416, 167)
+
+[node name="Door" parent="Kickers/LeftKicker/WaitingNode" instance=ExtResource("18_vwigw")]
+z_index = 30
+position = Vector2(366, 531)
+rotation = 0.453786
+scale = Vector2(0.1, 1)
+Behaviour = 0
+InitialStatus = 3
+WaitingTime = 1.0
+FinalPosition = Vector2(373, 531)
+FinalRotation = 0.453786
+FinalScale = Vector2(1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Kickers/LeftKicker/WaitingNode/Door"]
+position = Vector2(16.1011, 0)
+shape = SubResource("RectangleShape2D_3rgab")
+
+[node name="ColorRect" type="ColorRect" parent="Kickers/LeftKicker/WaitingNode/Door"]
+offset_left = -20.0
+offset_top = -4.0
+offset_right = 43.0
+offset_bottom = 4.0
+color = Color(0.0156863, 0.0156863, 0.0156863, 1)
 
 [node name="RightKicker" parent="Kickers" instance=ExtResource("12_p47g8")]
 position = Vector2(840, 568)
@@ -337,6 +355,32 @@ HitAudio = ExtResource("14_702jj")
 MaxHitPower = 10000
 ShootDirection = Vector2(0, -1)
 HoldingForMaxPowerSound = 0.75
+
+[node name="ScoreModifier" parent="Kickers/RightKicker" instance=ExtResource("17_ab7x8")]
+BaseScore = 20000.0
+
+[node name="Door" parent="Kickers/RightKicker" instance=ExtResource("18_vwigw")]
+z_index = 30
+position = Vector2(-24, 4)
+rotation = -0.523599
+scale = Vector2(0.1, 1)
+Behaviour = 0
+InitialStatus = 3
+WaitingTime = 1.0
+FinalPosition = Vector2(-24, 4)
+FinalRotation = -0.523599
+FinalScale = Vector2(1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Kickers/RightKicker/Door"]
+position = Vector2(16.1011, 0)
+shape = SubResource("RectangleShape2D_3rgab")
+
+[node name="ColorRect" type="ColorRect" parent="Kickers/RightKicker/Door"]
+offset_left = -20.0
+offset_top = -4.0
+offset_right = 43.0
+offset_bottom = 4.0
+color = Color(0.0156863, 0.0156863, 0.0156863, 1)
 
 [node name="WaitingNode" parent="Kickers/RightKicker" instance=ExtResource("17_4gw3y")]
 waitingTime = 0.25
