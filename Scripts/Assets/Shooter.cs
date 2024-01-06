@@ -44,12 +44,6 @@ public partial class Shooter : Node2D, IActionable {
 		if (MaxPowerAudio != null) audioComponent?.AddAudio(MAX_POWER, MaxPowerAudio);
 		ShootDirection = ShootDirection.Normalized();
 		shootIntoTarget = (ShootDirection == Vector2.Zero);
-
-		QueueRedraw();
-	}
-
-	public override void _Draw () {
-		DrawLine(Vector2.Zero, ShootDirection * MaxHitPower, Colors.Yellow, 4f);
 	}
 
 	public void Action(EventData data) {

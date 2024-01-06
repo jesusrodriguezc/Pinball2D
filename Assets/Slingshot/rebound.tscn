@@ -7,13 +7,14 @@
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="4_rl6g7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kqfuu"]
+radius = 9.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_iat1m"]
 radius = 6.0
 
 [sub_resource type="Curve" id="Curve_0gmpa"]
 max_value = 4.0
-_data = [Vector2(0, 4), 0.0, 0.0, 0, 0, Vector2(0.161049, 1.09474), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 3.83158), 0.0, 0.0, 0, 0, Vector2(0.172285, 1.47368), 0.0, 0.0, 0, 0, Vector2(1, 0.8), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_rmdkt"]
@@ -21,8 +22,8 @@ curve = SubResource("Curve_0gmpa")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jnqvi"]
 lifetime_randomness = 0.5
-emission_shape = 1
-emission_sphere_radius = 16.0
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
 particle_flag_disable_z = true
 spread = 90.0
 flatness = 0.5
@@ -33,7 +34,7 @@ angular_velocity_min = 5.0
 angular_velocity_max = 10.0
 orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
-scale_max = 2.0
+scale_min = 0.5
 scale_curve = SubResource("CurveTexture_rmdkt")
 
 [sub_resource type="Gradient" id="Gradient_hu8eb"]
@@ -51,19 +52,21 @@ HitStream = ExtResource("2_usmi4")
 HitPower = 4000.0
 Score = 500.0
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_071de")
-
 [node name="CollisionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
 shape = SubResource("CircleShape2D_kqfuu")
+debug_color = Color(0.6, 0.545098, 0, 0.419608)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_iat1m")
+debug_color = Color(0, 0, 0, 0.419608)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_071de")
 
 [node name="ParticleSystem" type="GPUParticles2D" parent="."]
-position = Vector2(8, 0)
+position = Vector2(6, 0)
 emitting = false
 amount = 50
 process_material = SubResource("ParticleProcessMaterial_jnqvi")

@@ -157,7 +157,7 @@ max_value = 4.0
 _data = [Vector2(0, 4), 0.0, 0.0, 0, 0, Vector2(0.161049, 1.09474), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_rv8e2"]
+[sub_resource type="CurveTexture" id="CurveTexture_tuubd"]
 curve = SubResource("Curve_3qbcn")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7k0e8"]
@@ -175,14 +175,14 @@ angular_velocity_max = 10.0
 orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
 scale_max = 2.0
-scale_curve = SubResource("CurveTexture_rv8e2")
+scale_curve = SubResource("CurveTexture_tuubd")
 
-[sub_resource type="Gradient" id="Gradient_67803"]
+[sub_resource type="Gradient" id="Gradient_6m6g2"]
 offsets = PackedFloat32Array(0)
 colors = PackedColorArray(0.691357, 0.691357, 0.691357, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_k230s"]
-gradient = SubResource("Gradient_67803")
+gradient = SubResource("Gradient_6m6g2")
 width = 1
 height = 1
 

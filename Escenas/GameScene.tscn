@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://cb7aph7p675a8"]
+[gd_scene load_steps=41 format=3 uid="uid://cb7aph7p675a8"]
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_jf6fp"]
 [ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Assets/Map/Mapa.tscn" id="2_pj3pm"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c7bo5nf411ybk" path="res://Assets/Slingshot/rebound.tscn" id="7_wpwg3"]
 [ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Assets/Flipper/left_flipper.tscn" id="8_khtso"]
 [ext_resource type="PackedScene" uid="uid://rvg8pn7803jr" path="res://Assets/Flipper/right_flipper.tscn" id="9_ee4xj"]
+[ext_resource type="PackedScene" uid="uid://cqhjn5gombvfj" path="res://Assets/Target/Target.tscn" id="10_a6qii"]
 [ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/TriggerArea.tscn" id="12_p47g8"]
 [ext_resource type="PackedScene" uid="uid://p5ihd7ojsajs" path="res://Assets/Actionables/LifeModifier.tscn" id="12_rs7vt"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="12_uotgu"]
@@ -84,6 +85,8 @@ LivesLeft = 3
 
 [node name="Fondo" type="Sprite2D" parent="."]
 light_mask = 0
+position = Vector2(3.49998, 3.50001)
+scale = Vector2(1.04922, 1.07361)
 texture = SubResource("GradientTexture2D_o8sb2")
 
 [node name="Suelo" type="Sprite2D" parent="."]
@@ -98,6 +101,8 @@ metadata/_edit_horizontal_guides_ = []
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("3_or7yh")
+randomStrength = 30.0
+shakeFade = 5.0
 
 [node name="UserInterface" type="Control" parent="Camera2D"]
 z_index = 500
@@ -176,12 +181,16 @@ HitPower = 6000.0
 [node name="Rebound" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
 position = Vector2(502, 217)
+rotation = -0.785397
 collision_layer = 4
+HitPower = 2500.0
 
 [node name="Rebound2" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
 position = Vector2(754, 227)
+rotation = -2.72808
 collision_layer = 4
+HitPower = 2500.0
 
 [node name="Slingshot2" parent="Rebounds" instance=ExtResource("5_wm3ia")]
 z_index = 40
@@ -190,6 +199,94 @@ rotation = -1.13446
 scale = Vector2(-1, 1)
 collision_layer = 4
 HitPower = 6000.0
+
+[node name="Flippers" type="Node" parent="."]
+
+[node name="Left Flipper" parent="Flippers" instance=ExtResource("8_khtso")]
+z_index = 40
+position = Vector2(561, 577)
+rotation = 0.453786
+collision_mask = 0
+constant_angular_velocity = 0.0
+RotationMax = 50.0
+RotationFrameDuration = 8.0
+
+[node name="Right Flipper" parent="Flippers" instance=ExtResource("9_ee4xj")]
+z_index = 40
+position = Vector2(715, 577)
+rotation = -0.453786
+collision_mask = 0
+constant_angular_velocity = 0.0
+RotationMax = 50.0
+RotationFrameDuration = 8.0
+
+[node name="Targets" type="Node" parent="."]
+
+[node name="Booster Targets" type="Node" parent="Targets"]
+
+[node name="Target" parent="Targets/Booster Targets" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(785, 330)
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target2" parent="Targets/Booster Targets" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(785, 314)
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target3" parent="Targets/Booster Targets" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(785, 298)
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Medal Targets" type="Node" parent="Targets"]
+
+[node name="Target" parent="Targets/Medal Targets" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(634, 269)
+rotation = -1.309
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target2" parent="Targets/Medal Targets" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(621, 265)
+rotation = -1.309
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target3" parent="Targets/Medal Targets" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(608, 261)
+rotation = -1.309
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Field Multiplier Targets" type="Node" parent="Targets"]
+
+[node name="Target" parent="Targets/Field Multiplier Targets" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(571, 122)
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target2" parent="Targets/Field Multiplier Targets" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(557, 127)
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target3" parent="Targets/Field Multiplier Targets" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(543, 132)
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
 
 [node name="ReentryLaneBonus" parent="." node_paths=PackedStringArray("elements") instance=ExtResource("6_sjfye")]
 z_index = 30
@@ -227,24 +324,6 @@ collision_layer = 8
 [node name="RampLane3" parent="RampLaneBonus" instance=ExtResource("7_87ocl")]
 position = Vector2(32, 24)
 collision_layer = 8
-
-[node name="Left Flipper" parent="." instance=ExtResource("8_khtso")]
-z_index = 40
-position = Vector2(-79, 216)
-rotation = 0.453786
-collision_mask = 0
-constant_angular_velocity = 0.0
-RotationMax = 50.0
-RotationFrameDuration = 8.0
-
-[node name="Right Flipper" parent="." instance=ExtResource("9_ee4xj")]
-z_index = 40
-position = Vector2(75, 217)
-rotation = -0.453786
-collision_mask = 0
-constant_angular_velocity = 0.0
-RotationMax = 50.0
-RotationFrameDuration = 8.0
 
 [node name="DeathArea" parent="." instance=ExtResource("12_p47g8")]
 collision_layer = 2

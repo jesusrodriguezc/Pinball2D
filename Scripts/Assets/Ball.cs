@@ -71,6 +71,12 @@ public partial class Ball : RigidBody2D, IActor{
 				Move();
 			}
 		}
+
+		if (@event is InputEventKey key) {
+			if (key.Keycode.Equals(Key.Enter) && key.IsPressed()) {
+				Instance.Shake();
+			}		
+		}
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess (double delta) {

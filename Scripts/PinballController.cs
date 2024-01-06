@@ -98,5 +98,10 @@ public partial class PinballController : Node {
 		Ball.Resume();
 		pauseMenu.Hide();
 	}
+
+	public void Shake () {
+		// Should shake the camera and the ball.
+		CurrentCamera.ApplyShake();
+	}
 }
 

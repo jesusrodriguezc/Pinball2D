@@ -28,7 +28,6 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 
 	public override void _Ready () {
 
-		GD.Print($"Hola, soy {Name}");
 		_animationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
 		particleSystem = GetNodeOrNull<GpuParticles2D>("ParticleSystem");
 		_collisionArea = GetNode<Area2D>("CollisionArea");
@@ -52,7 +51,6 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 	}
 	public virtual void Collision (Node2D node) {
 
-		GD.Print("Collision()");
 		if (node is not IActor) {
 			return;
 		}
@@ -94,7 +92,6 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 	public abstract void EmitParticles (Node2D node);
 
 	public void Action (EventData data) {
-		GD.Print($"Action {IsCollisionEnabled}");
 		if (!IsCollisionEnabled) {
 			return;
 		}

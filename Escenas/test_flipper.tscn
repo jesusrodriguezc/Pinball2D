@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://61hw8lynt53k"]
+[gd_scene load_steps=23 format=3 uid="uid://61hw8lynt53k"]
 
 [ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_qxhib"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_yix0e"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bacfc0s5fsli" path="res://Assets/Actionables/Teleport.tscn" id="12_5gkhb"]
 [ext_resource type="PackedScene" uid="uid://b6ib76heth48f" path="res://Assets/Actionables/WaitingNode.tscn" id="13_hmqbj"]
 [ext_resource type="PackedScene" uid="uid://c7bo5nf411ybk" path="res://Assets/Slingshot/rebound.tscn" id="14_u4bym"]
+[ext_resource type="PackedScene" uid="uid://cqhjn5gombvfj" path="res://Assets/Target/Target.tscn" id="15_svgox"]
 
 [sub_resource type="Gradient" id="Gradient_b81lh"]
 colors = PackedColorArray(0, 0.0470588, 0.301961, 1, 0, 0.0470588, 0.301961, 1)
@@ -248,4 +249,20 @@ MaxHitPower = 5000
 ShootDirection = Vector2(-1, 0)
 
 [node name="Rebound" parent="." instance=ExtResource("14_u4bym")]
-position = Vector2(-16, 176)
+position = Vector2(-144, 176)
+
+[node name="Target" parent="." instance=ExtResource("15_svgox")]
+position = Vector2(56, 186)
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target2" parent="." instance=ExtResource("15_svgox")]
+position = Vector2(88, 192)
+rotation = 1.57079
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target3" parent="." instance=ExtResource("15_svgox")]
+position = Vector2(120, 186)
+collision_layer = 4
+HitPower = 1000.0
