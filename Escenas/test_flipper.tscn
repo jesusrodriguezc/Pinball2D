@@ -1,6 +1,6 @@
 [gd_scene load_steps=23 format=3 uid="uid://61hw8lynt53k"]
 
-[ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_qxhib"]
+[ext_resource type="Script" path="res://Scripts/GlobalControllers/PinballController.cs" id="1_qxhib"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_yix0e"]
 [ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="4_ec1oo"]
 [ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/TriggerArea.tscn" id="4_qnxv0"]

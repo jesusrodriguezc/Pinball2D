@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://46ubn6t0slfa"]
 
-[ext_resource type="Script" path="res://Scripts/Assets/ShooterLane.cs" id="1_lfa4p"]
+[ext_resource type="Script" path="res://Scripts/Assets/Actionables/ShooterLane.cs" id="1_lfa4p"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="3_43x23"]
 
 [node name="ShooterLane" type="Area2D"]

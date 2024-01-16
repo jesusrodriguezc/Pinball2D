@@ -39,7 +39,6 @@ public partial class Ball : RigidBody2D, IActor{
 
 
 		eventManager = GetNodeOrNull<EventManager>("/root/EventManager");
-		GD.Print($"[Ready] CollisionMask = {CollisionMask} - ZIndex = {ZIndex}");
 
 		InitSignalConnections();
 
@@ -49,7 +48,6 @@ public partial class Ball : RigidBody2D, IActor{
 		initialPosition = GlobalPosition;
 		currentStatus = Status.IDLE;
 
-		GD.Print($"CollisionLayer: {CollisionMask} -> currentLayer: {currentLayer}");
 		SetLevel(currentLayer);
 
 	}
@@ -89,16 +87,15 @@ public partial class Ball : RigidBody2D, IActor{
 			LinearVelocity = LinearVelocity.LimitLength(MaxVelocity);
 		}
 
-		if (LinearVelocity.LengthSquared() < 0.1f) {
-			if (currentStatus == Status.MOVING) {
-				currentStatus = Status.IDLE;
-				//NotifyStoppingStatus();
-			}
-		} else {
-			if (currentStatus == Status.IDLE) {
-				currentStatus = Status.MOVING;
-			}
-		}
+		//if (LinearVelocity.LengthSquared() < 0.1f) {
+		//	if (currentStatus == Status.MOVING) {
+		//		currentStatus = Status.IDLE;
+		//	}
+		//} else {
+		//	if (currentStatus == Status.IDLE) {
+		//		currentStatus = Status.MOVING;
+		//	}
+		//}
 	}
 
 	private void ApplyImpulse (Vector2 impulse) {
@@ -160,11 +157,6 @@ public partial class Ball : RigidBody2D, IActor{
 	public void Resume () {
 		LinearVelocity = storedVelocity;
 		GlobalPosition = storedPosition;
-	}
-
-	// No es necesario de momento.
-	public void NotifyStoppingStatus() {
-		eventManager.SendMessage(this, LayerManager.GetActionablesFromLayer(currentLayer, GetTree().Root), EventManager.EventType.STOP, null);
 	}
 	#endregion
 }

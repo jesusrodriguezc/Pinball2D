@@ -18,8 +18,7 @@ public partial class EventManager : Node {
 		TRIGGER,
 		ERROR,
 		ENABLE,
-		DISABLE,
-		STOP
+		DISABLE
 	}
 
 	public void SendMessage(Node2D sender, Node2D[] receivers, EventType eventType, Dictionary<StringName, object> args) {
@@ -69,18 +68,6 @@ public partial class EventManager : Node {
 
 					Nodes.SecureCall(collisionObj, "EnableCollision", false);
 				}
-				break;
-			case EventType.STOP:
-				foreach (var receiver in receivers) {
-					if (receiver is not ITrigger trigger) {
-						continue;
-					}
-
-					GD.Print($"Trigger {receiver.Name} notified of stop event");
-
-					trigger.OnTargetStopped(sender);
-				}
-
 				break;
 			case EventType.ERROR:
 			default:

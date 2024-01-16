@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static System.Formats.Asn1.AsnWriter;
 
-public partial class PinballController : Node {
+public partial class PinballController : Node2D {
 
 	public enum LevelZ {
 		FONDO = -10,
@@ -32,7 +32,8 @@ public partial class PinballController : Node {
 	public Ball Ball { get; set; }
 	public Camera CurrentCamera { get; set; }
 
-	public ScoringController ScoreCtrl;
+	public ScoringController scoreController;
+	public GlobalEffectController globalEffectController;
 	private PauseMenu pauseMenu;
 	bool isPaused = false;
 	private SceneSwitcher sceneSwitcher;
@@ -45,7 +46,9 @@ public partial class PinballController : Node {
 
 		Ball = GetChildren().OfType<Ball>().ToList().First();
 		CurrentCamera = GetChildren().OfType<Camera>().FirstOrDefault();
-		ScoreCtrl = new ScoringController(GetTree().Root);
+		scoreController = GetNode<ScoringController>("ScoringController");
+		globalEffectController = GetNode<GlobalEffectController>("GlobalEffectController");
+
 		pauseMenu = GetNodeOrNull<PauseMenu>("PauseMenu");
 
 		Ball.Death += OnLiveLost;
@@ -84,7 +87,7 @@ public partial class PinballController : Node {
 	}
 
 	public double GetScore () {
-		return ScoreCtrl?.Score ?? 0;
+		return scoreController?.Score ?? 0;
 	}
 
 	internal void PauseGame () {

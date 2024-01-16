@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://cqhjn5gombvfj"]
 
-[ext_resource type="Script" path="res://Scripts/Assets/Target.cs" id="1_jkl1o"]
+[ext_resource type="Script" path="res://Scripts/Assets/Actionables/Target.cs" id="1_fksfy"]
 [ext_resource type="AudioStream" uid="uid://7mpnvjkwmiqj" path="res://SFX/slingshot_hit.wav" id="2_4ia71"]
 [ext_resource type="Texture2D" uid="uid://c1lhwvsmqn6rm" path="res://Assets/Target/Target.png" id="3_voxh8"]
 [ext_resource type="PackedScene" uid="uid://cy3dvu3unu2uo" path="res://Components/ScoreComponent.tscn" id="4_rwlhy"]
@@ -161,7 +161,7 @@ _data = {
 
 [node name="Target" type="StaticBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_si8w8")
-script = ExtResource("1_jkl1o")
+script = ExtResource("1_fksfy")
 HitStream = ExtResource("2_4ia71")
 Score = 500.0
 

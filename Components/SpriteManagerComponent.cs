@@ -5,8 +5,7 @@ public partial class SpriteManagerComponent : Node
 {
 	private Sprite2D Sprite;
 
-	[Export]
-	CompressedTexture2D[] animatedTextures;
+	[Export] CompressedTexture2D[] animatedTextures;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		Sprite = GetNode<Sprite2D>("Sprite2D");

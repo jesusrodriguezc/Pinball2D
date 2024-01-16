@@ -1,12 +1,14 @@
 using Godot;
 
-public partial class BonusLane : Area2D, IActionable {
+public partial class BonusLane : Area2D, IActionable, IGroupable {
+
+
 	private AnimationPlayer _animationPlayer;
 	private AudioComponent _audioComponent;
 
 	public readonly StringName SWITCH = "Switch";
 
-	public bool Active { get; private set; }
+	public bool Active { get; set; } = false;
 	public bool Blocked { get; set; } = false;
 	public bool IsCollisionEnabled { get; set; }
 

@@ -64,8 +64,4 @@ public partial class WaitingNode : Node2D, IActionable, ITrigger
 
 		currentEvent = null;
 	}
-
-	public void OnTargetStopped (Node2D node) {
-		return;
-	}
 }

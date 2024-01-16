@@ -15,7 +15,7 @@ run/main_scene="res://Escenas/IntroScreen.tscn"
 config/features=PackedStringArray("4.1", "C#", "Mobile")
 run/max_fps=120
 boot_splash/show_image=false
-config/icon="res://pinball.png"
+config/icon="res://Sprites/pinball_mix.png"
 
 [audio]
 

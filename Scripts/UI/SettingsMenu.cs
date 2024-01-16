@@ -35,7 +35,6 @@ public partial class SettingsMenu : Control
 
 	private void PrepareSettingsMenu () {
 
-		GD.Print($"{settingsManager.settingsData.SfxVolume}");
 		// Video
 		displayModeButton = GetNodeOrNull<OptionButton>("VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer/DisplayModeOpt");
 		vsyncButton = GetNodeOrNull<CheckButton>("VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer/VSyncOpt");

@@ -15,7 +15,7 @@ public partial class MainMenu : Control
 	private Label VersionLabel;
 
 	private readonly StringName MUSIC = "Music";
-	private readonly string GAME_VERSION = "v.0.0.2";
+	private readonly string GAME_VERSION = "v.0.0.4";
 
 
 	public override void _Ready () {

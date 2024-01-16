@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cysdgl8aojt6b"]
 
-[ext_resource type="Script" path="res://Scripts/Assets/TriggerArea.cs" id="1_8xb8q"]
+[ext_resource type="Script" path="res://Scripts/Assets/Trigger/TriggerArea.cs" id="1_8xb8q"]
 
 [node name="Area2D" type="Area2D" node_paths=PackedStringArray("triggeredNodes")]
 collision_layer = 0

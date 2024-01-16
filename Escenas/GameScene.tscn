@@ -1,12 +1,14 @@
-[gd_scene load_steps=41 format=3 uid="uid://cb7aph7p675a8"]
+[gd_scene load_steps=44 format=3 uid="uid://cb7aph7p675a8"]
 
-[ext_resource type="Script" path="res://Scripts/PinballController.cs" id="1_jf6fp"]
+[ext_resource type="Script" path="res://Scripts/GlobalControllers/PinballController.cs" id="1_0pib5"]
+[ext_resource type="Script" path="res://Scripts/GlobalControllers/ScoringController.cs" id="2_jivhh"]
 [ext_resource type="PackedScene" uid="uid://cwebqd2jf65fg" path="res://Assets/Map/Mapa.tscn" id="2_pj3pm"]
 [ext_resource type="Script" path="res://Scripts/Assets/Camera.cs" id="3_or7yh"]
 [ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="3_ucbuj"]
+[ext_resource type="Script" path="res://Scripts/GlobalControllers/GlobalEffectController.cs" id="3_xl14v"]
 [ext_resource type="PackedScene" uid="uid://b2k5k6gh6ggy7" path="res://Assets/Bumper/bumper.tscn" id="4_7xi1l"]
 [ext_resource type="PackedScene" uid="uid://dn0oy12w8ujny" path="res://Assets/Slingshot/slingshot.tscn" id="5_wm3ia"]
-[ext_resource type="PackedScene" uid="uid://8wbtmaw03d7i" path="res://Assets/BonusLane/LaneBonusGroup.tscn" id="6_sjfye"]
+[ext_resource type="PackedScene" uid="uid://8wbtmaw03d7i" path="res://Assets/BonusLane/GroupTrigger.tscn" id="6_sjfye"]
 [ext_resource type="PackedScene" uid="uid://b3k8b7kbea58p" path="res://Assets/BonusLane/bonus_lane.tscn" id="7_87ocl"]
 [ext_resource type="PackedScene" uid="uid://c7bo5nf411ybk" path="res://Assets/Slingshot/rebound.tscn" id="7_wpwg3"]
 [ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Assets/Flipper/left_flipper.tscn" id="8_khtso"]
@@ -17,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="12_uotgu"]
 [ext_resource type="AudioStream" uid="uid://6on0becnnqx0" path="res://SFX/shooterlane_hit.wav" id="13_1riy5"]
 [ext_resource type="PackedScene" uid="uid://ddcmg3477qnnl" path="res://Escenas/PauseMenu.tscn" id="13_fcjr0"]
+[ext_resource type="AudioStream" uid="uid://m0ctv00ntaei" path="res://SFX/bankCompleted.wav" id="13_q7v8a"]
 [ext_resource type="PackedScene" uid="uid://dnnucr2srvyrn" path="res://Assets/Actionables/Shooter.tscn" id="13_yfwst"]
 [ext_resource type="PackedScene" uid="uid://xv5e2r5qk23p" path="res://Escenas/SettingsMenu.tscn" id="14_5vdku"]
 [ext_resource type="AudioStream" uid="uid://c5tsamikog7v2" path="res://SFX/shooterlane_full.wav" id="14_702jj"]
@@ -78,10 +81,16 @@ fill_to = Vector2(0.880342, 0.15812)
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_v0gfe"]
 polygon = PackedVector2Array(6, -14, 10, -14, 10, -12, 12, -12, 12, -10, 14, -10, 14, -6, 16, -6, 16, 6, 14, 6, 14, 10, 12, 10, 12, 12, 10, 12, 10, 14, 6, 14, 6, 16, -6, 16, -6, 14, -10, 14, -10, 12, -12, 12, -12, 10, -14, 10, -14, 6, -16, 6, -16, -6, -14, -6, -14, -10, -12, -10, -12, -12, -10, -12, -10, -14, -6, -14, -6, -16, 6, -16)
 
-[node name="Main" type="Node2D"]
+[node name="Pinball" type="Node2D"]
 position = Vector2(640, 360)
-script = ExtResource("1_jf6fp")
+script = ExtResource("1_0pib5")
 LivesLeft = 3
+
+[node name="ScoringController" type="Node" parent="."]
+script = ExtResource("2_jivhh")
+
+[node name="GlobalEffectController" type="Node" parent="."]
+script = ExtResource("3_xl14v")
 
 [node name="Fondo" type="Sprite2D" parent="."]
 light_mask = 0
@@ -222,77 +231,205 @@ RotationFrameDuration = 8.0
 
 [node name="Targets" type="Node" parent="."]
 
-[node name="Booster Targets" type="Node" parent="Targets"]
+[node name="Booster Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+GroupName = &"BoosterBank"
+AudioStream = ExtResource("13_q7v8a")
+actionables = [NodePath("../../Ball")]
+ScoreAddition = 3000.0
 
-[node name="Target" parent="Targets/Booster Targets" instance=ExtResource("10_a6qii")]
+[node name="Target" parent="Targets/Booster Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 40
 position = Vector2(785, 330)
 collision_layer = 4
 HitPower = 1000.0
 
-[node name="Target2" parent="Targets/Booster Targets" instance=ExtResource("10_a6qii")]
+[node name="Target2" parent="Targets/Booster Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 40
 position = Vector2(785, 314)
 collision_layer = 4
 HitPower = 1000.0
 
-[node name="Target3" parent="Targets/Booster Targets" instance=ExtResource("10_a6qii")]
+[node name="Target3" parent="Targets/Booster Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 40
 position = Vector2(785, 298)
 collision_layer = 4
 HitPower = 1000.0
 
-[node name="Medal Targets" type="Node" parent="Targets"]
+[node name="Medal Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+GroupName = &"MedalBank"
+AudioStream = ExtResource("13_q7v8a")
+actionables = [NodePath("../../Ball")]
+ScoreAddition = 3000.0
 
-[node name="Target" parent="Targets/Medal Targets" instance=ExtResource("10_a6qii")]
+[node name="Target" parent="Targets/Medal Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 40
 position = Vector2(634, 269)
 rotation = -1.309
 collision_layer = 4
 HitPower = 1000.0
 
-[node name="Target2" parent="Targets/Medal Targets" instance=ExtResource("10_a6qii")]
+[node name="Target2" parent="Targets/Medal Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 40
 position = Vector2(621, 265)
 rotation = -1.309
 collision_layer = 4
 HitPower = 1000.0
 
-[node name="Target3" parent="Targets/Medal Targets" instance=ExtResource("10_a6qii")]
+[node name="Target3" parent="Targets/Medal Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 40
 position = Vector2(608, 261)
 rotation = -1.309
 collision_layer = 4
 HitPower = 1000.0
 
-[node name="Field Multiplier Targets" type="Node" parent="Targets"]
+[node name="Field Multiplier Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+GroupName = &"FieldMultiplierBank"
+AudioStream = ExtResource("13_q7v8a")
+actionables = [NodePath("../../Ball")]
+ScoreAddition = 3000.0
 
-[node name="Target" parent="Targets/Field Multiplier Targets" instance=ExtResource("10_a6qii")]
+[node name="Target" parent="Targets/Field Multiplier Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 40
 position = Vector2(571, 122)
 rotation = -1.88709
 collision_layer = 4
 HitPower = 1000.0
 
-[node name="Target2" parent="Targets/Field Multiplier Targets" instance=ExtResource("10_a6qii")]
+[node name="Target2" parent="Targets/Field Multiplier Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 40
 position = Vector2(557, 127)
 rotation = -1.88709
 collision_layer = 4
 HitPower = 1000.0
 
-[node name="Target3" parent="Targets/Field Multiplier Targets" instance=ExtResource("10_a6qii")]
+[node name="Target3" parent="Targets/Field Multiplier Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 40
 position = Vector2(543, 132)
 rotation = -1.88709
 collision_layer = 4
 HitPower = 1000.0
 
-[node name="ReentryLaneBonus" parent="." node_paths=PackedStringArray("elements") instance=ExtResource("6_sjfye")]
+[node name="Hazard Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+position = Vector2(465, 153)
+rotation = -1.38777
+GroupName = &"HazardBank"
+AudioStream = ExtResource("13_q7v8a")
+actionables = [NodePath("../../Ball")]
+ScoreAddition = 3000.0
+
+[node name="Target" parent="Targets/Hazard Target Bank" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(14, -5)
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target2" parent="Targets/Hazard Target Bank" instance=ExtResource("10_a6qii")]
+z_index = 40
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target3" parent="Targets/Hazard Target Bank" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(-14, 5)
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Mission Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+position = Vector2(454, 347)
+rotation = -1.25054
+GroupName = &"MissionBank"
+AudioStream = ExtResource("13_q7v8a")
+actionables = [NodePath("../../Ball")]
+ScoreAddition = 3000.0
+
+[node name="Target" parent="Targets/Mission Target Bank" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(12.9733, -5.35651)
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target2" parent="Targets/Mission Target Bank" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(-0.314819, -0.949158)
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target3" parent="Targets/Mission Target Bank" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(-13.603, 3.45825)
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Hazard Target Bank2" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+position = Vector2(744, 162)
+rotation = -4.97418
+GroupName = &"HazardBank2"
+AudioStream = ExtResource("13_q7v8a")
+actionables = [NodePath("../../Ball")]
+ScoreAddition = 3000.0
+
+[node name="Target" parent="Targets/Hazard Target Bank2" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(16.1111, -6.03601)
+rotation = -1.57079
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target2" parent="Targets/Hazard Target Bank2" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(-0.448273, -2.19067)
+rotation = -1.88709
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target3" parent="Targets/Hazard Target Bank2" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(-16.8182, 4.81104)
+rotation = -2.09439
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Fuel Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+position = Vector2(458, 67)
+rotation = -1.38777
+GroupName = &"FuelBank"
+AudioStream = ExtResource("13_q7v8a")
+actionables = [NodePath("../../Ball")]
+ScoreAddition = 3000.0
+
+[node name="Target" parent="Targets/Fuel Target Bank" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(2.18863, -43.1186)
+rotation = -1.57079
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target2" parent="Targets/Fuel Target Bank" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(47.9996, -9.90167)
+rotation = -0.261799
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="Target3" parent="Targets/Fuel Target Bank" instance=ExtResource("10_a6qii")]
+z_index = 40
+position = Vector2(30.5509, 44.1774)
+rotation = -5.23598
+collision_layer = 4
+HitPower = 1000.0
+
+[node name="ReentryLaneBonus" parent="." node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
 z_index = 30
-BName = &"ReentryLane"
+GroupName = &"ReentryLane"
+actionables = [NodePath("../Bumpers/ReentryBumper"), NodePath("../Bumpers/ReentryBumper2"), NodePath("../Bumpers/ReentryBumper3"), NodePath("../Bumpers/RoundBumper")]
+BonusMultiplier = 1.5
 Duration = 60.0
-elements = [NodePath("../Bumpers/ReentryBumper"), NodePath("../Bumpers/ReentryBumper2"), NodePath("../Bumpers/ReentryBumper3")]
 
 [node name="ReentryLane" parent="ReentryLaneBonus" instance=ExtResource("7_87ocl")]
 position = Vector2(-46, -256)
@@ -306,12 +443,13 @@ collision_layer = 4
 position = Vector2(11, -256)
 collision_layer = 4
 
-[node name="RampLaneBonus" parent="." node_paths=PackedStringArray("elements") instance=ExtResource("6_sjfye")]
+[node name="RampLaneBonus" parent="." node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
 z_index = 55
 position = Vector2(-242, -96)
-BName = &"RampLane"
+GroupName = &"RampLane"
+actionables = [NodePath("../Bumpers/RampBumper"), NodePath("../Bumpers/RampBumper2"), NodePath("../Bumpers/RampBumper3")]
+BonusMultiplier = 1.5
 Duration = 60.0
-elements = [NodePath("../Bumpers/RampBumper"), NodePath("../Bumpers/RampBumper2"), NodePath("../Bumpers/RampBumper3")]
 
 [node name="RampLane" parent="RampLaneBonus" instance=ExtResource("7_87ocl")]
 position = Vector2(-32, 24)

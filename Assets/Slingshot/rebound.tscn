@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://c7bo5nf411ybk"]
 
 [ext_resource type="Texture2D" uid="uid://3mrtutwq4tne" path="res://Assets/Slingshot/rebound_small.png" id="1_071de"]
-[ext_resource type="Script" path="res://Scripts/Assets/Rebound.cs" id="1_fhbe0"]
+[ext_resource type="Script" path="res://Scripts/Assets/Actionables/Rebound.cs" id="1_fhbe0"]
 [ext_resource type="AudioStream" uid="uid://cyr3abrv0kosr" path="res://SFX/slingshot_hit_2.wav" id="2_usmi4"]
 [ext_resource type="PackedScene" uid="uid://cy3dvu3unu2uo" path="res://Components/ScoreComponent.tscn" id="3_o26de"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="4_rl6g7"]

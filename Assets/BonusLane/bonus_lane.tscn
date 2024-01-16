@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://b3k8b7kbea58p"]
 
-[ext_resource type="Script" path="res://Scripts/Assets/BonusLane.cs" id="1_w4xo0"]
+[ext_resource type="Script" path="res://Scripts/Assets/Actionables/BonusLane.cs" id="1_cic04"]
 [ext_resource type="Texture2D" uid="uid://d6bjnljj6raf" path="res://Assets/BonusLane/bonus_lane-sheet.png" id="2_i82ro"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="3_ym00d"]
 
@@ -73,7 +73,7 @@ fill_from = Vector2(0.491453, 0.5)
 fill_to = Vector2(0.884615, 0.141026)
 
 [node name="Area2D" type="Area2D"]
-script = ExtResource("1_w4xo0")
+script = ExtResource("1_cic04")
 
 [node name="BonusLane" type="Sprite2D" parent="."]
 texture = ExtResource("2_i82ro")

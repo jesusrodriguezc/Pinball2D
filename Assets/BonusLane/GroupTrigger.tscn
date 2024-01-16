@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://8wbtmaw03d7i"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/Trigger/GroupTrigger.cs" id="1_qk28h"]
+[ext_resource type="AudioStream" uid="uid://bf6ferj70n64e" path="res://SFX/powerup.wav" id="2_52cvf"]
+[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="3_60phd"]
+
+[node name="GroupTrigger" type="Node2D" node_paths=PackedStringArray("actionables")]
+script = ExtResource("1_qk28h")
+AudioStream = ExtResource("2_52cvf")
+actionables = []
+BonusMultiplier = 1.0
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AudioComponent" parent="." instance=ExtResource("3_60phd")]

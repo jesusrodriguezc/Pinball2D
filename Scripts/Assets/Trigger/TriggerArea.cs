@@ -331,21 +331,6 @@ public partial class TriggerArea : Area2D, ITrigger {
 		ProcessHold(isPressed);
 	}
 
-	public void OnTargetStopped (Node2D node) {
-		if (node == null) {
-			return;
-		}
-
-		if (node != Target) {
-			return;
-		}
-
-		if (!behaviourInfo.Stopped) {
-			return;
-		}
-
-		AfterStopping();
-	}
 
 	#endregion Behaviour
 }

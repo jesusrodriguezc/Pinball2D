@@ -60,11 +60,4 @@ public interface ITrigger {
 
 
 	public void Trigger (Dictionary<StringName, object> args = null);
-	//public void ProcessInstantaneous ();
-	//public void ProcessWait ();
-	//public void ProcessPress (bool isPressed);
-	//public void ProcessHold (bool isPressed);
-	//public void ProcessPressWait (bool isPressed);
-	//public void ProcessHoldWait (bool isPressed);
-	public void OnTargetStopped (Node2D node);
 }

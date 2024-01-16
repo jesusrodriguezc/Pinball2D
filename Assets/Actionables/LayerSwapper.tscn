@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bq026lg6n6o7t"]
 
-[ext_resource type="Script" path="res://Scripts/Assets/LayerSwapper.cs" id="1_biosv"]
+[ext_resource type="Script" path="res://Scripts/Assets/Actionables/LayerSwapper.cs" id="1_biosv"]
 
 [node name="LayerSwapper" type="Node2D"]
 script = ExtResource("1_biosv")

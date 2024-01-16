@@ -10,8 +10,8 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 	protected AnimationPlayer _animationPlayer;
 
 	#region Components
-	protected SpriteManagerComponent _spriteManager;
-	protected ScoreComponent _scoreComponent;
+	public SpriteManagerComponent spriteManagerComponent;
+	public ScoreComponent scoreComponent;
 	protected AudioComponent _audioComponent;
 	protected GpuParticles2D particleSystem;
 	#endregion
@@ -36,13 +36,13 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 		_collisionArea.BodyExited += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { ITrigger.ENTERING, false }, { ITrigger.ACTIVATOR, node } } });
 		_collisionArea.CollisionLayer = CollisionLayer;
 
-		_spriteManager = GetNodeOrNull<SpriteManagerComponent>("SpriteManagerComponent");
-		_spriteManager?.ChangeTexture(0);
+		spriteManagerComponent = GetNodeOrNull<SpriteManagerComponent>("SpriteManagerComponent");
+		spriteManagerComponent?.ChangeTexture(0);
 
-		_scoreComponent = GetNodeOrNull<ScoreComponent>("ScoreComponent");
+		scoreComponent = GetNodeOrNull<ScoreComponent>("ScoreComponent");
 
-		if (_scoreComponent != null) {
-			_scoreComponent.BaseScore = Score;
+		if (scoreComponent != null) {
+			scoreComponent.BaseScore = Score;
 		}
 		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
 		if (_audioComponent != null) {
@@ -50,10 +50,6 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 		}
 	}
 	public virtual void Collision (Node2D node) {
-
-		if (node is not IActor) {
-			return;
-		}
 
 		Vector2 dirImpulso = CalculateImpulseDirection(node);
 		if (_animationPlayer?.HasAnimation("on_collision") ?? false) {
@@ -63,7 +59,7 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 		_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
 		
 		EmitSignal(SignalName.Impulse, node, dirImpulso * HitPower);
-		_scoreComponent?.AddScore();
+		scoreComponent?.AddScore();
 
 	}
 
@@ -93,6 +89,10 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 
 	public void Action (EventData data) {
 		if (!IsCollisionEnabled) {
+			return;
+		}
+
+		if (data.Sender is not IActor) {
 			return;
 		}
 		bool isEntering = false;

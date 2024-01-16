@@ -285,7 +285,6 @@ Type = 0
 
 [node name="In" type="CollisionShape2D" parent="Triggers/Rampa_in"]
 position = Vector2(-12.9032, 0.771027)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_ymlyk")
 debug_color = Color(0.929412, 0, 0.12549, 0.419608)
 
