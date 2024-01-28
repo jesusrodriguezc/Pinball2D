@@ -32,6 +32,7 @@ public partial class Door : AnimatableBody2D, IActionable {
 	private Timer waitTimer;
 	[Export] public double WaitingTime;
 
+	[Export] public float TransitionTime;
 
 	[ExportCategory("Final transform")]
 
@@ -114,7 +115,14 @@ public partial class Door : AnimatableBody2D, IActionable {
 		}
 		switch (CurrentStatus) {
 			case DoorStatus.OPENING:
-				if (_t <= 1f) {
+				if (TransitionTime <= delta) {
+					Transform = OpenedTransform;
+					CurrentStatus = DoorStatus.OPENED;
+					_t = 0f;
+					return;
+				}
+
+				if (_t <= TransitionTime) {
 					Transform = Transform.InterpolateWith(OpenedTransform, _t);
 					_t += (float)delta;
 				}
@@ -125,7 +133,13 @@ public partial class Door : AnimatableBody2D, IActionable {
 
 				break;
 			case DoorStatus.CLOSING:
-				if (_t <= 1f) {
+				if (TransitionTime <= delta) {
+					Transform = ClosedTransform;
+					CurrentStatus = DoorStatus.CLOSED;
+					_t = 0f;
+					return;
+				}
+				if (_t <= TransitionTime) {
 					Transform = Transform.InterpolateWith(ClosedTransform, _t);
 					_t += (float)delta;
 				} else {
@@ -146,7 +160,6 @@ public partial class Door : AnimatableBody2D, IActionable {
 			previousActionToReceived = CurrentStatus;
 		}
 
-		GD.Print($"{Name}.Action(). ActionQueue.Count = {ActionQueue.Count}");
 		if (ActionQueue.Count > 1 || (ActionQueue.Count <= 1 && waitTimer != null && waitTimer.TimeLeft > 0)) {
 			return;
 		}

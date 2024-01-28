@@ -18,6 +18,8 @@ public partial class PinballController : Node2D {
 	#region Singleton
 	// Singleton
 	private static PinballController _instance = new PinballController();
+	private Random randomNumberGenerator;
+
 	private PinballController () { }
 	public static PinballController Instance {
 		get { return _instance; }
@@ -40,6 +42,7 @@ public partial class PinballController : Node2D {
 
 	public override void _Ready () {
 		_instance = this;
+		randomNumberGenerator = new Random(Guid.NewGuid().GetHashCode());
 		LayerManager.UpdateActionables(this, 0, true);
 
 		sceneSwitcher = GetNode<SceneSwitcher>("/root/SceneSwitcher");
@@ -74,7 +77,6 @@ public partial class PinballController : Node2D {
 			}
 
 		}
-
 	}
 
 	public void OnLiveLost(Ball ball) {
@@ -92,19 +94,48 @@ public partial class PinballController : Node2D {
 
 	internal void PauseGame () {
 		pauseMenu.Show();
+		GetTree().Paused = true;
 		Ball.Pause();
-		Engine.TimeScale = 0f;
+		//Engine.TimeScale = 0f;
 	}
 
 	internal void ResumeGame () {
-		Engine.TimeScale = 1f;
+		//Engine.TimeScale = 1f;
 		Ball.Resume();
 		pauseMenu.Hide();
+		GetTree().Paused = false;
+
 	}
 
 	public void Shake () {
 		// Should shake the camera and the ball.
 		CurrentCamera.ApplyShake();
+		Ball.ForceMove(new Vector2((float)randomNumberGenerator.NextDouble(), (float)randomNumberGenerator.NextDouble()), randomNumberGenerator.Next(100, 1000));
+	}
+
+	public async void DisableAll<T> (double secondsDisabled) where T : Node2D, IActionable {
+		var nodes = Nodes.findByClass<T>(GetTree().Root).Where(node => node.IsCollisionEnabled).ToList();
+		foreach (var node in nodes) {
+			node.EnableCollision(false);
+		}
+
+		Timer disableTimer = new() {
+			Autostart = false,
+			OneShot = true,
+			WaitTime = secondsDisabled
+		};
+		AddChild(disableTimer);
+
+		disableTimer.Start(secondsDisabled);
+		await ToSignal(disableTimer, "timeout");
+		foreach (var node in nodes) {
+			node.EnableCollision(true);
+		}
+
+		RemoveChild(disableTimer);
+		disableTimer.QueueFree();
+
+
 	}
 }
 

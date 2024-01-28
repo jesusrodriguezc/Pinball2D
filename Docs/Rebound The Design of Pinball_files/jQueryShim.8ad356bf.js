@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkgiantbomb=self.webpackChunkgiantbomb||[]).push([[7650],{455:(e,a,b)=>{var n=b(9755),r=b.n(n);b.g.$=r(),b.g.jQuery=r()}},e=>{e.O(0,[9755],(()=>{return a=455,e(e.s=a);var a}));e.O()}]);

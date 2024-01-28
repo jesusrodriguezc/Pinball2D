@@ -163,6 +163,7 @@ _data = {
 physics_material_override = SubResource("PhysicsMaterial_si8w8")
 script = ExtResource("1_fksfy")
 HitStream = ExtResource("2_4ia71")
+HitPower = 4000.0
 Score = 500.0
 
 [node name="CollisionArea" type="Area2D" parent="."]

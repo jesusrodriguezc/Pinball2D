@@ -1,16 +1,16 @@
-[gd_scene load_steps=13 format=3 uid="uid://c7bo5nf411ybk"]
+[gd_scene load_steps=17 format=3 uid="uid://c7bo5nf411ybk"]
 
-[ext_resource type="Texture2D" uid="uid://3mrtutwq4tne" path="res://Assets/Slingshot/rebound_small.png" id="1_071de"]
 [ext_resource type="Script" path="res://Scripts/Assets/Actionables/Rebound.cs" id="1_fhbe0"]
 [ext_resource type="AudioStream" uid="uid://cyr3abrv0kosr" path="res://SFX/slingshot_hit_2.wav" id="2_usmi4"]
+[ext_resource type="Texture2D" uid="uid://d3bexeuxsy0s2" path="res://Assets/Slingshot/rebound_small-sheet.png" id="3_km53d"]
 [ext_resource type="PackedScene" uid="uid://cy3dvu3unu2uo" path="res://Components/ScoreComponent.tscn" id="3_o26de"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="4_rl6g7"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_kqfuu"]
-radius = 9.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ibr7t"]
+size = Vector2(2.66667, 14)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_iat1m"]
-radius = 6.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oh3bu"]
+size = Vector2(4, 16)
 
 [sub_resource type="Curve" id="Curve_0gmpa"]
 max_value = 4.0
@@ -39,12 +39,102 @@ scale_curve = SubResource("CurveTexture_rmdkt")
 
 [sub_resource type="Gradient" id="Gradient_hu8eb"]
 offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0.691357, 0.691357, 0.691357, 1)
+colors = PackedColorArray(1, 1, 1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bxlbj"]
 gradient = SubResource("Gradient_hu8eb")
 width = 1
 height = 1
+
+[sub_resource type="Animation" id="Animation_4wu75"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_0bepk"]
+resource_name = "Collision"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.75, 1.15)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 0]
+}
+
+[sub_resource type="Animation" id="Animation_x2krv"]
+resource_name = "on_release"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.75, 1.15), Vector2(1.1, 0.9), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [1, 2, 3, 0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_b0p7x"]
+_data = {
+"RESET": SubResource("Animation_4wu75"),
+"on_collision": SubResource("Animation_0bepk"),
+"on_release": SubResource("Animation_x2krv")
+}
 
 [node name="Rebound" type="StaticBody2D"]
 script = ExtResource("1_fhbe0")
@@ -55,15 +145,20 @@ Score = 500.0
 [node name="CollisionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
-shape = SubResource("CircleShape2D_kqfuu")
-debug_color = Color(0.6, 0.545098, 0, 0.419608)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_iat1m")
+visible = false
+position = Vector2(1.33333, 0)
+shape = SubResource("RectangleShape2D_ibr7t")
 debug_color = Color(0, 0, 0, 0.419608)
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 0)
+shape = SubResource("RectangleShape2D_oh3bu")
+debug_color = Color(0.6, 0.545098, 0, 0.419608)
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_071de")
+texture = ExtResource("3_km53d")
+hframes = 2
+vframes = 2
 
 [node name="ParticleSystem" type="GPUParticles2D" parent="."]
 position = Vector2(6, 0)
@@ -81,3 +176,8 @@ fixed_fps = 60
 BaseScore = 500.0
 
 [node name="AudioComponent" parent="." instance=ExtResource("4_rl6g7")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_b0p7x")
+}

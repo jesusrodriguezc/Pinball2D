@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 public partial class LayerSwapper : Node2D, IActionable {
-
-	[Export]
-	public LayerId outLayer;
+	[Export] public LayerId insideLayer;
+	[Export] public LayerId outLayer;
 	private EventManager eventManager;
 
 	public bool IsCollisionEnabled { get; set; } = true;
@@ -24,11 +23,17 @@ public partial class LayerSwapper : Node2D, IActionable {
 			return;
 		}
 
+		bool isEntering = false;
+		if (data.Parameters.TryGetValue(ITrigger.ENTERING, out var obj) && obj is bool boolean) {
+			isEntering = boolean;
+		}
+
 		GD.Print($" -- {Name} CHANGING LAYER OF {((Node2D)data.Parameters[ITrigger.ACTIVATOR]).Name} TO {outLayer} -- ");
 
-		ball.SetLevel(outLayer);
-		eventManager?.SendMessage(this, LayerManager.GetActionablesFromLayer(outLayer, GetTree().Root), EventManager.EventType.ENABLE, data.Parameters);
-		eventManager?.SendMessage(this, LayerManager.GetActionablesOutOfLayer(outLayer, GetTree().Root), EventManager.EventType.DISABLE, data.Parameters);
+		var newLayer = isEntering ? insideLayer : outLayer;
+		ball.SetLevel(newLayer);
+		eventManager?.SendMessage(this, LayerManager.GetActionablesFromLayer(newLayer, GetTree().Root), EventManager.EventType.ENABLE, data.Parameters);
+		eventManager?.SendMessage(this, LayerManager.GetActionablesOutOfLayer(newLayer, GetTree().Root), EventManager.EventType.DISABLE, data.Parameters);
 
 	}
 

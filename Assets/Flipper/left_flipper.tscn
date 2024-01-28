@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b7u8gr8pt5tuv"]
+[gd_scene load_steps=10 format=3 uid="uid://b7u8gr8pt5tuv"]
 
 [ext_resource type="Script" path="res://Scripts/Assets/Flipper.cs" id="1_id8jy"]
 [ext_resource type="Texture2D" uid="uid://bif4vjda4e2v2" path="res://Assets/Flipper/flipper_left_small.png" id="2_vqvb1"]
@@ -6,9 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="4_1283b"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0v7j4"]
-friction = 0.1
+friction = 0.15
 rough = true
-bounce = 0.1
+bounce = 0.15
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_crv1f"]
+size = Vector2(82, 28)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_7s777"]
 diffuse_texture = ExtResource("2_vqvb1")
@@ -17,18 +20,21 @@ normal_texture = ExtResource("3_uqjmn")
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_cevpl"]
 polygon = PackedVector2Array(35, -10, 37, -10, 37, -9, 38, -9, 38, -7, 39, -7, 39, -1, 38, -1, 38, 1, 37, 1, 37, 2, 35, 2, 35, 3, 28, 3, 28, 4, 21, 4, 21, 5, 13, 5, 13, 6, 6, 6, 6, 7, -1, 7, -1, 8, -8, 8, -8, 9, -16, 9, -16, 10, -24, 10, -24, 11, -32, 11, -32, 10, -34, 10, -34, 9, -35, 9, -35, 8, -36, 8, -36, 7, -37, 7, -37, 6, -38, 6, -38, 4, -39, 4, -39, -4, -38, -4, -38, -6, -37, -6, -37, -7, -36, -7, -36, -8, -35, -8, -35, -9, -34, -9, -34, -10, -32, -10, -32, -11, 35, -11)
 
-[node name="AnimatableBody2D" type="AnimatableBody2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qot80"]
+radius = 7.5
+
+[node name="LeftFlipper" type="AnimatableBody2D"]
 collision_layer = 2
+collision_priority = 10.0
 physics_material_override = SubResource("PhysicsMaterial_0v7j4")
-constant_angular_velocity = 0.174533
 script = ExtResource("1_id8jy")
 isLeftFlipper = true
-RotationMax = 75.0
-RotationFrameDuration = 6.0
+RotationMax = 60.0
+RotationFrameDuration = 4.0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-position = Vector2(6.6, -12.8)
-polygon = PackedVector2Array(63.4, 0.8, -17.6, 0.799999, -17.6, 28.8, 63.4, 28.8)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(30, 2)
+shape = SubResource("RectangleShape2D_crv1f")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(8.6, -3.8)
@@ -40,3 +46,10 @@ position = Vector2(29, 0)
 occluder = SubResource("OccluderPolygon2D_cevpl")
 
 [node name="AudioComponent" parent="." instance=ExtResource("4_1283b")]
+
+[node name="HitBooster" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBooster"]
+position = Vector2(55, -12)
+rotation = -1.57079
+shape = SubResource("CapsuleShape2D_qot80")

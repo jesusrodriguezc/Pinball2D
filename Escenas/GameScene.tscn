@@ -24,12 +24,11 @@
 [ext_resource type="PackedScene" uid="uid://xv5e2r5qk23p" path="res://Escenas/SettingsMenu.tscn" id="14_5vdku"]
 [ext_resource type="AudioStream" uid="uid://c5tsamikog7v2" path="res://SFX/shooterlane_full.wav" id="14_702jj"]
 [ext_resource type="Texture2D" uid="uid://bu5xwoo7sgbjn" path="res://Assets/Ball/ball.png" id="16_mglgc"]
-[ext_resource type="PackedScene" uid="uid://bq026lg6n6o7t" path="res://Assets/Actionables/LayerSwapper.tscn" id="16_oeoae"]
 [ext_resource type="PackedScene" uid="uid://b6ib76heth48f" path="res://Assets/Actionables/WaitingNode.tscn" id="17_4gw3y"]
 [ext_resource type="PackedScene" uid="uid://b3qi8eycesa21" path="res://Assets/Actionables/ScoreModifier.tscn" id="17_ab7x8"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="17_tc5xm"]
-[ext_resource type="PackedScene" uid="uid://bacfc0s5fsli" path="res://Assets/Actionables/Teleport.tscn" id="18_jgni7"]
 [ext_resource type="PackedScene" uid="uid://bbn3ape6o6pht" path="res://Assets/Actionables/Door.tscn" id="18_vwigw"]
+[ext_resource type="PackedScene" uid="uid://7lu2bdwysrs8" path="res://Assets/Actionables/Wormhole.tscn" id="26_a5g04"]
 
 [sub_resource type="Gradient" id="Gradient_ivc7w"]
 
@@ -40,26 +39,26 @@ height = 720
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_6vrlx"]
-offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0.431341, 0.43134, 0.43134, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_ox6ls"]
-gradient = SubResource("Gradient_6vrlx")
-width = 1280
-height = 720
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s12rt"]
 size = Vector2(280, 17)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7k5xa"]
-size = Vector2(40, 22)
+size = Vector2(13.8122, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6s5sr"]
+size = Vector2(25, 8.00006)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3rgab"]
-size = Vector2(51.8875, 8)
+size = Vector2(44.4074, 8)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ecuv"]
-size = Vector2(24, 10)
+size = Vector2(18, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_svj8o"]
+size = Vector2(31, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u1yef"]
+size = Vector2(62.7295, 7.3494)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_5fy75"]
 friction = 0.0
@@ -82,9 +81,12 @@ fill_to = Vector2(0.880342, 0.15812)
 polygon = PackedVector2Array(6, -14, 10, -14, 10, -12, 12, -12, 12, -10, 14, -10, 14, -6, 16, -6, 16, 6, 14, 6, 14, 10, 12, 10, 12, 12, 10, 12, 10, 14, 6, 14, 6, 16, -6, 16, -6, 14, -10, 14, -10, 12, -12, 12, -12, 10, -14, 10, -14, 6, -16, 6, -16, -6, -14, -6, -14, -10, -12, -10, -12, -12, -10, -12, -10, -14, -6, -14, -6, -16, 6, -16)
 
 [node name="Pinball" type="Node2D"]
+process_mode = 3
 position = Vector2(640, 360)
 script = ExtResource("1_0pib5")
 LivesLeft = 3
+metadata/_edit_horizontal_guides_ = [84.0, 102.0]
+metadata/_edit_vertical_guides_ = [696.0, 762.0]
 
 [node name="ScoringController" type="Node" parent="."]
 script = ExtResource("2_jivhh")
@@ -98,15 +100,10 @@ position = Vector2(3.49998, 3.50001)
 scale = Vector2(1.04922, 1.07361)
 texture = SubResource("GradientTexture2D_o8sb2")
 
-[node name="Suelo" type="Sprite2D" parent="."]
-z_index = 25
-position = Vector2(-4.00003, 0.500013)
-scale = Vector2(0.48125, 0.970833)
-texture = SubResource("GradientTexture2D_ox6ls")
-
 [node name="Mapa" parent="." instance=ExtResource("2_pj3pm")]
-position = Vector2(-1, 0)
-metadata/_edit_horizontal_guides_ = []
+position = Vector2(-2, 0)
+metadata/_edit_horizontal_guides_ = [587.0, 584.0]
+metadata/_edit_vertical_guides_ = [240.0]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("3_or7yh")
@@ -129,107 +126,134 @@ offset_bottom = -258.0
 metadata/_edit_use_anchors_ = true
 
 [node name="Bumpers" type="Node" parent="."]
+process_mode = 1
 
 [node name="ReentryBumper" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
-position = Vector2(587, 188)
+position = Vector2(596, 178)
 collision_layer = 4
-HitPower = 2500.0
+HitPower = 3000.0
 
 [node name="ReentryBumper2" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
-position = Vector2(665, 179)
+position = Vector2(662, 164)
 collision_layer = 4
-HitPower = 2500.0
+HitPower = 3000.0
 
 [node name="ReentryBumper3" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
-position = Vector2(632, 241)
+position = Vector2(629, 224)
 collision_layer = 4
-HitPower = 2500.0
+HitPower = 3000.0
 
 [node name="RoundBumper" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
-position = Vector2(460, 59)
+position = Vector2(437, 63)
 collision_layer = 4
-HitPower = 2500.0
+HitPower = 3000.0
 
 [node name="RampBumper" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 65
-position = Vector2(368, 336)
+position = Vector2(344, 322)
 scale = Vector2(0.4, 0.4)
 collision_layer = 8
-HitPower = 1500.0
+collision_mask = 64
+HitPower = 2000.0
 Score = 1500.0
 
 [node name="RampBumper2" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 65
-position = Vector2(440, 344)
+position = Vector2(410, 332)
 scale = Vector2(0.4, 0.4)
 collision_layer = 8
-HitPower = 1500.0
+collision_mask = 64
+HitPower = 2000.0
 Score = 1500.0
 
 [node name="RampBumper3" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 65
-position = Vector2(400, 368)
+position = Vector2(373, 359)
 scale = Vector2(0.4, 0.4)
 collision_layer = 8
-HitPower = 1500.0
+collision_mask = 64
+HitPower = 2000.0
 Score = 1500.0
 
 [node name="Rebounds" type="Node" parent="."]
+process_mode = 1
 
 [node name="Slingshot" parent="Rebounds" instance=ExtResource("5_wm3ia")]
 z_index = 40
-position = Vector2(524, 477)
+position = Vector2(475, 472)
 rotation = 1.13446
 collision_layer = 4
-HitPower = 6000.0
+HitPower = 7500.0
 
 [node name="Rebound" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
-position = Vector2(502, 217)
-rotation = -0.785397
+position = Vector2(497, 204)
+rotation = -0.85174
 collision_layer = 4
-HitPower = 2500.0
+
+[node name="Rebound6" parent="Rebounds" instance=ExtResource("7_wpwg3")]
+z_index = 40
+position = Vector2(509, 216)
+rotation = -0.761826
+collision_layer = 4
 
 [node name="Rebound2" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
-position = Vector2(754, 227)
-rotation = -2.72808
+position = Vector2(729, 233)
+rotation = -2.41416
 collision_layer = 4
-HitPower = 2500.0
+
+[node name="Rebound4" parent="Rebounds" instance=ExtResource("7_wpwg3")]
+z_index = 40
+position = Vector2(740, 221)
+rotation = -2.41416
+collision_layer = 4
+
+[node name="Rebound5" parent="Rebounds" instance=ExtResource("7_wpwg3")]
+z_index = 40
+position = Vector2(749, 209)
+rotation = -2.66525
+collision_layer = 4
+
+[node name="Rebound3" parent="Rebounds" instance=ExtResource("7_wpwg3")]
+z_index = 40
+position = Vector2(723, 252)
+rotation = -4.05125
+collision_layer = 4
 
 [node name="Slingshot2" parent="Rebounds" instance=ExtResource("5_wm3ia")]
 z_index = 40
-position = Vector2(757, 476)
+position = Vector2(756, 472)
 rotation = -1.13446
 scale = Vector2(-1, 1)
 collision_layer = 4
-HitPower = 6000.0
+HitPower = 7500.0
 
 [node name="Flippers" type="Node" parent="."]
-
-[node name="Left Flipper" parent="Flippers" instance=ExtResource("8_khtso")]
-z_index = 40
-position = Vector2(561, 577)
-rotation = 0.453786
-collision_mask = 0
-constant_angular_velocity = 0.0
-RotationMax = 50.0
-RotationFrameDuration = 8.0
+process_mode = 1
 
 [node name="Right Flipper" parent="Flippers" instance=ExtResource("9_ee4xj")]
 z_index = 40
-position = Vector2(715, 577)
-rotation = -0.453786
+position = Vector2(687, 615)
+rotation = -0.581195
 collision_mask = 0
-constant_angular_velocity = 0.0
-RotationMax = 50.0
-RotationFrameDuration = 8.0
+RotationFrameDuration = 4.0
+HitBoostPower = 10000.0
+
+[node name="Left Flipper" parent="Flippers" instance=ExtResource("8_khtso")]
+z_index = 40
+position = Vector2(532, 614)
+rotation = 0.580578
+collision_mask = 128
+constant_linear_velocity = Vector2(0, -10)
+HitBoostPower = 10000.0
 
 [node name="Targets" type="Node" parent="."]
+process_mode = 1
 
 [node name="Booster Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
 GroupName = &"BoosterBank"
@@ -238,51 +262,53 @@ actionables = [NodePath("../../Ball")]
 ScoreAddition = 3000.0
 
 [node name="Target" parent="Targets/Booster Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(785, 330)
+z_index = 30
+position = Vector2(787, 325)
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target2" parent="Targets/Booster Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(785, 314)
+z_index = 30
+position = Vector2(787, 309)
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target3" parent="Targets/Booster Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(785, 298)
+z_index = 30
+position = Vector2(787, 293)
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Medal Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+position = Vector2(0, -16)
 GroupName = &"MedalBank"
 AudioStream = ExtResource("13_q7v8a")
 actionables = [NodePath("../../Ball")]
 ScoreAddition = 3000.0
 
 [node name="Target" parent="Targets/Medal Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
+z_index = 30
 position = Vector2(634, 269)
 rotation = -1.309
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target2" parent="Targets/Medal Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
+z_index = 30
 position = Vector2(621, 265)
 rotation = -1.309
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target3" parent="Targets/Medal Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
+z_index = 30
 position = Vector2(608, 261)
 rotation = -1.309
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Field Multiplier Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+position = Vector2(-2, -14)
 GroupName = &"FieldMultiplierBank"
 AudioStream = ExtResource("13_q7v8a")
 actionables = [NodePath("../../Ball")]
@@ -310,35 +336,36 @@ collision_layer = 4
 HitPower = 1000.0
 
 [node name="Hazard Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(465, 153)
-rotation = -1.38777
+position = Vector2(434, 167)
+rotation = -1.32775
 GroupName = &"HazardBank"
 AudioStream = ExtResource("13_q7v8a")
 actionables = [NodePath("../../Ball")]
 ScoreAddition = 3000.0
 
 [node name="Target" parent="Targets/Hazard Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(14, -5)
-rotation = -1.88709
+z_index = 30
+position = Vector2(12.8745, -10.4042)
+rotation = -1.91893
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target2" parent="Targets/Hazard Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-rotation = -1.88709
+z_index = 30
+position = Vector2(-0.473358, -6.06433)
+rotation = -1.92432
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target3" parent="Targets/Hazard Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(-14, 5)
-rotation = -1.88709
+z_index = 30
+position = Vector2(-14.3105, 0.457397)
+rotation = -2.30375
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Mission Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(454, 347)
+position = Vector2(428, 347)
 rotation = -1.25054
 GroupName = &"MissionBank"
 AudioStream = ExtResource("13_q7v8a")
@@ -346,28 +373,28 @@ actionables = [NodePath("../../Ball")]
 ScoreAddition = 3000.0
 
 [node name="Target" parent="Targets/Mission Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(12.9733, -5.35651)
+z_index = 30
+position = Vector2(12.6585, -6.3056)
 rotation = -1.88709
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target2" parent="Targets/Mission Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(-0.314819, -0.949158)
+z_index = 30
+position = Vector2(-0.629639, -1.89832)
 rotation = -1.88709
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target3" parent="Targets/Mission Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(-13.603, 3.45825)
+z_index = 30
+position = Vector2(-13.9178, 2.50903)
 rotation = -1.88709
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Hazard Target Bank2" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(744, 162)
+position = Vector2(742, 164)
 rotation = -4.97418
 GroupName = &"HazardBank2"
 AudioStream = ExtResource("13_q7v8a")
@@ -375,28 +402,28 @@ actionables = [NodePath("../../Ball")]
 ScoreAddition = 3000.0
 
 [node name="Target" parent="Targets/Hazard Target Bank2" instance=ExtResource("10_a6qii")]
-z_index = 40
+z_index = 30
 position = Vector2(16.1111, -6.03601)
-rotation = -1.57079
+rotation = -1.38495
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target2" parent="Targets/Hazard Target Bank2" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(-0.448273, -2.19067)
+z_index = 30
+position = Vector2(-2.12137, -3.67444)
 rotation = -1.88709
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target3" parent="Targets/Hazard Target Bank2" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(-16.8182, 4.81104)
-rotation = -2.09439
+z_index = 30
+position = Vector2(-18.0429, 5.51819)
+rotation = -2.2306
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Fuel Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(458, 67)
+position = Vector2(431, 68)
 rotation = -1.38777
 GroupName = &"FuelBank"
 AudioStream = ExtResource("13_q7v8a")
@@ -404,31 +431,33 @@ actionables = [NodePath("../../Ball")]
 ScoreAddition = 3000.0
 
 [node name="Target" parent="Targets/Fuel Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(2.18863, -43.1186)
+z_index = 30
+position = Vector2(1.56943, -40.9699)
 rotation = -1.57079
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target2" parent="Targets/Fuel Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(47.9996, -9.90167)
+z_index = 30
+position = Vector2(48.1816, -8.91827)
 rotation = -0.261799
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="Target3" parent="Targets/Fuel Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 40
-position = Vector2(30.5509, 44.1774)
+z_index = 30
+position = Vector2(30.7328, 45.1607)
 rotation = -5.23598
 collision_layer = 4
-HitPower = 1000.0
+HitPower = 3000.0
 
 [node name="ReentryLaneBonus" parent="." node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+process_mode = 1
 z_index = 30
 GroupName = &"ReentryLane"
 actionables = [NodePath("../Bumpers/ReentryBumper"), NodePath("../Bumpers/ReentryBumper2"), NodePath("../Bumpers/ReentryBumper3"), NodePath("../Bumpers/RoundBumper")]
-BonusMultiplier = 1.5
+canShiftWhenButtonPressed = true
+BonusMultiplier = 3.0
 Duration = 60.0
 
 [node name="ReentryLane" parent="ReentryLaneBonus" instance=ExtResource("7_87ocl")]
@@ -444,28 +473,33 @@ position = Vector2(11, -256)
 collision_layer = 4
 
 [node name="RampLaneBonus" parent="." node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+process_mode = 1
 z_index = 55
 position = Vector2(-242, -96)
 GroupName = &"RampLane"
 actionables = [NodePath("../Bumpers/RampBumper"), NodePath("../Bumpers/RampBumper2"), NodePath("../Bumpers/RampBumper3")]
-BonusMultiplier = 1.5
+canShiftWhenButtonPressed = true
+BonusMultiplier = 2.0
 Duration = 60.0
 
 [node name="RampLane" parent="RampLaneBonus" instance=ExtResource("7_87ocl")]
-position = Vector2(-32, 24)
+position = Vector2(-56, 17)
 collision_layer = 8
+collision_mask = 64
 
 [node name="RampLane2" parent="RampLaneBonus" instance=ExtResource("7_87ocl")]
-position = Vector2(0, 24)
+position = Vector2(-26, 20)
 collision_layer = 8
+collision_mask = 64
 
 [node name="RampLane3" parent="RampLaneBonus" instance=ExtResource("7_87ocl")]
-position = Vector2(32, 24)
+position = Vector2(7, 24)
 collision_layer = 8
+collision_mask = 64
 
 [node name="DeathArea" parent="." instance=ExtResource("12_p47g8")]
 collision_layer = 2
-collision_mask = 1
+collision_mask = 65
 Type = 0
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="DeathArea"]
@@ -476,6 +510,7 @@ shape = SubResource("RectangleShape2D_s12rt")
 LivesModification = -1
 
 [node name="Kickers" type="Node" parent="."]
+process_mode = 1
 
 [node name="ShooterKicker" parent="Kickers" node_paths=PackedStringArray("Target") instance=ExtResource("12_p47g8")]
 collision_layer = 2
@@ -494,138 +529,240 @@ shape = SubResource("RectangleShape2D_7k5xa")
 [node name="Kicker" parent="Kickers/ShooterKicker" instance=ExtResource("13_yfwst")]
 position = Vector2(867, 665)
 HitAudio = ExtResource("13_1riy5")
-MaxHitPower = 6000
+MaxHitPower = 10000
 ShootDirection = Vector2(0, -1)
 HoldingForMaxPowerSound = 0.5
 
-[node name="LeftKicker" parent="Kickers" node_paths=PackedStringArray("Target") instance=ExtResource("12_p47g8")]
-collision_layer = 2
+[node name="HyperspaceKickout" parent="Kickers" node_paths=PackedStringArray("Target") instance=ExtResource("12_p47g8")]
+position = Vector2(-171, -581)
+collision_layer = 4
 collision_mask = 1
+input_pickable = false
 Type = 0
-Behaviour = 1
 Target = NodePath("../../Ball")
-WaitingTime = 2.0
+triggerOnEnter = false
 
-[node name="CollisionArea" type="CollisionShape2D" parent="Kickers/LeftKicker"]
-position = Vector2(389, 561)
+[node name="CollisionArea" type="CollisionShape2D" parent="Kickers/HyperspaceKickout"]
+position = Vector2(862.475, 666.409)
+rotation = 0.523598
 shape = SubResource("RectangleShape2D_7k5xa")
 
-[node name="LayerSwapperLK" parent="Kickers/LeftKicker" instance=ExtResource("16_oeoae")]
-outLayer = 32
+[node name="Kicker" parent="Kickers/HyperspaceKickout" instance=ExtResource("13_yfwst")]
+position = Vector2(867, 665)
+HitAudio = ExtResource("13_1riy5")
+MaxHitPower = 6000
+ShootDirection = Vector2(0.75, 0.25)
 
-[node name="Kicker" parent="Kickers/LeftKicker" instance=ExtResource("13_yfwst")]
-position = Vector2(389, 558)
-HitAudio = ExtResource("14_702jj")
-MaxHitPower = 20000
-ShootDirection = Vector2(0, -1)
-HoldingForMaxPowerSound = 0.75
+[node name="LeftKicker" type="Node2D" parent="Kickers"]
+position = Vector2(-27, -1)
 
-[node name="ScoreModifier" parent="Kickers/LeftKicker" instance=ExtResource("17_ab7x8")]
-BaseScore = 20000.0
-
-[node name="WaitingNode" parent="Kickers/LeftKicker" instance=ExtResource("17_4gw3y")]
-waitingTime = 0.25
-
-[node name="LayerSwapperLK2" parent="Kickers/LeftKicker/WaitingNode" instance=ExtResource("16_oeoae")]
-outLayer = 4
-
-[node name="Teleport" parent="Kickers/LeftKicker/WaitingNode" instance=ExtResource("18_jgni7")]
-position = Vector2(416, 167)
-
-[node name="Door" parent="Kickers/LeftKicker/WaitingNode" instance=ExtResource("18_vwigw")]
-z_index = 30
-position = Vector2(366, 531)
-rotation = 0.453786
-scale = Vector2(0.1, 1)
-Behaviour = 0
-InitialStatus = 3
-WaitingTime = 1.0
-FinalPosition = Vector2(373, 531)
-FinalRotation = 0.453786
-FinalScale = Vector2(1, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Kickers/LeftKicker/WaitingNode/Door"]
-position = Vector2(16.1011, 0)
-shape = SubResource("RectangleShape2D_3rgab")
-
-[node name="ColorRect" type="ColorRect" parent="Kickers/LeftKicker/WaitingNode/Door"]
-offset_left = -20.0
-offset_top = -4.0
-offset_right = 43.0
-offset_bottom = 4.0
-color = Color(0.0156863, 0.0156863, 0.0156863, 1)
-
-[node name="RightKicker" parent="Kickers" instance=ExtResource("12_p47g8")]
-position = Vector2(840, 568)
+[node name="FirstPart_Kicker" parent="Kickers/LeftKicker" node_paths=PackedStringArray("Target") instance=ExtResource("12_p47g8")]
 collision_layer = 2
 collision_mask = 1
 Type = 0
 Behaviour = 1
+Target = NodePath("../../../Ball")
 WaitingTime = 2.0
 
-[node name="CollisionArea" type="CollisionShape2D" parent="Kickers/RightKicker"]
-position = Vector2(-2, 5)
-shape = SubResource("RectangleShape2D_8ecuv")
+[node name="CollisionArea" type="CollisionShape2D" parent="Kickers/LeftKicker/FirstPart_Kicker"]
+position = Vector2(388.094, 560.5)
+shape = SubResource("RectangleShape2D_7k5xa")
 
-[node name="Kicker" parent="Kickers/RightKicker" instance=ExtResource("13_yfwst")]
+[node name="Door_Wormhole" parent="Kickers/LeftKicker/FirstPart_Kicker" instance=ExtResource("18_vwigw")]
+z_index = 30
+position = Vector2(394, 407)
+rotation = -3.14159
+InitialStatus = 1
+WaitingTime = 1.0
+TransitionTime = 0.0
+FinalPosition = Vector2(375, 403)
+FinalScale = Vector2(0.05, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Kickers/LeftKicker/FirstPart_Kicker/Door_Wormhole"]
+position = Vector2(8.5, 0.000152588)
+shape = SubResource("RectangleShape2D_6s5sr")
+
+[node name="Kicker" parent="Kickers/LeftKicker/FirstPart_Kicker" instance=ExtResource("13_yfwst")]
+position = Vector2(389, 558)
 HitAudio = ExtResource("14_702jj")
 MaxHitPower = 10000
 ShootDirection = Vector2(0, -1)
 HoldingForMaxPowerSound = 0.75
 
-[node name="ScoreModifier" parent="Kickers/RightKicker" instance=ExtResource("17_ab7x8")]
+[node name="ScoreModifier" parent="Kickers/LeftKicker/FirstPart_Kicker" instance=ExtResource("17_ab7x8")]
 BaseScore = 20000.0
 
-[node name="Door" parent="Kickers/RightKicker" instance=ExtResource("18_vwigw")]
+[node name="WaitingNode" parent="Kickers/LeftKicker/FirstPart_Kicker" instance=ExtResource("17_4gw3y")]
+waitingTime = 0.5
+
+[node name="Door" parent="Kickers/LeftKicker/FirstPart_Kicker/WaitingNode" instance=ExtResource("18_vwigw")]
 z_index = 30
-position = Vector2(-24, 4)
-rotation = -0.523599
+position = Vector2(369, 534)
+rotation = 0.453786
 scale = Vector2(0.1, 1)
-Behaviour = 0
+collision_layer = 4
+collision_mask = 65
 InitialStatus = 3
 WaitingTime = 1.0
-FinalPosition = Vector2(-24, 4)
+FinalPosition = Vector2(369, 534)
+FinalRotation = 0.453786
+FinalScale = Vector2(1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Kickers/LeftKicker/FirstPart_Kicker/WaitingNode/Door"]
+position = Vector2(13.4157, 0.132263)
+shape = SubResource("RectangleShape2D_3rgab")
+
+[node name="ColorRect" type="ColorRect" parent="Kickers/LeftKicker/FirstPart_Kicker/WaitingNode/Door"]
+offset_left = -12.0345
+offset_top = -4.14383
+offset_right = 35.9655
+offset_bottom = 3.85617
+color = Color(0.0156863, 0.0156863, 0.0156863, 1)
+
+[node name="SecondPart" type="Node2D" parent="Kickers/LeftKicker"]
+
+[node name="Wormhole" parent="Kickers/LeftKicker/SecondPart" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
+visible = false
+z_index = 60
+position = Vector2(380, 400)
+scale = Vector2(0.5, 0.5)
+collision_layer = 4
+collision_mask = 65
+Score = 0.0
+ShootDirection = Vector2(0.25, -1)
+finalPosition = NodePath("../Salida_Wormhole")
+
+[node name="Salida_Wormhole" type="Node2D" parent="Kickers/LeftKicker/SecondPart"]
+position = Vector2(410, 182)
+
+[node name="RightKicker" type="Node2D" parent="Kickers"]
+position = Vector2(840, 568)
+
+[node name="FirstPart_Kicker" parent="Kickers/RightKicker" instance=ExtResource("12_p47g8")]
+collision_layer = 2
+collision_mask = 1
+Type = 0
+Behaviour = 1
+WaitingTime = 2.0
+
+[node name="CollisionArea" type="CollisionShape2D" parent="Kickers/RightKicker/FirstPart_Kicker"]
+position = Vector2(-2, 5)
+shape = SubResource("RectangleShape2D_8ecuv")
+
+[node name="Kicker" parent="Kickers/RightKicker/FirstPart_Kicker" instance=ExtResource("13_yfwst")]
+HitAudio = ExtResource("14_702jj")
+MaxHitPower = 80000
+ShootDirection = Vector2(0, -1)
+HoldingForMaxPowerSound = 0.75
+
+[node name="Door_Wormhole" parent="Kickers/RightKicker/FirstPart_Kicker" instance=ExtResource("18_vwigw")]
+z_index = 30
+position = Vector2(-4, -212)
+rotation = -3.14159
+InitialStatus = 1
+WaitingTime = 1.0
+TransitionTime = 0.0
+FinalPosition = Vector2(375, 403)
+FinalScale = Vector2(0.05, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Kickers/RightKicker/FirstPart_Kicker/Door_Wormhole"]
+position = Vector2(0.5, 2)
+shape = SubResource("RectangleShape2D_svj8o")
+
+[node name="ScoreModifier" parent="Kickers/RightKicker/FirstPart_Kicker" instance=ExtResource("17_ab7x8")]
+position = Vector2(0, 2)
+BaseScore = 20000.0
+
+[node name="Door" parent="Kickers/RightKicker/FirstPart_Kicker" instance=ExtResource("18_vwigw")]
+z_index = 30
+position = Vector2(-32, 11)
+rotation = -0.523599
+scale = Vector2(0.1, 1)
+collision_layer = 4
+collision_mask = 65
+InitialStatus = 3
+WaitingTime = 1.0
+FinalPosition = Vector2(-32, 11)
 FinalRotation = -0.523599
 FinalScale = Vector2(1, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Kickers/RightKicker/Door"]
-position = Vector2(16.1011, 0)
-shape = SubResource("RectangleShape2D_3rgab")
-
-[node name="ColorRect" type="ColorRect" parent="Kickers/RightKicker/Door"]
-offset_left = -20.0
-offset_top = -4.0
-offset_right = 43.0
-offset_bottom = 4.0
+[node name="ColorRect" type="ColorRect" parent="Kickers/RightKicker/FirstPart_Kicker/Door"]
+offset_left = -10.981
+offset_top = -4.09814
+offset_right = 52.019
+offset_bottom = 3.90186
 color = Color(0.0156863, 0.0156863, 0.0156863, 1)
 
-[node name="WaitingNode" parent="Kickers/RightKicker" instance=ExtResource("17_4gw3y")]
-waitingTime = 0.25
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Kickers/RightKicker/FirstPart_Kicker/Door"]
+position = Vector2(20.8385, -0.0932617)
+shape = SubResource("RectangleShape2D_u1yef")
 
-[node name="LayerSwapperRK" parent="Kickers/RightKicker/WaitingNode" instance=ExtResource("16_oeoae")]
-position = Vector2(-840, -568)
-outLayer = 2
+[node name="SecondPart" type="Node2D" parent="Kickers/RightKicker"]
 
-[node name="WaitingNode2" parent="Kickers/RightKicker/WaitingNode" instance=ExtResource("17_4gw3y")]
-waitingTime = 1.0
+[node name="Wormhole" parent="Kickers/RightKicker/SecondPart" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
+visible = false
+z_index = 60
+position = Vector2(-4, -274)
+collision_layer = 4
+collision_mask = 65
+Score = 0.0
+ShootDirection = Vector2(0, -1)
+finalPosition = NodePath("../Salida_Wormhole")
 
-[node name="LayerSwaperRK2" parent="Kickers/RightKicker/WaitingNode/WaitingNode2" instance=ExtResource("16_oeoae")]
-outLayer = 4
+[node name="Salida_Wormhole" type="Node2D" parent="Kickers/RightKicker/SecondPart"]
+position = Vector2(26, -279)
 
-[node name="MainLight" type="DirectionalLight2D" parent="."]
-light_mask = 6
-visibility_layer = 6
-color = Color(0.784314, 0.784314, 0.784314, 1)
-energy = 1.05
-height = 0.61
-max_distance = 1000.0
+[node name="Wormholes" type="Node2D" parent="."]
+process_mode = 1
+position = Vector2(158, -14)
+rotation = 0.615491
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-light_mask = 7
-visibility_layer = 7
-color = Color(0.396078, 0.396078, 0.396078, 1)
+[node name="WormholeRight" parent="Wormholes" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
+z_index = 60
+position = Vector2(1.97119, 1.0556)
+collision_layer = 4
+collision_mask = 65
+ShootDirection = Vector2(-1, 1)
+finalPosition = NodePath("../WormholeTopRight")
+
+[node name="WormholeTopRight" parent="Wormholes" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
+z_index = 60
+position = Vector2(-214.722, -120.061)
+rotation = -0.27576
+collision_layer = 4
+collision_mask = 65
+ShootDirection = Vector2(-3, 1)
+finalPosition = NodePath("../WormholeRight")
+
+[node name="WormholeTopLeft" parent="Wormholes" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
+z_index = 60
+position = Vector2(-366.483, -59.2872)
+rotation = 1.4789
+collision_layer = 4
+collision_mask = 65
+ShootDirection = Vector2(-3, 1)
+finalPosition = NodePath("../WormholeTopRight")
+
+[node name="WormholeRampLeft" parent="Wormholes" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
+z_index = 60
+position = Vector2(-274.584, 74.1389)
+rotation = 3.56103
+collision_layer = 4
+collision_mask = 65
+ShootDirection = Vector2(3, -1)
+finalPosition = NodePath(".")
+
+[node name="WormholeRampRight" parent="Wormholes" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
+z_index = 60
+position = Vector2(-308.282, 120.013)
+rotation = -0.0536132
+collision_layer = 4
+collision_mask = 65
+ShootDirection = Vector2(3, -1)
+finalPosition = NodePath("../WormholeRampLeft")
 
 [node name="PauseMenu" parent="." instance=ExtResource("13_fcjr0")]
+process_mode = 2
 visible = false
 z_index = 1000
 clip_contents = true
@@ -642,6 +779,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="SettingsMenu" parent="." instance=ExtResource("14_5vdku")]
+process_mode = 2
 visible = false
 z_index = 2000
 offset_left = -320.0
@@ -650,17 +788,18 @@ offset_right = 320.0
 offset_bottom = 216.0
 
 [node name="Ball" parent="." instance=ExtResource("3_ucbuj")]
+process_mode = 1
 z_index = 35
-position = Vector2(228, 176)
+position = Vector2(227, 252)
 collision_mask = 3
 mass = 5.0
 physics_material_override = SubResource("PhysicsMaterial_5fy75")
-gravity_scale = 0.5
+gravity_scale = 0.65
 continuous_cd = 1
 max_contacts_reported = 100
 contact_monitor = true
 DebugPower = 6000
-MaxVelocity = 900.0
+MaxVelocity = 1000.0
 
 [node name="Sprite2D2" type="Sprite2D" parent="Ball"]
 scale = Vector2(0.5, 0.5)

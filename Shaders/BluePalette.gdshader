@@ -2,8 +2,10 @@ shader_type canvas_item;
 uniform sampler2D SCREEN_TEXTURE :hint_screen_texture, filter_linear_mipmap;
 
 uniform sampler2D palette;
+uniform sampler2D luminosityPalette;
 uniform float minValue;
 uniform float maxValue;
+uniform float lightThreshold;
 
 
 float grayScale(vec3 color)
@@ -31,36 +33,19 @@ float humanGrayScale (vec3 color)
 
 void fragment() {
 	
-	vec3 source_col = texture(SCREEN_TEXTURE, SCREEN_UV).rgb;
-    vec3 closest_col = vec3(0.0);
-    float smallest_error = .1f;
-
     int palette_size = textureSize(palette, 0).x;
     float palette_pixel_size = 1.0 / float(palette_size);
-	
+
 	COLOR = texture(SCREEN_TEXTURE, SCREEN_UV);
 	float screenGrayColor = humanGrayScale(COLOR.rgb);
 	
-	float stepValue = 1.f/float(palette_size);
-	
-	// 0.3f -> 0.3f ^* 6f = 
-	float stepsToDo = floor((abs(1.f -screenGrayColor) * float(palette_size)));
-    vec3 palette_col = texture(palette, vec2(stepsToDo * palette_pixel_size, 0.0)).rgb;
-    float paletteGrayColor = humanGrayScale(palette_col);
-	
-//    for (int x = 0; x < palette_size; x++)
-//    {
-//        vec3 palette_col = texture(palette, vec2(float(x) * palette_pixel_size, 0.0)).rgb;
-//        float paletteGrayColor = humanGrayScale(palette_col);
-//		float error = distance(screenGrayColor, paletteGrayColor);
-//        if (error < smallest_error)
-//        {
-//            closest_col = palette_col;
-//            smallest_error = error;
-//        }
-//    }
+	// 0.0 - 1.0 * 8 -> 
+	float colorStepsToDo = floor(screenGrayColor * float(palette_size)) + 0.5;
+    vec3 palette_col = texture(palette, vec2(colorStepsToDo * palette_pixel_size, 0.0)).rgb;
 
     COLOR.rgb = palette_col;
+	//COLOR.rgb = vec3(screenGrayColor, screenGrayColor, screenGrayColor);
+
 	
 }
 

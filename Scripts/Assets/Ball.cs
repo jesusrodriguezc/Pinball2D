@@ -10,7 +10,8 @@ public partial class Ball : RigidBody2D, IActor{
 		GAMEOVER = -2,
 		DEAD = -1,
 		IDLE = 0,
-		MOVING = 1
+		MOVING = 1,
+		PAUSED = 2
 	}
 
 	[Signal]
@@ -26,6 +27,7 @@ public partial class Ball : RigidBody2D, IActor{
 
 
 	public Status currentStatus;
+	public Status previousStatus;
 	[Export] private LayerId currentLayer;
 
 	private Vector2 initialPosition;
@@ -34,6 +36,8 @@ public partial class Ball : RigidBody2D, IActor{
 
 	internal Vector2 storedVelocity;
 	private Vector2 storedPosition;
+	private uint storedCollisionLayer;
+	private uint storedCollisionMask;
 
 	public override void _Ready () {
 
@@ -47,6 +51,7 @@ public partial class Ball : RigidBody2D, IActor{
 		
 		initialPosition = GlobalPosition;
 		currentStatus = Status.IDLE;
+		previousStatus = Status.DEAD;
 
 		SetLevel(currentLayer);
 
@@ -57,6 +62,11 @@ public partial class Ball : RigidBody2D, IActor{
 		foreach (var rebound in rebounds) {
 			rebound.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
 		}
+
+		var flippers = Nodes.findByClass<Flipper>(GetTree().Root);
+		foreach (var flipper in flippers) {
+			flipper.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
+		}
 	}
 
 	public override void _Input (InputEvent @event) {
@@ -66,7 +76,9 @@ public partial class Ball : RigidBody2D, IActor{
 
 		if (@event is InputEventMouseButton mouseButton) {
 			if (mouseButton.ButtonIndex == MouseButton.Left && mouseButton.IsPressed()) {
-				Move();
+				Vector2 mousePosition = GetGlobalMousePosition();
+				Vector2 forceDirection = (mousePosition - GlobalPosition).Normalized();
+				ForceMove(forceDirection, DebugPower);
 			}
 		}
 
@@ -74,6 +86,10 @@ public partial class Ball : RigidBody2D, IActor{
 			if (key.Keycode.Equals(Key.Enter) && key.IsPressed()) {
 				Instance.Shake();
 			}		
+
+			if (key.Keycode == Key.D && key.IsPressed()) {
+				GD.Print($"{GlobalPosition}");
+			}
 		}
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -87,6 +103,11 @@ public partial class Ball : RigidBody2D, IActor{
 			LinearVelocity = LinearVelocity.LimitLength(MaxVelocity);
 		}
 
+		if (OutOfLimits()) {
+			GD.Print($"Out of limits. Trying to teleport to {initialPosition}");
+			Reset();
+
+		}
 		//if (LinearVelocity.LengthSquared() < 0.1f) {
 		//	if (currentStatus == Status.MOVING) {
 		//		currentStatus = Status.IDLE;
@@ -98,16 +119,17 @@ public partial class Ball : RigidBody2D, IActor{
 		//}
 	}
 
+	private bool OutOfLimits () {
+		return !GlobalPosition.IsFinite();
+	}
+
 	private void ApplyImpulse (Vector2 impulse) {
 		LinearVelocity = new Vector2(0f, 0f);
 		ApplyCentralImpulse(impulse);
 	}
 
-	public void Move () {
-		Vector2 mousePosition = GetGlobalMousePosition();
-		Vector2 forceDirection = (mousePosition - GlobalPosition).Normalized();
-
-		ApplyCentralImpulse(forceDirection * DebugPower); //, Position - (Vector2) result["position"]);
+	public void ForceMove (Vector2 direction, float impulsePower) {
+		ApplyCentralImpulse(direction * impulsePower);
 
 	}
 
@@ -142,6 +164,7 @@ public partial class Ball : RigidBody2D, IActor{
 		SetCollisionMaskValue(level, true);
 
 		ZIndex = LayerManager.GetZLevel(level);
+		CollisionLayer = LayerManager.GetBallLayer(level);
 
 		eventManager.SendMessage(this, LayerManager.GetActionablesFromLayer(layerId, GetTree().Root), EventManager.EventType.DISABLE, null);
 
@@ -152,11 +175,32 @@ public partial class Ball : RigidBody2D, IActor{
 		storedVelocity = LinearVelocity;
 		storedPosition = GlobalPosition;
 
+		previousStatus = currentStatus;
+		currentStatus = Status.PAUSED;
+
 	}
 
 	public void Resume () {
-		LinearVelocity = storedVelocity;
+		
 		GlobalPosition = storedPosition;
+		LinearVelocity = storedVelocity;
+
+		currentStatus = previousStatus;
+		previousStatus = Status.PAUSED;
+
+	}
+
+	public void IgnoreCollision (bool ignoreCollision) {
+		if (ignoreCollision) {
+			storedCollisionLayer = CollisionLayer;
+			CollisionLayer = 0;
+			storedCollisionMask = CollisionMask;
+			CollisionMask = 0;
+		} else 
+		{
+			CollisionLayer = storedCollisionLayer;
+			CollisionMask = storedCollisionMask;
+		}
 	}
 	#endregion
 }

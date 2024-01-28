@@ -16,7 +16,7 @@ namespace Pinball.Components {
 		public override void _Ready () {
 			var settings = GetNode<SettingsManager>("/root/SettingsManager");
 			shaderContainer = GetNode<ColorRect>("CanvasLayer/ColorRect") as ColorRect;
-			shaderContainer.Visible = false;
+			//shaderContainer.Visible = false;
 			shader = shaderContainer?.Material as ShaderMaterial;
 
 			Palette = (CompressedTexture2D)GD.Load(settings.settingsData.GetPaletteURL());

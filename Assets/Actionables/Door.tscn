@@ -4,4 +4,4 @@
 
 [node name="Door" type="AnimatableBody2D"]
 script = ExtResource("1_xo2c6")
-Behaviour = 2
+TransitionTime = 1.0

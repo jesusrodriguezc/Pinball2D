@@ -8,7 +8,8 @@ public partial class BonusLane : Area2D, IActionable, IGroupable {
 
 	public readonly StringName SWITCH = "Switch";
 
-	public bool Active { get; set; } = false;
+	public bool Active { get { return _active; } set { if (_active == value) return; _active = value; if (value) Enable(); else { Disable(); } } } 
+	private bool _active = false;
 	public bool Blocked { get; set; } = false;
 	public bool IsCollisionEnabled { get; set; }
 
@@ -29,40 +30,24 @@ public partial class BonusLane : Area2D, IActionable, IGroupable {
 	public override void _Process (double delta) {
 	}
 
-	public void ChangeStatus (Node2D node) {
-		if (!node.GetType().Equals(typeof(Ball))) {
-			return;
-		}
-
-		if (Blocked) {
-			return;
-		}
-
-		if (Active) {
-			Disable();
-		} else {
-			Enable();
-		}
-	}
-
 	public void Enable () {
-		Active = true;
 		_animationPlayer?.Play("Enabled");
 		_audioComponent?.Play(SWITCH, AudioComponent.SFX_BUS);
 	}
 
 	public void Disable () {
-		Active = false;
 		_animationPlayer?.Play("Disabled");
 		_audioComponent?.Play(SWITCH, AudioComponent.SFX_BUS);
 
 	}
 	public void Reset () {
 		Blocked = false;
-		Disable();
+		Active = false;
 	}
 
 	public void Action (EventData data) {
+		GD.Print(data.Sender.Name, Blocked, Active, IsCollisionEnabled);
+
 		if (!IsCollisionEnabled) {
 			return;
 		}
@@ -75,11 +60,16 @@ public partial class BonusLane : Area2D, IActionable, IGroupable {
 			return;
 		}
 
-		if (Active) {
-			Disable();
-		} else {
-			Enable();
-		}
+		Active = !Active;
+
+		//if (Active) {
+		//	Disable();
+		//} else {
+		//	Enable();
+		//}
+
+		GD.Print(data.Sender.Name, Blocked, Active, IsCollisionEnabled);
+
 	}
 
 	public void EnableCollision (bool enable) {

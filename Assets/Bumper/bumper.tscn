@@ -12,7 +12,7 @@
 friction = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qvy71"]
-radius = 32.0
+radius = 26.0
 
 [sub_resource type="Animation" id="Animation_00leb"]
 length = 0.001
@@ -70,6 +70,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_p7067"]
 resource_name = "on_release"
 length = 0.5
+step = 0.05
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -77,9 +78,9 @@ tracks/0/path = NodePath("SpriteManagerComponent/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0, 0, 0, 0),
-"points": PackedFloat32Array(4, -0.25, 0, 0.25, 0, 5, -0.25, 0, 0.25, 0, 6, -0.25, 0, 0.25, 0, 7, -0.25, 0, 0.25, 0, 8, -0.25, 0, 0.25, 0, 9, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5)
+"handle_modes": PackedInt32Array(0, 0, 0, 0, 0, 0, 0),
+"points": PackedFloat32Array(4, -0.25, 0, 0.25, 0, 5, -0.25, 0, 0.25, 0, 6, -0.25, 0, 0.25, 0, 7, -0.25, 0, 0.25, 0, 8, -0.25, 0, 0.25, 0, 9, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.45, 0.5)
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -102,7 +103,6 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nyjv2"]
-radius = 16.0
 
 [sub_resource type="Curve" id="Curve_3qbcn"]
 max_value = 4.0
@@ -131,7 +131,7 @@ scale_curve = SubResource("CurveTexture_tuubd")
 
 [sub_resource type="Gradient" id="Gradient_6m6g2"]
 offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0.691357, 0.691357, 0.691357, 1)
+colors = PackedColorArray(1, 1, 1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_k230s"]
 gradient = SubResource("Gradient_6m6g2")

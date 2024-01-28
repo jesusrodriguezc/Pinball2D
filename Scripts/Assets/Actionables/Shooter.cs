@@ -12,8 +12,6 @@ public partial class Shooter : Node2D, IActionable {
 		PRESS_AND_WAIT,
 		HOLD_AND_WAIT
 	}
-	private Ball currBall;
-
 	#region Audio
 	private AudioComponent audioComponent;
 	public readonly StringName HIT = "Hit";
@@ -48,7 +46,6 @@ public partial class Shooter : Node2D, IActionable {
 
 	public void Action(EventData data) {
 
-		GD.Print($"{data.Sender.Name} -> {Name}.Action()");
 		RigidBody2D target = (RigidBody2D)data.Parameters[ITrigger.ACTIVATOR];
 		float holdPerc = 1f;
 		if (data.Parameters != null && data.Parameters.TryGetValue(ITrigger.HOLD_PERCENTAGE, out var holdPercObj)) {

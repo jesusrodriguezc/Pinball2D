@@ -1,14 +1,10 @@
 using Godot;
-using Pinball.Scripts.Utils;
-using Pinball.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static EventManager;
 using static ITrigger;
-using static Shooter;
 using static TriggerBehaviour;
-//using System.Collections.Generic;
 
 public partial class TriggerArea : Area2D, ITrigger {
 	private const float STILL_ELEMENT_MAX_VELOCITY = 0.1f;
@@ -33,6 +29,8 @@ public partial class TriggerArea : Area2D, ITrigger {
 	[Export] public double HoldingTime;
 	private Timer waitTimer;
 	[Export] public double WaitingTime;
+
+	public bool Triggered { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
 
@@ -116,20 +114,19 @@ public partial class TriggerArea : Area2D, ITrigger {
 			return;
 		}
 
-		NodesInside.Add(node);
-
 		if (!triggerOnEnter) {
+			Triggered = false;
 			return;
 		}
+
+		NodesInside.Add(node);
+
+
 
 		if (node is not RigidBody2D collisionObject2D) {
 			return;
 		}
 
-		if (collisionObject2D.LinearVelocity.Length() < STILL_ELEMENT_MAX_VELOCITY) {
-			GD.Print("Elemento {collisionObject2D.Name} parado.");
-		}
-		
 		switch (Behaviour) {
 			case TriggerBehaviourId.INSTANTANEOUS:
 				ProcessInstantaneous();
@@ -156,6 +153,7 @@ public partial class TriggerArea : Area2D, ITrigger {
 		}
 
 		if (triggerOnEnter) {
+			Triggered = false;
 			return;
 		}
 
@@ -282,9 +280,13 @@ public partial class TriggerArea : Area2D, ITrigger {
 		{
 			args[ACTIVATOR] = Target;
 		}
-		
+
+		args[ENTERING] = triggerOnEnter;
+
 		GD.Print($" -- {Name} TRIGGERED by {((Node2D)args[ACTIVATOR]).Name} -- ");
-		eventManager.SendMessage(this, triggeredNodes, Type, args);		
+		eventManager.SendMessage(this, triggeredNodes, Type, args);
+
+		Triggered = true;
 	}
 
 	public void ProcessInstantaneous() {

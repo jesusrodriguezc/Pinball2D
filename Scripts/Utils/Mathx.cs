@@ -22,5 +22,11 @@ namespace Pinball.Utils {
 			return Math.Pow(value, Math.E) / 20d;
 		}
 
+		public static Vector2 GetVectorFromAngle (float anguloEnRadianes) {
+			float xComponente = Mathf.Cos(anguloEnRadianes);
+			float yComponente = Mathf.Sin(anguloEnRadianes);
+
+			return new Vector2(xComponente, yComponente).Normalized();
+		}
 	}
 }

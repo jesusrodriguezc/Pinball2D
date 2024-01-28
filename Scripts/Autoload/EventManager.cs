@@ -49,20 +49,12 @@ public partial class EventManager : Node {
 						continue;
 					}
 
-					if (!collisionObj.HasMethod("EnableCollision")) {
-						continue;
-					}
-
 					Nodes.SecureCall(collisionObj, "EnableCollision", true);
 				}
 				break;
 			case EventType.DISABLE:
 				foreach (var receiver in receivers) {
 					if (receiver is not CollisionObject2D collisionObj) {
-						continue;
-					}
-
-					if (!collisionObj.HasMethod("EnableCollision")) {
 						continue;
 					}
 

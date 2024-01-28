@@ -16,7 +16,7 @@ public class SettingsData {
 
 	#region Resolution Values
 	public static readonly Dictionary<long, Vector2I> ResolutionDict = new() {
-		{0,  new Vector2I(640, 480)},
+		{0,  new Vector2I(640, 360)},
 		{1, new Vector2I(1024, 768)},
 		{2, new Vector2I(1280, 720)},
 		{3, new Vector2I(1366, 768)},

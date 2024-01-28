@@ -22,22 +22,33 @@ public enum ZLevel {
 }
 
 public enum LayerId {
-	Ball = 1,
+	Ball_Level0 = 1,
 	Map_Border = 1 << 1,
 	Level0 = 1 << 2,
 	Level1 = 1 << 3,
 	SkillShootBarrier = 1 << 4,
-	LeftShootBarrier = 1 << 5
+	LeftShootBarrier = 1 << 5,
+	Ball_Level1 = 1 << 6,
 }
 public static class LayerManager {
 	public static Dictionary<LayerId, ZLevel> LayerZLevel = new Dictionary<LayerId, ZLevel>()
 	{
-		{ LayerId.Ball, ZLevel.Level0_Ball},
+		{ LayerId.Ball_Level0, ZLevel.Level0_Ball},
 		{ LayerId.Map_Border, ZLevel.Level0_Ball},
 		{ LayerId.Level0, ZLevel.Level0_Ball},
 		{ LayerId.Level1, ZLevel.Level1_Ball},
 		{ LayerId.SkillShootBarrier, ZLevel.Level0_Ball},
 		{ LayerId.LeftShootBarrier, ZLevel.Level0_Ball}
+	};
+
+	public static Dictionary<LayerId, LayerId> BallLayer = new Dictionary<LayerId, LayerId>()
+{
+		{ LayerId.Ball_Level0, LayerId.Ball_Level0},
+		{ LayerId.Map_Border, LayerId.Ball_Level0},
+		{ LayerId.Level0, LayerId.Ball_Level0},
+		{ LayerId.Level1, LayerId.Ball_Level1},
+		{ LayerId.SkillShootBarrier, LayerId.Ball_Level0},
+		{ LayerId.LeftShootBarrier, LayerId.Ball_Level1}
 	};
 
 	public static Dictionary<LayerId, Node2D[]> ActionablesInLayer = new();
@@ -50,6 +61,16 @@ public static class LayerManager {
 		}
 
 		return (int)result;
+	}
+
+	public static uint GetBallLayer(int layerId) {
+		var layer = (LayerId)Enum.ToObject(typeof(LayerId), 1 << (layerId - 1));
+
+		if (!BallLayer.TryGetValue(layer, out LayerId result)) {
+			throw new Exception($"Layer {layerId} no definida.");
+		}
+
+		return (uint)result;
 	}
 
 	public static void UpdateActionables (Node startingNode, LayerId layer = 0, bool forceUpdate = false) {

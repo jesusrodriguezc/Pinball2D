@@ -58,6 +58,7 @@ public interface ITrigger {
 	public static readonly StringName POSITION = "position";
 	public static readonly StringName VELOCITY = "velocity";
 
+	public bool Triggered { get; set; }
 
 	public void Trigger (Dictionary<StringName, object> args = null);
 }

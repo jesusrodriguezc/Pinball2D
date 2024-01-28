@@ -13,6 +13,7 @@ public partial class WaitingNode : Node2D, IActionable, ITrigger
 	private Node2D[] triggeredNodes;
 	private EventData currentEvent;
 	public bool IsCollisionEnabled { get; set; }
+	public bool Triggered { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -62,6 +63,7 @@ public partial class WaitingNode : Node2D, IActionable, ITrigger
 	public void Trigger (Dictionary<StringName, object> args = null) {
 		eventManager.SendMessage(this, triggeredNodes, EventType.TRIGGER, currentEvent.Parameters);
 
+		Triggered = true;
 		currentEvent = null;
 	}
 }

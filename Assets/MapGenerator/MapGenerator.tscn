@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyv8t8isgxkes"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/MapGenerator.cs" id="1_opu5x"]
+
+[node name="MapGenerator" type="StaticBody2D"]
+script = ExtResource("1_opu5x")
+paintingColor = Color(0.666667, 0.215686, 0.266667, 1)
+metadata/_edit_horizontal_guides_ = [-15.0, 15.0, 5.0, -5.0, -15.0, 15.0]
+metadata/_edit_vertical_guides_ = [-10.0, 10.0]

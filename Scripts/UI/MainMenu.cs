@@ -15,7 +15,7 @@ public partial class MainMenu : Control
 	private Label VersionLabel;
 
 	private readonly StringName MUSIC = "Music";
-	private readonly string GAME_VERSION = "v.0.0.4";
+	private readonly string GAME_VERSION = "v.0.0.5";
 
 
 	public override void _Ready () {
@@ -46,7 +46,6 @@ public partial class MainMenu : Control
 
 	private void OnOptionsButtonPressed () {
 		settingsMenu.Show();
-		//sceneSwitcher?.GotoScene("res://Escenas/SettingsMenu.tscn");
 	}
 
 
