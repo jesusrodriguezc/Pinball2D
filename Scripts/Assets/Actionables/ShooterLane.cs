@@ -4,6 +4,7 @@ using Pinball.Utils;
 public partial class ShooterLane : Area2D {
 	private Ball currBall;
 	private Area2D collisionArea;
+	private PinballController pinballController;
 
 	#region Audio
 	private AudioComponent audioComponent;
@@ -26,7 +27,7 @@ public partial class ShooterLane : Area2D {
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready () {
-
+		pinballController = GetNode<PinballController>("/root/Pinball");
 		audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
 		if (audioComponent != null) {
 			audioComponent.AddAudio(HIT, ResourceLoader.Load<AudioStream>("res://SFX/shooterlane_hit.wav"));
@@ -63,8 +64,6 @@ public partial class ShooterLane : Area2D {
 					float percButtonTime = (float)Mathf.Min(1, timeCountButtonHold / (double)MaxPowerHoldTime);
 					float hitPower = ShotterLanePower * Mathx.FuncSmooth(percButtonTime);
 
-					GD.Print($"ShooterLane.Action({Vector2.Up * hitPower})");
-
 					EmitSignal(SignalName.Impulse, currBall, Vector2.Up * hitPower);
 					if (percButtonTime >= 0.35f) {
 						audioComponent?.Play(ENOUGH_POWER, 0.1f);
@@ -89,7 +88,7 @@ public partial class ShooterLane : Area2D {
 		}
 
 		currBall = (Ball)node;
-		if (PinballController.Instance.Ball != currBall) {
+		if (pinballController.Ball != currBall) {
 			GD.PrintErr("La pelota no esta en la lista de pelotas.");
 			return;
 		}
@@ -104,7 +103,7 @@ public partial class ShooterLane : Area2D {
 		}
 
 		currBall = (Ball)node;
-		if (PinballController.Instance.Ball != currBall) {
+		if (pinballController.Ball != currBall) {
 			GD.PrintErr("La pelota no esta en la lista de pelotas.");
 			return;
 		}

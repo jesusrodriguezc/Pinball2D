@@ -9,7 +9,7 @@ public partial class Led : Node2D{
 	private AudioComponent _audioComponent;
 	public readonly StringName SWITCH = "Switch";
 	[Export] public Node2D[] Elements { get; set; }
-	private ITrigger[] Triggers;
+	private TriggerBase[] Triggers;
 	[Export] public bool Active { get; private set; }
 
 	public override void _Ready () {
@@ -20,18 +20,15 @@ public partial class Led : Node2D{
 			_audioComponent.AddAudio(SWITCH, ResourceLoader.Load<AudioStream>("res://SFX/bonuslane_switch.wav"));
 		}
 
-		Triggers = Elements?.OfType<ITrigger>().ToArray();
+		Triggers = Elements?.OfType<TriggerBase>().ToArray();
 	}
 
 	public override void _Process (double delta) {
-		bool allElementsTriggered = Triggers.All(trigger => trigger.Triggered);
-		//GD.Print($"allElementsTriggered = {allElementsTriggered}");
+		bool allElementsTriggered = Triggers.All(trigger => trigger.IsTriggered);
 
 		if (allElementsTriggered == Active) {
 			return;
 		}
-		GD.Print($"Status change.");
-
 
 		if (allElementsTriggered) {
 			Enable();

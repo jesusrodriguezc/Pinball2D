@@ -1,32 +1,33 @@
-[gd_scene load_steps=15 format=3 uid="uid://rvbtg2oc61o2"]
+[gd_scene load_steps=13 format=3 uid="uid://rvbtg2oc61o2"]
 
 [ext_resource type="Script" path="res://Scripts/GlobalControllers/PinballController.cs" id="1_spehh"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_6q7fh"]
 [ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/TriggerArea.tscn" id="4_3pjr2"]
-[ext_resource type="PackedScene" uid="uid://bdu43i4eov6ki" path="res://Assets/led.tscn" id="4_85v7x"]
-[ext_resource type="PackedScene" uid="uid://8wbtmaw03d7i" path="res://Assets/BonusLane/GroupTrigger.tscn" id="4_dojhr"]
-[ext_resource type="PackedScene" uid="uid://b3k8b7kbea58p" path="res://Assets/BonusLane/bonus_lane.tscn" id="5_ag6wo"]
-[ext_resource type="Script" path="res://Scripts/GlobalControllers/ScoringController.cs" id="6_edm6w"]
+[ext_resource type="PackedScene" uid="uid://bacfc0s5fsli" path="res://Assets/Actionables/Teleport.tscn" id="6_8kvga"]
+[ext_resource type="PackedScene" uid="uid://p5ihd7ojsajs" path="res://Assets/Actionables/LifeModifier.tscn" id="6_q82bs"]
 [ext_resource type="PackedScene" uid="uid://bq026lg6n6o7t" path="res://Assets/Actionables/LayerSwapper.tscn" id="7_cnshn"]
-[ext_resource type="Script" path="res://Scripts/GlobalControllers/GlobalEffectController.cs" id="7_tp5ow"]
 [ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="9_pxuon"]
 
 [sub_resource type="Gradient" id="Gradient_b81lh"]
-colors = PackedColorArray(0, 0.0470588, 0.301961, 1, 0, 0.0470588, 0.301961, 1)
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(0.158472, 0.158472, 0.158472, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ox6ls"]
 gradient = SubResource("Gradient_b81lh")
 width = 1280
 height = 720
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xx3ti"]
-size = Vector2(24.6247, 15.3597)
-
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c2do7"]
 rough = true
 absorbent = true
 
-[node name="Main" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jrh3b"]
+size = Vector2(69.5378, 9.2311)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f81gk"]
+size = Vector2(189, 18)
+
+[node name="Pinball" type="Node2D"]
 process_mode = 3
 position = Vector2(640, 360)
 script = ExtResource("1_spehh")
@@ -34,21 +35,20 @@ Debug = true
 LivesLeft = 999
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-24, 0)
 texture = SubResource("GradientTexture2D_ox6ls")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(-104, 136)
-zoom = Vector2(2, 2)
 
-[node name="UI" parent="." instance=ExtResource("2_6q7fh")]
-offset_left = -609.0
-offset_top = -352.0
-offset_right = -545.0
-offset_bottom = -296.0
+[node name="UI" parent="Camera2D" instance=ExtResource("2_6q7fh")]
+offset_left = -408.0
+offset_top = -216.0
+offset_right = -322.0
+offset_bottom = -168.0
 metadata/_edit_use_anchors_ = true
 
 [node name="Ball" parent="." instance=ExtResource("9_pxuon")]
-position = Vector2(-288, 24)
+position = Vector2(-300, -57)
 collision_mask = 7
 mass = 5.0
 gravity_scale = 0.5
@@ -57,22 +57,6 @@ contact_monitor = true
 DebugPower = 500
 MaxVelocity = 1000.0
 currentLayer = 1
-
-[node name="Shooter_Lane_empty" parent="." instance=ExtResource("4_3pjr2")]
-position = Vector2(-288, 56)
-scale = Vector2(1.16, 0.605511)
-collision_layer = 2
-collision_mask = 65
-Type = 0
-
-[node name="In" type="CollisionShape2D" parent="Shooter_Lane_empty"]
-shape = SubResource("RectangleShape2D_xx3ti")
-debug_color = Color(0.929412, 0, 0.12549, 0.419608)
-
-[node name="LayerSwapper" parent="Shooter_Lane_empty" instance=ExtResource("7_cnshn")]
-position = Vector2(0, -1.65149)
-insideLayer = 4
-outLayer = 4
 
 [node name="Mapa" type="StaticBody2D" parent="."]
 collision_layer = 2
@@ -109,35 +93,35 @@ offset_right = 383.0
 offset_bottom = 256.0
 color = Color(0, 0, 0, 1)
 
-[node name="Node2D" type="Node2D" parent="."]
-position = Vector2(64, 88)
+[node name="Shooter_Lane_full" parent="." instance=ExtResource("4_3pjr2")]
+position = Vector2(-296, -32)
+scale = Vector2(0.36, 1.64551)
+collision_layer = 2
+collision_mask = 1
+Type = 0
 
-[node name="GroupTrigger" parent="." instance=ExtResource("4_dojhr")]
-position = Vector2(-80, 152)
-GroupName = &"PEPE"
-canShiftWhenButtonPressed = true
+[node name="In" type="CollisionShape2D" parent="Shooter_Lane_full"]
+position = Vector2(6.10352e-05, -1.52588e-05)
+shape = SubResource("RectangleShape2D_jrh3b")
+debug_color = Color(0.929412, 0, 0.12549, 0.419608)
 
-[node name="Area2D" parent="GroupTrigger" instance=ExtResource("5_ag6wo")]
-position = Vector2(-32, 24)
-collision_layer = 4
+[node name="LayerSwapper" parent="Shooter_Lane_full" instance=ExtResource("7_cnshn")]
+insideLayer = 4
+outLayer = 4
+
+[node name="DeathArea" parent="." instance=ExtResource("4_3pjr2")]
+position = Vector2(52.0009, 4)
+collision_layer = 2
 collision_mask = 65
+Type = 0
 
-[node name="Area2D2" parent="GroupTrigger" instance=ExtResource("5_ag6wo")]
-position = Vector2(8, 24)
-collision_layer = 4
-collision_mask = 65
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="DeathArea"]
+position = Vector2(-332.001, 180)
+shape = SubResource("RectangleShape2D_f81gk")
 
-[node name="Area2D3" parent="GroupTrigger" instance=ExtResource("5_ag6wo")]
-position = Vector2(40, 24)
-collision_layer = 4
-collision_mask = 65
+[node name="LifeModifier" parent="DeathArea" instance=ExtResource("6_q82bs")]
+LivesModification = -1
 
-[node name="ScoringController" type="Node" parent="."]
-script = ExtResource("6_edm6w")
-
-[node name="GlobalEffectController" type="Node" parent="."]
-script = ExtResource("7_tp5ow")
-
-[node name="Led" parent="." node_paths=PackedStringArray("Elements") instance=ExtResource("4_85v7x")]
-position = Vector2(-48, 56)
-Elements = [NodePath("../GroupTrigger")]
+[node name="Teleport" parent="DeathArea" instance=ExtResource("6_8kvga")]
+position = Vector2(-284.001, -28)
+StoppedAfterTeleport = true

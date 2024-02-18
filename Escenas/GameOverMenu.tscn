@@ -1,26 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://dvym84ocroljg"]
+[gd_scene load_steps=9 format=3 uid="uid://dvym84ocroljg"]
 
 [ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_45gmm"]
 [ext_resource type="Script" path="res://Scripts/UI/GameOverMenu.cs" id="1_71a1u"]
+[ext_resource type="Shader" path="res://Shaders/Blur.gdshader" id="2_1cj73"]
+[ext_resource type="PackedScene" uid="uid://eyhg24mwjxbk" path="res://Escenas/Background.tscn" id="2_2uct4"]
 [ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="6_rb10o"]
 
-[sub_resource type="Gradient" id="Gradient_dp5nl"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_algaj"]
-gradient = SubResource("Gradient_dp5nl")
-fill_from = Vector2(1, 0.1)
-fill_to = Vector2(1, 0.8)
-metadata/_snap_enabled = true
-
-[sub_resource type="LabelSettings" id="LabelSettings_fh288"]
-line_spacing = 16.0
-font = ExtResource("6_rb10o")
-font_size = 48
-outline_size = 2
-shadow_size = 5
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_g607r"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gykfs"]
+shader = ExtResource("2_1cj73")
+shader_parameter/lod = 3.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_0h3ga"]
 font = ExtResource("6_rb10o")
@@ -29,104 +17,121 @@ outline_size = 1
 shadow_size = 5
 shadow_color = Color(0, 0, 0, 1)
 
-[sub_resource type="Theme" id="Theme_slfa1"]
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_g607r"]
 
-[node name="GameOverMenu" type="Control"]
-layout_mode = 3
+[node name="GameOverMenu" type="MarginContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 21.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_45gmm")
 script = ExtResource("1_71a1u")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(640, 360)
-scale = Vector2(20, 11.25)
-texture = SubResource("GradientTexture2D_algaj")
+[node name="Background2" parent="." instance=ExtResource("2_2uct4")]
 
-[node name="GameOverLabel" type="Label" parent="."]
-layout_mode = 0
-offset_left = 189.0
-offset_top = 176.0
-offset_right = 1092.0
-offset_bottom = 273.0
-theme_override_font_sizes/font_size = 32
+[node name="Background" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_gykfs")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.145098, 0.145098, 0.145098, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="GameOverLabel" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
 text = "GAMEOVER"
-label_settings = SubResource("LabelSettings_fh288")
 horizontal_alignment = 1
+autowrap_mode = 2
+uppercase = true
 
-[node name="HSeparator" type="HSeparator" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -152.0
-offset_top = -134.0
-offset_right = 152.0
-offset_bottom = -130.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/separator = SubResource("StyleBoxLine_g607r")
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
 
-[node name="ScoreLabel" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -451.5
-offset_top = -130.5
-offset_right = 451.5
-offset_bottom = -33.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="ScoreLabel" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "SCORE: 000000"
+text = "SCORE:"
 label_settings = SubResource("LabelSettings_0h3ga")
 horizontal_alignment = 1
 
-[node name="VBox" type="VBoxContainer" parent="."]
-clip_contents = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = -73.0
-offset_right = 128.0
-offset_bottom = 87.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme = SubResource("Theme_slfa1")
-alignment = 1
-
-[node name="RetryButton" type="Button" parent="VBox"]
+[node name="ScoreLabelValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "0000000"
+label_settings = SubResource("LabelSettings_0h3ga")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_g607r")
+
+[node name="RetryButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 0
 focus_neighbor_top = NodePath("../ExitButton")
-focus_neighbor_bottom = NodePath("../MainMenuButton")
-text = "Try again"
+focus_neighbor_bottom = NodePath("../LeaderboardButton")
+focus_next = NodePath("../LeaderboardButton")
+focus_previous = NodePath("../ExitButton")
+text = "TRY_AGAIN"
 
-[node name="MainMenuButton" type="Button" parent="VBox"]
+[node name="LeaderboardButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 0
+focus_neighbor_top = NodePath("../RetryButton")
+focus_neighbor_bottom = NodePath("../MainMenuButton")
+focus_next = NodePath("../MainMenuButton")
+focus_previous = NodePath("../RetryButton")
+text = "SHOW_LEADERBOARD"
+
+[node name="MainMenuButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 0
 focus_neighbor_top = NodePath("../RetryButton")
 focus_neighbor_bottom = NodePath("../ExitButton")
-text = "Main menu"
+focus_next = NodePath("../ExitButton")
+focus_previous = NodePath("../LeaderboardButton")
+text = "MAIN_MENU"
 
-[node name="ExitButton" type="Button" parent="VBox"]
+[node name="ExitButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 0
 focus_neighbor_top = NodePath("../MainMenuButton")
 focus_neighbor_bottom = NodePath("../RetryButton")
-text = "Exit"
+focus_next = NodePath("../RetryButton")
+focus_previous = NodePath("../MainMenuButton")
+text = "EXIT"
 
-[connection signal="pressed" from="VBox/RetryButton" to="." method="OnRetryButtonPressed"]
-[connection signal="pressed" from="VBox/MainMenuButton" to="." method="OnMenuButtonPressed"]
-[connection signal="pressed" from="VBox/ExitButton" to="." method="OnExitButtonPressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/RetryButton" to="." method="OnRetryButtonPressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/LeaderboardButton" to="." method="OnShowLeaderboard"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/MainMenuButton" to="." method="OnMenuButtonPressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ExitButton" to="." method="OnExitButtonPressed"]

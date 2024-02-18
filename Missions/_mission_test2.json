@@ -1,0 +1,11 @@
+{"Title":"TestMission2", 
+"Description":"This is the description of TestMission2", 
+"Steps": [
+{"Type": "REBOUND", "Repetitions":5},
+{"Type": "ANY_WORMHOLE", "Repetitions":2}
+],
+"StartMethod": "OnStart",
+"Rank": 0,
+"XpReward": 50,
+"ScoreReward" : 650
+}

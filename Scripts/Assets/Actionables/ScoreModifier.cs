@@ -1,12 +1,14 @@
 using Godot;
 using System;
 
-public partial class ScoreModifier : Node2D, IActionable
+public partial class ScoreModifier : Node2D, IActionable 
 {
+	[Signal] public delegate void ActionedEventHandler ();
 	private ScoreComponent scoreComponent;
 
-	public bool IsCollisionEnabled { get; set; }
 	[Export] public double BaseScore;
+
+	public bool IsCollisionEnabled { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

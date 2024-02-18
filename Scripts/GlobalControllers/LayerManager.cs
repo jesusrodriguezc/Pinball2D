@@ -78,7 +78,7 @@ public static class LayerManager {
 		if (layer > 0) {
 			ActionablesInLayer[layer] = Nodes
 				.findByClass<CollisionObject2D>(startingNode)
-				.Where(node => (node is IActionable || node is ITrigger) && (node.CollisionLayer & (uint)layer) == (uint)layer)
+				.Where(node => (node is IActionable || node is TriggerBase) && (node.CollisionLayer & (uint)layer) == (uint)layer)
 				.ToArray();
 			return;
 		}
@@ -90,7 +90,7 @@ public static class LayerManager {
 		foreach (LayerId id in Enum.GetValues(typeof(LayerId))) {
 			ActionablesInLayer[id] = Nodes
 			.findByClass<CollisionObject2D>(startingNode)
-			.Where(node => (node is IActionable || node is ITrigger) && (node.CollisionLayer & (uint)id) == (uint)id)
+			.Where(node => (node is IActionable || node is TriggerBase) && (node.CollisionLayer & (uint)id) == (uint)id)
 			.ToArray();
 		}
 

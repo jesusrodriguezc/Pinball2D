@@ -8,51 +8,42 @@ using static GroupTrigger;
 /// Manage all the global effects (e.j. bonus, ...)
 /// </summary>
 public partial class GlobalEffectController : Node {
-
-
+	private PinballController pinballController;
 	private List<GroupTrigger> groupTriggers = new();
 	
 	public override void _Ready () {
+		//Prepare();
+	}
+	public void Prepare () {
+		pinballController = GetNode<PinballController>("/root/Pinball");
 		groupTriggers = Nodes.findByClass<GroupTrigger>(GetTree().Root);
 		groupTriggers.ForEach(groupTrigger => {
-			GD.Print($"GroupTrigger {groupTrigger.Name}");
 			groupTrigger.GlobalEffect += (type, element) => ManageGlobalEffect(groupTrigger, type, element);
 		});
 	}
 
 	public void ManageGlobalEffect(GroupTrigger group, string type, Node2D affectedNode) {
 
-		GD.Print($"[{group.GroupName} COMPLETED] Effect {type} applied.");
 		switch (type) {
-			case BONUS_ON:
+			case CHANGE_UPGRADE_LEVEL:
 				if (affectedNode is ReboundBase rbOn) {
-					AddBonus(rbOn, group);
-				}
-				break;
-			case BONUS_OFF:
-				if (affectedNode is ReboundBase rbOff) {
-					RemoveBonus(rbOff, group);
+					ChangeUpgradeLevel(rbOn, group);
 				}
 				break;
 			case SCORE_ADD:
-				PinballController.Instance.scoreController.AddScore(group.ScoreAddition);
+				pinballController.scoreController.AddScore(group.ScoreAddition);
+				break;
+			case ACTION_DONE:
+				// TODO: Completa una parte de una mision
 				break;
 		}
 	}
 
-	public void AddBonus (ReboundBase element, GroupTrigger bonus) {
+	public void ChangeUpgradeLevel (ReboundBase element, GroupTrigger bonus) {
 		if (element == null) return;
 
-		element.scoreComponent?.ApplyBonus(bonus.GroupName, bonus.BonusMultiplier);
-		element.spriteManagerComponent?.ChangeTexture(1);
-	}
-
-	public void RemoveBonus (ReboundBase element, GroupTrigger bonus) {
-		if (element == null) return;
-
-		element.scoreComponent?.ApplyBonus(bonus.GroupName, bonus.BonusMultiplier);
-		element.spriteManagerComponent?.ChangeTexture(0);
-
+		element.scoreComponent?.ChangeUpgradeBonus(bonus.GroupName, bonus.CurrentUpgradeLevel);
+		element.upgradeComponent?.ChangeLevel(bonus.CurrentUpgradeLevel);
 	}
 }
 

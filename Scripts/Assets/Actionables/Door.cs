@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public partial class Door : AnimatableBody2D, IActionable {
+public partial class Door : StaticBody2D, IActionable {
 
 	public enum DoorStatus {
 		NONE,
@@ -21,6 +21,8 @@ public partial class Door : AnimatableBody2D, IActionable {
 		TOGGLE_ON_ACTION,
 		CYCLE_ON_ACTION
 	}
+
+	[Signal] public delegate void ActionedEventHandler ();
 
 	[ExportCategory("Behaviour")]
 	[Export] private DoorBehaviour Behaviour;
@@ -52,7 +54,7 @@ public partial class Door : AnimatableBody2D, IActionable {
 
 	private float _t = 0.0f;
 
-	public bool IsCollisionEnabled { get; set; } = true;
+	public bool IsCollisionEnabled { get; set; }
 
 	public override void _Ready () {
 		switch (InitialStatus) {
@@ -104,7 +106,6 @@ public partial class Door : AnimatableBody2D, IActionable {
 
 		// If the current status is final (Opened/Closed) and there is no action in progress, we enqueue action from the action queue (if any).
 		if (CurrentStatus.IsIn(DoorStatus.OPENED, DoorStatus.CLOSED) && ActionQueue.Count > 0) {
-			GD.Print($"There is {ActionQueue.Count} elements in the ActionQueue.");
 			ExecuteAction(ActionQueue.Dequeue());
 		}
 	}
@@ -194,8 +195,6 @@ public partial class Door : AnimatableBody2D, IActionable {
 	
 	public void ExecuteAction(DoorStatus nextStatus) {
 
-		GD.Print($"{Name} changing status: {CurrentStatus} to {nextStatus}");
-
 		switch (Behaviour) {
 			case DoorBehaviour.SINGLE_USE:
 				break;
@@ -217,14 +216,12 @@ public partial class Door : AnimatableBody2D, IActionable {
 	}
 
 	private void Close () {
-		GD.Print("Should start closing");
 		CurrentStatus = DoorStatus.CLOSING;
 
 		AudioComponent?.Play(CLOSE, AudioComponent.SFX_BUS);
 	}
 
 	private void Open () {
-		GD.Print("Should start opening");
 		CurrentStatus = DoorStatus.OPENING;
 
 		AudioComponent?.Play(OPEN, AudioComponent.SFX_BUS);

@@ -4,9 +4,6 @@ using System;
 
 public partial class MainMenu : Control
 {
-	[Export] PackedScene gameScene;
-	[Export] PackedScene creditsScene;
-	[Export] PackedScene optionsScene;
 	private SceneSwitcher sceneSwitcher;
 	private SettingsMenu settingsMenu;
 	private ShaderPlaceholder shaderPlaceholder;
@@ -15,8 +12,7 @@ public partial class MainMenu : Control
 	private Label VersionLabel;
 
 	private readonly StringName MUSIC = "Music";
-	private readonly string GAME_VERSION = "v.0.0.5";
-
+	private readonly string GAME_VERSION = "v.0.1.0";
 
 	public override void _Ready () {
 		sceneSwitcher = GetNodeOrNull<SceneSwitcher>("/root/SceneSwitcher");
@@ -36,11 +32,9 @@ public partial class MainMenu : Control
 			globalAudioSystem.Play(MUSIC, AudioComponent.MUSIC_BUS);
 
 		}
-
-
 	}
 	private void OnStartButtonPressed () {
-		sceneSwitcher?.GotoScene("res://Escenas/GameScene.tscn");
+		sceneSwitcher?.GotoScene("res://Escenas/GameScene.tscn");		
 	}
 
 
@@ -55,8 +49,7 @@ public partial class MainMenu : Control
 	
 	private void OnCreditsButtonPressed()
 	{
-		//sceneSwitcher?.GotoScene("res://Escenas/CreditsScene.tscn");
-		sceneSwitcher?.GotoScene("res://Escenas/IntroScreen.tscn");
+		sceneSwitcher?.GotoScene("res://Escenas/CreditScene.tscn");
 	}
 }
 

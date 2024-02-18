@@ -1,0 +1,28 @@
+keys,en,es
+ATTACK_BUMPERS,Hit the attack bumpers,Golpea los rebotadores de ataque
+RAMP_BUMPERS,Hit the ramp bumpers,Golpea los rebotadores de la rampa
+ENTER_RAMP,Send it up the ramp,Envíala a la rampa
+HYPERSPACE,Put it in the hyperspace kickout,Llévala al lanzador del hiperespacio
+REBOUND,Hit the rebounds,Golpea los rebotadores
+RETURN_LANE,Send it down the return lanes,Envíala a los carriles de retorno
+OUT_LANE,Send it down the out lanes,Envíala a los carriles de salida
+REENTRY_LANE,Send it down the reentry lanes,Envíala a los carriles de reentrada
+ANY_TARGET,Hit any target,Golpea cualquier objetivo
+UPGRADE_ATTACK,Upgrade the attack bumpers,Mejora los rebotadores de ataque
+BOOSTER_TARGET_BANK,Hit all the booster targets,Golpea todos los objetivos de refuerzo
+ANY_WORMHOLE,Put it in any wormhole,Llévala a cualquier agujero de gusano.
+REMOTE_ATTACK_BUMPER,Hit the remote attack bumper,Golpea el rebotador de ataque aislado
+ANY_LANE,Send it down any lanes,Envíala a cualquier carril
+FLAG,Roll the flags,Haz girar los banderines
+MISSION_COMPLETED,Mission completed,Misión completada
+,,
+GAME_DESIGNER,Game design,Diseñador
+GAME_DEVELOPER,Game developer,Programador
+MUSIC_ARTIST,Music by,Música
+SFX_ARTIST,SFX artist,Sonidos FX
+ART_DESIGNER,Art designer,Artista
+,,
+TRY_AGAIN,Try again,Nueva partida
+LEADERBOARD,Show eaderboard,Mostrar ranking
+MAIN_MENU,Main menu,Menú principal
+EXIT,Exit,Salir

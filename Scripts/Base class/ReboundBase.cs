@@ -1,17 +1,13 @@
 ﻿using Godot;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
-public abstract partial class ReboundBase : StaticBody2D, IActionable{
+public abstract partial class ReboundBase : StaticBody2D, IActionable {
+
 	protected Area2D _collisionArea;
-	protected AnimationPlayer _animationPlayer;
+	protected AnimationPlayer _lightAnimationPlayer;
 
 	#region Components
-	public SpriteManagerComponent spriteManagerComponent;
+	public UpgradeComponent upgradeComponent;
 	public ScoreComponent scoreComponent;
 	protected AudioComponent _audioComponent;
 	protected GpuParticles2D particleSystem;
@@ -20,27 +16,31 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 	[Export] public AudioStream HitStream;
 	public readonly StringName HIT = "Hit";
 
-
+	[Signal] public delegate void ActionedEventHandler ();
 	[Signal] public delegate void ImpulseEventHandler (Node2D nodeAffected, Vector2 impulse);
 
 	[Export] public float HitPower { get; set; }
 	[Export] public float Score { get; set; }
-	public bool IsCollisionEnabled { get; set; } = true;
+	public bool IsCollisionEnabled { get; set; }
+
+	private PinballController pinballController;
 	protected Godot.RandomNumberGenerator randomNumberGenerator;
 
 	public override void _Ready () {
+		base._Ready ();
+		pinballController = GetNode<PinballController>("/root/Pinball");
 		randomNumberGenerator = new();
-		_animationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+		_lightAnimationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+
 		particleSystem = GetNodeOrNull<GpuParticles2D>("ParticleSystem");
 		_collisionArea = GetNode<Area2D>("CollisionArea");
 
-		_collisionArea.BodyEntered += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { ITrigger.ENTERING, true }, { ITrigger.ACTIVATOR, node } } });
-		_collisionArea.BodyExited += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { ITrigger.ENTERING, false }, { ITrigger.ACTIVATOR, node } } });
+		_collisionArea.BodyEntered += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { TriggerBase.ENTERING, true }, { TriggerBase.ACTIVATOR, node } } });
+		_collisionArea.BodyExited += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { TriggerBase.ENTERING, false }, { TriggerBase.ACTIVATOR, node } } });
 		_collisionArea.CollisionLayer = CollisionLayer;
 		_collisionArea.CollisionMask = CollisionMask;
 
-		spriteManagerComponent = GetNodeOrNull<SpriteManagerComponent>("SpriteManagerComponent");
-		spriteManagerComponent?.ChangeTexture(0);
+		upgradeComponent = GetNodeOrNull<UpgradeComponent>("UpgradeComponent");
 
 		scoreComponent = GetNodeOrNull<ScoreComponent>("ScoreComponent");
 
@@ -55,12 +55,12 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 	public virtual void Collision (Node2D node) {
 
 		Vector2 dirImpulso = CalculateImpulseDirection(node).Rotated(randomNumberGenerator.RandfRange(-0.1f, 0.1f));
-		if (_animationPlayer?.HasAnimation("on_collision") ?? false) {
-			_animationPlayer.Play("on_collision");
+		if (_lightAnimationPlayer?.HasAnimation("on_collision") ?? false) {
+			_lightAnimationPlayer.Play("on_collision");
 		}
 
 		_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
-		
+
 		EmitSignal(SignalName.Impulse, node, dirImpulso * HitPower);
 		scoreComponent?.AddScore();
 
@@ -74,15 +74,17 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 		}
 
 		Ball currBall = (Ball)node;
-		if (PinballController.Instance.Ball != currBall) {
-			GD.Print("La pelota no esta en la lista de pelotas.");
+		if (pinballController.Ball != currBall) {
+			GD.PrintErr("La pelota no esta en la lista de pelotas.");
 			return;
 		}
 		EmitParticles(node);
 
-		if (_animationPlayer?.HasAnimation("on_release") ?? false) {
-			_animationPlayer.Play("on_release");
+		if (_lightAnimationPlayer?.HasAnimation("on_release") ?? false) {
+			_lightAnimationPlayer.Play("on_release");
 		}
+
+		EmitSignal(SignalName.Actioned);
 
 
 	}
@@ -99,7 +101,7 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 			return;
 		}
 		bool isEntering = false;
-		if (data.Parameters.TryGetValue(ITrigger.ENTERING, out var entering)) {
+		if (data.Parameters.TryGetValue(TriggerBase.ENTERING, out var entering)) {
 			isEntering = (bool)entering;
 		}
 
@@ -109,7 +111,6 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable{
 			Release(data.Sender);
 		}
 	}
-
 
 	public void EnableCollision (bool enable) {
 		IsCollisionEnabled = enable;

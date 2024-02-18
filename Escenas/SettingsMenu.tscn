@@ -28,6 +28,10 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 theme = ExtResource("1_dejiu")
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 script = ExtResource("2_01a6s")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -39,22 +43,28 @@ color = Color(0, 0, 0, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 8
 
 [node name="Settings" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 6
 theme_override_font_sizes/font_size = 32
 text = "SETTINGS"
 label_settings = SubResource("LabelSettings_fh288")
 horizontal_alignment = 1
+uppercase = true
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
 theme_override_styles/separator = SubResource("StyleBoxLine_g607r")
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 6.0
 tab_alignment = 1
 
 [node name="_GRAPHICS_" type="TabBar" parent="VBoxContainer/TabContainer"]
@@ -63,17 +73,15 @@ tab_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/_GRAPHICS_"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -256.0
-offset_top = -92.0
-offset_right = 256.0
-offset_bottom = 92.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 64
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer"]
 layout_mode = 2
@@ -84,7 +92,7 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "Display Mode"
+text = "DISPLAY_MODE"
 
 [node name="DisplayModeOpt" type="OptionButton" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
@@ -92,20 +100,20 @@ size_flags_horizontal = 3
 size_flags_vertical = 5
 item_count = 4
 selected = 0
-popup/item_0/text = "Window"
+popup/item_0/text = "WINDOW_MODE"
 popup/item_0/id = 0
-popup/item_1/text = "Full-screen"
+popup/item_1/text = "FULLSCREEN_MODE"
 popup/item_1/id = 1
-popup/item_2/text = "Borderless Window"
+popup/item_2/text = "BORDERLESS_WINDOW_MODE"
 popup/item_2/id = 2
-popup/item_3/text = "Borderless Full-screen"
+popup/item_3/text = "BORDERLESS_FULLSCREEN_MODE"
 popup/item_3/id = 3
 
 [node name="VSyncLbl" type="Label" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "VSync"
+text = "VSYNC"
 
 [node name="VSyncOpt" type="CheckButton" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
@@ -115,31 +123,34 @@ size_flags_horizontal = 10
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "Window resolution"
+text = "WINDOW_RESOLUTION"
 
 [node name="WindowResolutionOpt" type="OptionButton" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
-item_count = 5
+item_count = 7
 selected = 0
-popup/item_0/text = "640x480"
+popup/item_0/text = "854x480"
 popup/item_0/id = 0
-popup/item_1/text = "1024x768"
+popup/item_1/text = "1280x720"
 popup/item_1/id = 1
-popup/item_2/text = "1280x720"
+popup/item_2/text = "1366x768"
 popup/item_2/id = 2
-popup/item_3/text = "1366x768"
+popup/item_3/text = "1600x900"
 popup/item_3/id = 3
 popup/item_4/text = "1920x1080"
 popup/item_4/id = 4
+popup/item_5/text = "2560x1440"
+popup/item_5/id = 5
+popup/item_6/text = "3840x2160"
+popup/item_6/id = 6
 
 [node name="ShaderPaletteLbl" type="Label" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
-text = "Shader palette
-"
+text = "SHADER_PALETTE"
 
 [node name="ShaderPaletteOpt" type="OptionButton" parent="VBoxContainer/TabContainer/_GRAPHICS_/MarginContainer/GridContainer"]
 layout_mode = 2
@@ -147,11 +158,11 @@ size_flags_horizontal = 3
 size_flags_vertical = 5
 item_count = 3
 selected = 0
-popup/item_0/text = "Pink"
+popup/item_0/text = "PINK"
 popup/item_0/id = 0
-popup/item_1/text = "Blue"
+popup/item_1/text = "BLUE"
 popup/item_1/id = 1
-popup/item_2/text = "Grayscale"
+popup/item_2/text = "GRAYSCALE"
 popup/item_2/id = 2
 
 [node name="_SOUND_" type="TabBar" parent="VBoxContainer/TabContainer"]
@@ -161,17 +172,15 @@ tab_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/_SOUND_"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -256.0
-offset_top = -92.0
-offset_right = 256.0
-offset_bottom = 92.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 64
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer"]
 layout_mode = 2
@@ -182,7 +191,7 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "Master"
+text = "MASTER_BUS"
 
 [node name="MasterVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer"]
 layout_mode = 2
@@ -196,7 +205,7 @@ tick_count = 11
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "Music"
+text = "MUSIC_BUS"
 
 [node name="MusicVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer"]
 layout_mode = 2
@@ -208,7 +217,7 @@ tick_count = 11
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "Sound FX"
+text = "SFX_BUS"
 
 [node name="SFXVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/_SOUND_/MarginContainer/GridContainer"]
 layout_mode = 2
@@ -223,54 +232,54 @@ tab_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/_GAMEPLAY_"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -256.0
-offset_top = -92.0
-offset_right = 256.0
-offset_bottom = 92.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 64
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer"]
 layout_mode = 2
 theme_override_constants/v_separation = 24
 columns = 2
 
-[node name="DisplayModeLbl" type="Label" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
+[node name="PlayerNameLabel" type="Label" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "Display Mode"
+text = "PLAYER_NAME"
 
-[node name="DisplayModeOpt" type="OptionButton" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
+[node name="PlayerNameEdit" type="LineEdit" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
-item_count = 4
+
+[node name="LanguageLbl" type="Label" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "LANGUAGE"
+
+[node name="LanguageOpt" type="OptionButton" parent="VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+item_count = 2
 selected = 0
-popup/item_0/text = "Window"
+popup/item_0/text = "English"
 popup/item_0/id = 0
-popup/item_1/text = "Full-screen"
+popup/item_1/text = "Español"
 popup/item_1/id = 1
-popup/item_2/text = "Borderless Window"
-popup/item_2/id = 2
-popup/item_3/text = "Borderless Full-screen"
-popup/item_3/id = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="PanelContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 48
+size_flags_stretch_ratio = 0.5
 
-[node name="ApplyButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="ApplyButton" type="Button" parent="VBoxContainer/PanelContainer"]
 layout_mode = 2
-size_flags_horizontal = 6
-text = "Apply changes"
-
-[node name="BackButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 6
-text = "Back"
+size_flags_horizontal = 4
+text = "APPLY_BUTTON"

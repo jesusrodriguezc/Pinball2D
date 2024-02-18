@@ -1,0 +1,56 @@
+keys,en,es
+ATTACK_BUMPERS,Hit the attack bumpers,Golpea los rebotadores de ataque
+RAMP_BUMPERS,Hit the ramp bumpers,Golpea los rebotadores de la rampa
+ENTER_RAMP,Send it up the ramp,Envíala a la rampa
+HYPERSPACE,Put it in the hyperspace kickout,Llévala al lanzador del hiperespacio
+REBOUND,Hit the rebounds,Golpea los rebotadores
+RETURN_LANE,Send it down the return lanes,Envíala a los carriles de retorno
+OUT_LANE,Send it down the out lanes,Envíala a los carriles de salida
+REENTRY_LANE,Send it down the reentry lanes,Envíala a los carriles de reentrada
+ANY_TARGET,Hit any target,Golpea cualquier objetivo
+UPGRADE_ATTACK,Upgrade the attack bumpers,Mejora los rebotadores de ataque
+BOOSTER_TARGET_BANK,Hit all the booster targets,Golpea todos los objetivos de refuerzo
+ANY_WORMHOLE,Put it in any wormhole,Llévala a cualquier agujero de gusano.
+REMOTE_ATTACK_BUMPER,Hit the remote attack bumper,Golpea el rebotador de ataque aislado
+ANY_LANE,Send it down any lanes,Envíala a cualquier carril
+FLAG,Roll the flags,Haz girar los banderines
+MISSION_COMPLETED,Mission completed,Misión completada
+GAME_DESIGNER,Game design,Diseñador
+GAME_DEVELOPER,Game developer,Programador
+MUSIC_ARTIST,Music by,Música
+SFX_ARTIST,SFX artist,Sonidos FX
+ART_DESIGNER,Art designer,Artista
+TRY_AGAIN,Try again,Nueva partida
+SHOW_LEADERBOARD,Show leaderboard,Mostrar ranking
+MAIN_MENU,Main menu,Menú principal
+EXIT,Exit,Salir
+START,Start,Nueva partida
+SETTINGS,Settings,Opciones
+CREDITS,Credits,Créditos
+_GRAPHICS_,_GRAPHICS_,_GRÁFICOS_
+_SOUND_,_SOUND_,_SONIDO_
+_GAMEPLAY_,_GAMEPLAY_,_JUGABILIDAD_
+DISPLAY_MODE,Display mode,Modo de pantalla
+VSYNC,VSync,VSync
+WINDOW_RESOLUTION,Window resolution,Resolución de pantalla
+SHADER_PALETTE,Color palette,Paleta de color
+WINDOW_MODE,Windowed,Ventana
+FULLSCREEN_MODE,Fullscreen,Pantalla completa
+BORDERLESS_WINDOW_MODE,Borderless Windowed,Ventana sin bordes
+BORDERLESS_FULLSCREEN_MODE,Borderless Fullscreen,Pantalla completa sin bordes
+PINK,Pink,Rosa
+BLUE,Blue,Azul
+GRAYSCALE,Grayscale,Escala de grises
+MASTER_BUS,Master volume,Volumen general
+MUSIC_BUS,Music volume,Volumen de música
+SFX_BUS,SFX Volume,Volumen de efectos de sonido
+APPLY_BUTTON,Apply changes,Aplicar cambios
+BACK_BUTTON,Back,Atrás
+PLAYER_NAME,Player name,Nombre del jugador
+LANGUAGE,Language,Idioma
+GAMEOVER,Gameover,Se acabó la partida
+SCORE:,Score:,Puntuación:
+GAME_PAUSED,Game paused,Juego en pausa
+RESUME_BUTTON,Resume,Reanudar
+LEADERBOARD,Leaderboard,Clasificación
+LOADING_SCORES,Loading scores...,Cargando puntuaciones...

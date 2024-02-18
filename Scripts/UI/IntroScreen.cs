@@ -1,15 +1,15 @@
 using Godot;
+using Godot.Collections;
 using System;
 
-public partial class IntroScreen : Control
-{
+public partial class IntroScreen : Control {
 	private AnimationPlayer animationPlayer;
 	private Timer timeoutTimer;
 	private SceneSwitcher sceneSwitcher;
+	private Node silentWolf;
 
 	// Called when the node enters the scene tree for the first time.
-	public override async void _Ready()
-	{
+	public override async void _Ready () {
 		timeoutTimer = new Timer {
 			OneShot = true
 		};
@@ -21,13 +21,5 @@ public partial class IntroScreen : Control
 
 		sceneSwitcher = GetNodeOrNull<SceneSwitcher>("/root/SceneSwitcher");
 		sceneSwitcher?.GotoScene("res://Escenas/MainMenu.tscn");
-
-
-
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

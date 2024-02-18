@@ -1,7 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://hf2ui4s4w5my"]
+[gd_scene load_steps=3 format=3 uid="uid://hf2ui4s4w5my"]
 
 [ext_resource type="Script" path="res://Scripts/Assets/Trigger/TriggerZone.cs" id="1_akadq"]
+[ext_resource type="PackedScene" uid="uid://b3lonk8yxtlki" path="res://Components/CooldownComponent.tscn" id="2_c6wng"]
 
-[node name="TriggerZone" type="Area2D" node_paths=PackedStringArray("triggeredNodes")]
+[node name="TriggerZone" type="Area2D" node_paths=PackedStringArray("IgnoredZones", "triggeredNodes")]
+position = Vector2(-80, -282)
 script = ExtResource("1_akadq")
+IgnoredZones = []
+Cooldown = -1.0
 triggeredNodes = []
+
+[node name="CooldownComponent" parent="." instance=ExtResource("2_c6wng")]

@@ -4,4 +4,10 @@
 
 [node name="Door" type="AnimatableBody2D"]
 script = ExtResource("1_xo2c6")
+Behaviour = null
+InitialStatus = null
+WaitingTime = null
 TransitionTime = 1.0
+FinalPosition = null
+FinalRotation = null
+FinalScale = null

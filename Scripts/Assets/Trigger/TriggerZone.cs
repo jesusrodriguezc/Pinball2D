@@ -2,18 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static TriggerBehaviour;
-using static ITrigger;
 using static EventManager;
+using static TriggerBase;
 
-public partial class TriggerZone : Area2D, ITrigger{
-	public bool Triggered { get; set; }
+public partial class TriggerZone : TriggerBase{
+	[Export] public TriggerZone[] IgnoredZones { get; private set; }
+	[Export] public double Cooldown { get; set; }
+
 	public List<Node2D> NodesInside;
 	public EventManager eventManager;
 	[Export] private Node2D[] triggeredNodes;
-	[Export] private Color PaintingColor; 
+	[Export] private Color PaintingColor;
+	private CooldownComponent cooldownComponent;
 
 	public override void _Ready () {
 		eventManager = GetNode<EventManager>("/root/EventManager");
@@ -22,54 +22,98 @@ public partial class TriggerZone : Area2D, ITrigger{
 		BodyEntered += TriggerZone_BodyEntered;
 		BodyExited += TriggerZone_BodyExited;
 
-		if (triggeredNodes == null || triggeredNodes.Length == 0) {
-			triggeredNodes = GetChildren().OfType<Node2D>().ToArray();
-			if (triggeredNodes.Length == 0) {
-				GD.PrintErr($"TriggerArea ({Name}) has no triggered elements defined");
-			}
+		cooldownComponent = GetNode<CooldownComponent>("CooldownComponent");
+		cooldownComponent.SetCooldown(Cooldown);
 
-			triggeredNodes = triggeredNodes.Where(node => node is IActionable).ToArray();
-			if (triggeredNodes.Length == 0) {
-				GD.PrintErr($"TriggerArea ({Name}) has no triggered actionables defined.");
-			}
+		if (triggeredNodes != null && triggeredNodes.Length != 0) {
+			return;
 		}
+
+		triggeredNodes = GetChildren().OfType<Node2D>().ToArray();
+		if (triggeredNodes.Length == 0) {
+			GD.PushWarning($"TriggerArea ({Name}) has no triggered elements defined");
+		}
+
+		triggeredNodes = triggeredNodes.Where(node => node is IActionable).ToArray();
+		if (triggeredNodes.Length == 0) {
+			GD.Print($"TriggerArea ({Name}) has no triggered actionables defined.");
+		}
+
+		if (PaintingColor.A <= 255f) {
+			var mapGenerator = new MapGenerator {
+				paintingColor = PaintingColor,
+				collisionShapes = GetChildren().OfType<CollisionShape2D>().ToArray(),
+				collisionPolygons = GetChildren().OfType<CollisionPolygon2D>().ToArray()
+			};
+			AddChild(mapGenerator);
+			mapGenerator.EnableCollision(false);
+
+
+
+		}
+
 	}
 
 	private void TriggerZone_BodyEntered (Node2D body) {
-		GD.Print("Hola");
-		Triggered = true;
+		IsTriggered = true;
 		if (!NodesInside.Contains(body)) {
 			NodesInside.Add(body);
 		}
-		Trigger(new Dictionary<StringName, object>() { { ACTIVATOR, body }, { ENTERING, true } });
+
+		if (body is not IActor actor) {
+			return;
+		}
+
+		List<TriggerZone> currentZones = actor.CurrentTriggerZones;
+		if (currentZones.Any(zone => zone.IgnoredZones.Contains(this))) {
+			return;
+		}
+
+		actor.CurrentTriggerZones.Add(this);
+		Trigger(new EventData() {
+			Sender = body,
+			Parameters = new Dictionary<StringName, object>() { { ACTIVATOR, body }, { ENTERING, true } }
+		});
 	}
 
 	private void TriggerZone_BodyExited (Node2D body) {
 
-		Trigger(new Dictionary<StringName, object>() { { ACTIVATOR, body }, { ENTERING, false } });
-		Triggered = false;
+		Trigger(new EventData() { 
+			Sender = body,
+			Parameters = new Dictionary<StringName, object>() { { ACTIVATOR, body }, { ENTERING, false } } 
+		});
+
+		IsTriggered = false;
 		NodesInside.Remove(body);
+		((IActor)body).CurrentTriggerZones.Remove(this);
+
 	}
 
-	public void Trigger (Dictionary<StringName, object> args = null) {
+	public override void Trigger (EventData data) {
 
-		if (args == null) {
+		if (cooldownComponent.IsOnCooldown) {
 			return;
 		}
 
-		if (!args.TryGetValue(ACTIVATOR, out var obj) || obj is not Node2D currentNode) {
+
+		if (data.Parameters == null) {
+			return;
+		}
+
+		if (!data.Parameters.TryGetValue(ACTIVATOR, out var obj) || obj is not Node2D currentNode) {
 			return;
 		}
 
 		if (!NodesInside.Contains(currentNode)) {
-			GD.Print($" [TriggerZone.Trigger()]: Target {currentNode.Name} is not inside TriggerZone {Name} anymore.");
+			GD.PushWarning($" [TriggerZone.Trigger()]: Target {currentNode.Name} is not inside TriggerZone {Name} anymore.");
 			return;
 		}
 
-		GD.Print($" -- {Name} TRIGGERED by {((Node2D)args[ACTIVATOR]).Name} -- ");
-		eventManager.SendMessage(this, triggeredNodes, EventType.TRIGGER, args);
+		base.Trigger(data);
 
-		Triggered = true;
+		eventManager.SendMessage(this, triggeredNodes, EventType.TRIGGER, data.Parameters);
+
+		IsTriggered = true;
 	}
 }
 

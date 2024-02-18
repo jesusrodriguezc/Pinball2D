@@ -1,0 +1,10 @@
+{"Title":"TestMission", 
+"Description":"This is the description of TestMission", 
+"Steps": [
+{"Type": "ATTACK_BUMPERS", "Repetitions":2},
+{"Type": "ENTER_RAMP", "Repetitions":1}
+],
+"Rank": 0,
+"XpReward": 150,
+"ScoreReward" : 12500
+}

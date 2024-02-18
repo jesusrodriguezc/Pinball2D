@@ -1,0 +1,411 @@
+[gd_scene load_steps=10 format=3 uid="uid://chnj6sfyofi6q"]
+
+[ext_resource type="Script" path="res://Scripts/UI/MissionCard.cs" id="1_jk0n7"]
+[ext_resource type="Theme" uid="uid://blbvodw1b5vhw" path="res://UI/mission_ui_theme.tres" id="1_p4peq"]
+[ext_resource type="Texture2D" uid="uid://b60l3tin5hs00" path="res://Sprites/rank_spritesheet.png" id="3_821nx"]
+[ext_resource type="Texture2D" uid="uid://cryrf3k2opl67" path="res://Sprites/xp_icon.png" id="5_x1dto"]
+
+[sub_resource type="Curve" id="Curve_jf3cw"]
+max_value = 5.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.357639, 5), 0.0, 0.0, 0, 0, Vector2(0.614583, 5), 0.0, 0.0, 0, 0, Vector2(0.732639, 0.684211), 0.0, 0.0, 0, 0, Vector2(1, 0.526316), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kxc4j"]
+atlas = ExtResource("3_821nx")
+region = Rect2(48, 0, 16, 16)
+margin = Rect2(1, 1, 0, 0)
+
+[sub_resource type="Animation" id="Animation_7l85m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CPUParticles2D:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CPUParticles2D2:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CPUParticles2D3:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CompletedLabel:theme_override_font_sizes/font_size")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CompletedLabel:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ukpin"]
+resource_name = "completed"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CPUParticles2D:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CPUParticles2D2:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CPUParticles2D3:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.1, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CompletedLabel:theme_override_font_sizes/font_size")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [8, 32]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CompletedLabel:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2vwlq"]
+_data = {
+"RESET": SubResource("Animation_7l85m"),
+"completed": SubResource("Animation_ukpin")
+}
+
+[node name="MissionCard" type="PanelContainer"]
+offset_right = 297.0
+offset_bottom = 96.0
+theme = ExtResource("1_p4peq")
+script = ExtResource("1_jk0n7")
+metadata/_edit_horizontal_guides_ = [0.0, 100.0, 90.0]
+metadata/_edit_vertical_guides_ = [300.0, 286.0, 282.0, 245.0, 266.0]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2(40, 5)
+emitting = false
+amount = 80
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.9
+randomness = 1.0
+lifetime_randomness = 0.5
+fixed_fps = 60
+spread = 180.0
+gravity = Vector2(0, 98)
+initial_velocity_min = 40.0
+initial_velocity_max = 125.0
+linear_accel_max = 2.0
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_jf3cw")
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="."]
+position = Vector2(243, -32)
+emitting = false
+amount = 80
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.9
+randomness = 1.0
+lifetime_randomness = 0.5
+fixed_fps = 60
+spread = 180.0
+gravity = Vector2(0, 98)
+initial_velocity_min = 40.0
+initial_velocity_max = 125.0
+linear_accel_max = 2.0
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_jf3cw")
+
+[node name="CPUParticles2D3" type="CPUParticles2D" parent="."]
+position = Vector2(199, 95)
+emitting = false
+amount = 80
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.9
+randomness = 1.0
+lifetime_randomness = 0.5
+fixed_fps = 60
+spread = 180.0
+gravity = Vector2(0, 98)
+initial_velocity_min = 40.0
+initial_velocity_max = 125.0
+linear_accel_max = 2.0
+angle_min = -30.0
+angle_max = 30.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_jf3cw")
+
+[node name="Margins" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 8
+
+[node name="Card" type="HBoxContainer" parent="Margins"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="MissionInfo" type="VBoxContainer" parent="Margins/Card"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.45
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="Margins/Card/MissionInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 12
+text = "¡PELIGRO! ¡AGUJERO NEGRO INCOMING!"
+vertical_alignment = 2
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Steps" type="HBoxContainer" parent="Margins/Card/MissionInfo"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DescriptionList" type="VBoxContainer" parent="Margins/Card/MissionInfo/Steps"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
+theme_override_constants/separation = 4
+
+[node name="MissionStepDescription1" type="Label" parent="Margins/Card/MissionInfo/Steps/DescriptionList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Llévala a cualquier agujero in the flondum taka taka"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="MissionStepDescription2" type="Label" parent="Margins/Card/MissionInfo/Steps/DescriptionList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Roll the flags"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="MissionStepDescription3" type="Label" parent="Margins/Card/MissionInfo/Steps/DescriptionList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Hit the ramp bumpers"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="CounterList" type="VBoxContainer" parent="Margins/Card/MissionInfo/Steps"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="MissionStepCounter1" type="Label" parent="Margins/Card/MissionInfo/Steps/CounterList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "(64/64)"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="MissionStepCounter2" type="Label" parent="Margins/Card/MissionInfo/Steps/CounterList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "(64/99)"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="MissionStepCounter3" type="Label" parent="Margins/Card/MissionInfo/Steps/CounterList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "(64/99)"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Rewards" type="VBoxContainer" parent="Margins/Card"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="RewardXP" type="VBoxContainer" parent="Margins/Card/Rewards"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Margins/Card/Rewards/RewardXP"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="RankIcon" type="TextureRect" parent="Margins/Card/Rewards/RewardXP/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = SubResource("AtlasTexture_kxc4j")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="RewardXPAmount" type="Label" parent="Margins/Card/Rewards/RewardXP"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 8
+text = "+99xp"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="RewardScore" type="VBoxContainer" parent="Margins/Card/Rewards"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Margins/Card/Rewards/RewardScore"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="ScoreIcon" type="TextureRect" parent="Margins/Card/Rewards/RewardScore/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("5_x1dto")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="RewardScoreAmount" type="Label" parent="Margins/Card/Rewards/RewardScore"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 8
+text = "+999.9kk"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_2vwlq")
+}
+
+[node name="CompletedLabel" type="Label" parent="."]
+visible = false
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 8
+text = "COMPLETED"
+horizontal_alignment = 1
+vertical_alignment = 1

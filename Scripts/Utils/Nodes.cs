@@ -21,21 +21,45 @@ namespace Pinball.Scripts.Utils {
 			return result;
 
 		}
-		//public static void findByClass<T>(Node node, ref List<T> result ) where T : Node {
-		//	if (node is T nodeT) {
-		//		result.Add(nodeT);
-		//	}
-		//	foreach (var child in node.GetChildren(true)) {
-		//		findByClass(child, ref result);
-		//	}
-			
-		//}
 
 		public static Variant SecureCall(this Node node, StringName method, params Variant[] args) {
 			if (node.HasMethod(method)) {
 				return node.Call(method, args);
 			}
 			return new Variant();
+		}
+
+		public static T GetChildByType<T> (this Node node, bool recursive = true)
+		where T : Node {
+			int childCount = node.GetChildCount();
+
+			for (int i = 0; i < childCount; i++) {
+				Node child = node.GetChild(i);
+				if (child is T childT)
+					return childT;
+
+				if (recursive && child.GetChildCount() > 0) {
+					T recursiveResult = child.GetChildByType<T>(true);
+					if (recursiveResult != null)
+						return recursiveResult;
+				}
+			}
+
+			return null;
+		}
+
+		public static T GetParentByType<T> (this Node node)
+			where T : Node {
+			Node parent = node.GetParent();
+			if (parent != null) {
+				if (parent is T parentT) {
+					return parentT;
+				} else {
+					return parent.GetParentByType<T>();
+				}
+			}
+
+			return null;
 		}
 	}
 }

@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Scripts/Assets/Trigger/WaitingNode.cs" id="1_b8iu4"]
 
-[node name="WaitingNode" type="Node2D"]
+[node name="WaitingNode" type="Area2D"]
 script = ExtResource("1_b8iu4")

@@ -1,0 +1,16 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://blbvodw1b5vhw"]
+
+[ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="1_nu3wa"]
+[ext_resource type="Texture2D" uid="uid://chdmb4t3mnqge" path="res://Sprites/mission_ui.png" id="2_a746q"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c8mrt"]
+texture = ExtResource("2_a746q")
+texture_margin_left = 2.0
+texture_margin_top = 2.0
+texture_margin_right = 2.0
+texture_margin_bottom = 2.0
+
+[resource]
+Label/font_sizes/font_size = 16
+Label/fonts/font = ExtResource("1_nu3wa")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_c8mrt")

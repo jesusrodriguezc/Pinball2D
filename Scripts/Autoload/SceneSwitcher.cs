@@ -53,9 +53,6 @@ public partial class SceneSwitcher : Node {
 		GetTree().ChangeSceneToFile(path);
 
 		animationPlayer.Play("fade_out");
-
-
-
 	}
 }
 

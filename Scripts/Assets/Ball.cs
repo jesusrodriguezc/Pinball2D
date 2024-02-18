@@ -1,9 +1,6 @@
 using Godot;
 using Pinball.Scripts.Utils;
-using System;
-using System.Linq;
-using System.Reflection.Emit;
-using static PinballController;
+using System.Collections.Generic;
 
 public partial class Ball : RigidBody2D, IActor{
 	public enum Status {
@@ -17,6 +14,7 @@ public partial class Ball : RigidBody2D, IActor{
 	[Signal]
 	public delegate void DeathEventHandler (Ball ball);
 
+	private PinballController pinballController;
 	private EventManager eventManager;
 	[Export]
 	public int DebugPower { get; set; } = 3000;
@@ -24,7 +22,7 @@ public partial class Ball : RigidBody2D, IActor{
 
 	[Export]
 	public float MaxVelocity { get; set; }
-
+	public List<TriggerZone> CurrentTriggerZones { get; set; } = new List<TriggerZone>();
 
 	public Status currentStatus;
 	public Status previousStatus;
@@ -38,10 +36,11 @@ public partial class Ball : RigidBody2D, IActor{
 	private Vector2 storedPosition;
 	private uint storedCollisionLayer;
 	private uint storedCollisionMask;
+	private float storedGravityScale;
 
 	public override void _Ready () {
 
-
+		pinballController = GetNode<PinballController>("/root/Pinball");
 		eventManager = GetNodeOrNull<EventManager>("/root/EventManager");
 
 		InitSignalConnections();
@@ -51,14 +50,14 @@ public partial class Ball : RigidBody2D, IActor{
 		
 		initialPosition = GlobalPosition;
 		currentStatus = Status.IDLE;
-		previousStatus = Status.DEAD;
+		previousStatus = Status.IDLE;
 
 		SetLevel(currentLayer);
-
 	}
 
 	private void InitSignalConnections () {
 		var rebounds = Nodes.findByClass<ReboundBase>(GetTree().Root);
+
 		foreach (var rebound in rebounds) {
 			rebound.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
 		}
@@ -70,6 +69,7 @@ public partial class Ball : RigidBody2D, IActor{
 	}
 
 	public override void _Input (InputEvent @event) {
+
 		if (currentStatus.IsNotIn(Status.IDLE, Status.MOVING)) {
 			return;
 		}
@@ -84,18 +84,14 @@ public partial class Ball : RigidBody2D, IActor{
 
 		if (@event is InputEventKey key) {
 			if (key.Keycode.Equals(Key.Enter) && key.IsPressed()) {
-				Instance.Shake();
+				pinballController.Shake();
 			}		
-
-			if (key.Keycode == Key.D && key.IsPressed()) {
-				GD.Print($"{GlobalPosition}");
-			}
 		}
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess (double delta) {
-		if (currentStatus == Status.DEAD && Instance.LivesLeft > 0) {
-			Reset();
+
+		if (currentStatus == Status.DEAD && pinballController.LivesLeft > 0) {
 			currentStatus = Status.IDLE;
 		}
 
@@ -104,19 +100,10 @@ public partial class Ball : RigidBody2D, IActor{
 		}
 
 		if (OutOfLimits()) {
-			GD.Print($"Out of limits. Trying to teleport to {initialPosition}");
+			GD.PushWarning($"Out of limits. Trying to teleport to {initialPosition}");
 			Reset();
 
 		}
-		//if (LinearVelocity.LengthSquared() < 0.1f) {
-		//	if (currentStatus == Status.MOVING) {
-		//		currentStatus = Status.IDLE;
-		//	}
-		//} else {
-		//	if (currentStatus == Status.IDLE) {
-		//		currentStatus = Status.MOVING;
-		//	}
-		//}
 	}
 
 	private bool OutOfLimits () {
@@ -134,18 +121,18 @@ public partial class Ball : RigidBody2D, IActor{
 	}
 
 	public void Die () {
-
 		_audioComponent?.Play(DEAD, AudioComponent.SFX_BUS);
 
 		currentStatus = Status.DEAD;
 
 		EmitSignal(SignalName.Death, this);
-
-
 	}
 
 	private void Reset () {
+		GD.Print("Reseteando pelota", initialPosition, Vector2.Zero);
+		Stop();
 		Teleport(initialPosition, Vector2.Zero);
+		Resume();
 	}
 
 	public void Teleport(Vector2 position, Vector2 velocity) {
@@ -180,7 +167,7 @@ public partial class Ball : RigidBody2D, IActor{
 
 	}
 
-	public void Resume () {
+	public void Unpause () {
 		
 		GlobalPosition = storedPosition;
 		LinearVelocity = storedVelocity;
@@ -190,7 +177,19 @@ public partial class Ball : RigidBody2D, IActor{
 
 	}
 
+	public void Stop () {
+		LinearVelocity = Vector2.Zero;
+		storedGravityScale = GravityScale;
+		GravityScale = 0.0f;
+	}
+
+	public void Resume () {
+		GravityScale = storedGravityScale;
+	}
+
+
 	public void IgnoreCollision (bool ignoreCollision) {
+
 		if (ignoreCollision) {
 			storedCollisionLayer = CollisionLayer;
 			CollisionLayer = 0;

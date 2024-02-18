@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7b82tavlwifj"]
+
+[ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_uy888"]
+[ext_resource type="Script" path="res://Scripts/UI/MissionMenu.cs" id="2_therx"]
+[ext_resource type="PackedScene" uid="uid://chnj6sfyofi6q" path="res://UI/MissionCard.tscn" id="3_55fqf"]
+
+[node name="MissionMenu" type="VBoxContainer"]
+offset_right = 298.0
+offset_bottom = 420.0
+theme = ExtResource("1_uy888")
+theme_override_constants/separation = 4
+script = ExtResource("2_therx")
+missionScene = ExtResource("3_55fqf")

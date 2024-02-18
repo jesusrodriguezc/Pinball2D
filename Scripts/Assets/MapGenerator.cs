@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 public partial class MapGenerator : StaticBody2D {
-	[Export] private CollisionPolygon2D[] collisionPolygons;
-	[Export] private CollisionShape2D[] collisionShapes;
-	[Export] private Godot.Color paintingColor;
+	[Export] public CollisionPolygon2D[] collisionPolygons;
+	[Export] public CollisionShape2D[] collisionShapes;
+	[Export] public Godot.Color paintingColor;
+	[Export] public bool CollisionEnabled;
+	private uint storedCollisionLayer;
 
 	public override void _Ready () {
 
@@ -21,6 +23,8 @@ public partial class MapGenerator : StaticBody2D {
 
 		}
 
+		storedCollisionLayer = CollisionLayer;
+
 		QueueRedraw();
 	}
 
@@ -28,6 +32,22 @@ public partial class MapGenerator : StaticBody2D {
 		QueueRedraw();
 	}
 
+	public void EnableCollision (bool enable) {
+		if (CollisionEnabled == enable) {
+			return;
+		}
+
+		CollisionEnabled = enable;
+
+		if (CollisionEnabled) {
+			CollisionLayer = storedCollisionLayer;
+		}
+		else {
+			storedCollisionLayer = CollisionLayer;
+			CollisionLayer = 0;
+		}
+		
+	}
 	public override void _Draw () {
 
 		if (collisionPolygons != null) {

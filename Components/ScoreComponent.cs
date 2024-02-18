@@ -26,12 +26,12 @@ public partial class ScoreComponent : Node {
 
 	}
 
-	public void ApplyBonus (StringName bonusName, double bonusMultiplier) {
-		currentBonus.TryAdd(bonusName, bonusMultiplier);
-	}
-
-	public void StopBonus (StringName bonusName, double bonusMultiplier) {
-		currentBonus.Remove(bonusName);
+	public void ChangeUpgradeBonus (StringName bonusName, UPGRADE_LEVEL bonusLevel) {
+		if (!ScoreDataValues.upgradeLevelMultiplierDict.TryGetValue(bonusLevel, out var bonusMultiplier)) {
+			GD.PrintErr($"Upgrade level {bonusLevel} does not have assigned a bonus multiplier");
+			return;
+		}
+		currentBonus[bonusName] = bonusMultiplier;
 	}
 
 }

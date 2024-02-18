@@ -1,0 +1,122 @@
+[gd_scene load_steps=4 format=3 uid="uid://da4e3vtkfywet"]
+
+[ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_v3taw"]
+[ext_resource type="Script" path="res://Scripts/UI/CreditScene.cs" id="2_5xyjg"]
+[ext_resource type="PackedScene" uid="uid://eyhg24mwjxbk" path="res://Escenas/Background.tscn" id="2_t4g65"]
+
+[node name="CreditScene" type="MarginContainer"]
+offset_right = 854.0
+offset_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_v3taw")
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 32
+script = ExtResource("2_5xyjg")
+
+[node name="Background" parent="." instance=ExtResource("2_t4g65")]
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "SHADED PINBALL"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/v_separation = 16
+columns = 2
+
+[node name="Designer" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GAME_DESIGNER"
+
+[node name="DesignerName" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Jesús \"Blackhowler\" Rodríguez-Carretero"
+horizontal_alignment = 2
+
+[node name="Programmer" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GAME_DEVELOPER"
+
+[node name="DesignerName2" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Jesús \"Blackhowler\" Rodríguez-Carretero"
+horizontal_alignment = 2
+
+[node name="Artist" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "MUSIC_ARTIST"
+
+[node name="DesignerName3" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "\"Play The Game\" by Shane Ivers
+https://www.silvermansound.com"
+horizontal_alignment = 2
+
+[node name="SFXArtist" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "SFX_ARTIST"
+
+[node name="DesignerName4" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Jesús \"Blackhowler\" Rodríguez-Carretero
+Online Sound - https://onlinesound.net
+"
+horizontal_alignment = 2
+
+[node name="ArtDesigner" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ART_DESIGNER"
+
+[node name="DesignerName5" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Jesús \"Blackhowler\" Rodríguez-Carretero
+"
+horizontal_alignment = 2
+
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "BACK_BUTTON"
+flat = true
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Button" to="." method="BackToMainMenu"]

@@ -6,22 +6,27 @@
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_g8rgw"]
 friction = 0.0
-bounce = 0.15
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bb4j8"]
 radius = 8.0
 
 [node name="Ball" type="RigidBody2D"]
-collision_mask = 6
+process_mode = 1
+z_index = 35
+scale = Vector2(0.75, 0.75)
+collision_mask = 3
+mass = 5.0
 physics_material_override = SubResource("PhysicsMaterial_g8rgw")
-gravity_scale = 0.2
-continuous_cd = 2
+gravity_scale = 0.65
+continuous_cd = 1
+max_contacts_reported = 100
+contact_monitor = true
 lock_rotation = true
 script = ExtResource("1_qoyix")
-MaxVelocity = 900.0
+DebugPower = 6000
+MaxVelocity = 1000.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_em5k0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

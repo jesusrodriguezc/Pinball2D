@@ -1,11 +1,29 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3k8b7kbea58p"]
+[gd_scene load_steps=11 format=3 uid="uid://b3k8b7kbea58p"]
 
 [ext_resource type="Script" path="res://Scripts/Assets/Actionables/BonusLane.cs" id="1_cic04"]
 [ext_resource type="Texture2D" uid="uid://d6bjnljj6raf" path="res://Assets/BonusLane/bonus_lane-sheet.png" id="2_i82ro"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="3_ym00d"]
+[ext_resource type="PackedScene" uid="uid://b3lonk8yxtlki" path="res://Components/CooldownComponent.tscn" id="4_c11wa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ukeyc"]
 radius = 3.0
+
+[sub_resource type="Animation" id="Animation_3v2fm"]
+resource_name = "active"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 2, 1, 0]
+}
 
 [sub_resource type="Animation" id="Animation_2abfl"]
 resource_name = "Disabled"
@@ -56,12 +74,13 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wyh71"]
 _data = {
+"Completed": SubResource("Animation_3v2fm"),
 "Disabled": SubResource("Animation_2abfl"),
 "Enabled": SubResource("Animation_htr34"),
 "RESET": SubResource("Animation_665ef")
 }
 
-[node name="Area2D" type="Area2D"]
+[node name="BonusLane" type="Area2D"]
 script = ExtResource("1_cic04")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -78,3 +97,5 @@ libraries = {
 }
 
 [node name="AudioComponent" parent="." instance=ExtResource("3_ym00d")]
+
+[node name="CooldownComponent" parent="." instance=ExtResource("4_c11wa")]

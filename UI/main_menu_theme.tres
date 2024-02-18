@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=15 format=3 uid="uid://blsj5e3xangu2"]
+[gd_resource type="Theme" load_steps=16 format=3 uid="uid://blsj5e3xangu2"]
 
 [ext_resource type="FontFile" uid="uid://dt2fuxtra264t" path="res://Fonts/PixelCode.otf" id="1_vwfrc"]
 
@@ -46,6 +46,21 @@ expand_margin_right = 5.0
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_buc6e"]
 thickness = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kcori"]
+bg_color = Color(0.141176, 0.141176, 0.141176, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+corner_detail = 2
+anti_aliasing = false
+anti_aliasing_size = 0.01
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0tu6c"]
 bg_color = Color(0.14902, 0.14902, 0.14902, 1)
 
@@ -67,7 +82,13 @@ CheckButton/styles/normal = SubResource("StyleBoxEmpty_4byk4")
 CheckButton/styles/pressed = SubResource("StyleBoxEmpty_8fjww")
 HBoxContainer/constants/separation = 16
 HSeparator/styles/separator = SubResource("StyleBoxLine_buc6e")
+Panel/styles/panel = SubResource("StyleBoxFlat_kcori")
 TabBar/font_sizes/font_size = 24
 TabContainer/font_sizes/font_size = 24
 TabContainer/styles/panel = SubResource("StyleBoxFlat_0tu6c")
+Title/base_type = &"Label"
+Title/constants/outline_size = 2
+Title/constants/shadow_offset_x = 1
+Title/constants/shadow_offset_y = 1
+Title/constants/shadow_outline_size = 5
 VBoxContainer/constants/separation = 12

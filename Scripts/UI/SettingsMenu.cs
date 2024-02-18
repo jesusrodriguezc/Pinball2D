@@ -1,27 +1,39 @@
 using Godot;
 using Godot.Collections;
 using Pinball.Components;
+using Pinball.Scripts.Utils;
 using System;
+using System.Linq;
 using System.Text.Json;
 
 public partial class SettingsMenu : Control
 {
 	private SceneSwitcher sceneSwitcher;
 	private SettingsManager settingsManager;
+
+	private Label settingsTitle;
+
+	#region Graphics Settings
 	private OptionButton displayModeButton;
 	private CheckButton vsyncButton;
 	private OptionButton resolutionButton;
 	private OptionButton shaderPaletteButton;
+	#endregion
 
+	#region Sound Settings
 	private HSlider masterVolumeSlider;
 	private HSlider musicVolumeSlider;
 	private HSlider sfxVolumeSlider;
+	#endregion
+
+	#region Gameplay
+	private OptionButton languageButton;
+	private LineEdit playerNameEdit;
+	#endregion
 
 	private Button applyButton;
-	private Button backButton;
 
 	private Vector2I currentResolution;
-
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -48,8 +60,10 @@ public partial class SettingsMenu : Control
 
 		// Gameplay
 
-		applyButton = GetNodeOrNull<Button>("VBoxContainer/HBoxContainer/ApplyButton");
-		backButton = GetNodeOrNull<Button>("VBoxContainer/HBoxContainer/BackButton");
+		playerNameEdit = GetNodeOrNull<LineEdit>("VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer/PlayerNameEdit");
+		languageButton = GetNodeOrNull<OptionButton>("VBoxContainer/TabContainer/_GAMEPLAY_/MarginContainer/GridContainer/LanguageOpt");
+
+		applyButton = GetNodeOrNull<Button>("VBoxContainer/PanelContainer/ApplyButton");
 
 		UpdateValues();
 
@@ -57,12 +71,15 @@ public partial class SettingsMenu : Control
 		displayModeButton.ItemSelected += (value) => { SetDisabledResolutionSelection((value & 1) > 0); };
 		vsyncButton.Toggled += settingsManager.VSyncButtonToggled;
 		resolutionButton.ItemSelected += settingsManager.WindowResolutionSelected;
+
 		shaderPaletteButton.ItemSelected += settingsManager.ShaderPaletteSelected;
 
 		masterVolumeSlider.ValueChanged += settingsManager.MasterVolumeSelected;
 		musicVolumeSlider.ValueChanged += settingsManager.MusicVolumeSelected;
 		sfxVolumeSlider.ValueChanged += settingsManager.SfxVolumeSelected;
 
+		playerNameEdit.TextChanged += settingsManager.PlayerNameSubmitted;
+		languageButton.ItemSelected += settingsManager.LanguageSelected;
 
 
 		if (DisplayServer.WindowGetMode() != DisplayServer.WindowMode.Windowed) {
@@ -71,9 +88,6 @@ public partial class SettingsMenu : Control
 
 		applyButton.Pressed += settingsManager.Save;
 		applyButton.Pressed += () => Hide();
-
-		backButton.Pressed += () => Hide();
-
 
 	}
 
@@ -86,18 +100,32 @@ public partial class SettingsMenu : Control
 		masterVolumeSlider.SetValueNoSignal(settingsManager.settingsData.MasterVolume);
 		musicVolumeSlider.SetValueNoSignal(settingsManager.settingsData.MusicVolume);
 		sfxVolumeSlider.SetValueNoSignal(settingsManager.settingsData.SfxVolume);
+
+		playerNameEdit.Text = settingsManager.settingsData.PlayerName;
+		languageButton.Select((int)settingsManager.settingsData.Language);
 	}
 
 	public void SetDisabledResolutionSelection(bool disabled) {
-		resolutionButton.Selected = disabled? -1: resolutionButton.Selected;
 		resolutionButton.Disabled = disabled;
+
+		if (disabled) {
+			var screenSize = DisplayServer.ScreenGetSize();
+			var resolutionId = SettingsData.ResolutionDict
+				.Where(res => res.Value == screenSize)
+				.Select(p => new { Key = (int)p.Key, Value = p.Value })
+				.FirstOrDefault();
+
+			resolutionButton.Selected = resolutionId?.Key ?? -1;
+			return;
+		}
+
+		resolutionButton.Selected = (int)settingsManager.settingsData.WindowResolution;
+	}
+
+	public override void _Input (InputEvent inputEvent) {
+		if (Input.IsActionJustPressed("Back")) {
+			sceneSwitcher?.GotoScene("res://Escenas/MainMenu.tscn");
+		}
 	}
 
 }
-
-
-
-
-
-
-

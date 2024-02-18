@@ -6,29 +6,30 @@ using System.Text;
 using System.Threading.Tasks;
 
 public partial class LayerSwapper : Node2D, IActionable {
+	[Signal] public delegate void ActionedEventHandler ();
 	[Export] public LayerId insideLayer;
 	[Export] public LayerId outLayer;
+	private PinballController pinballController;
 	private EventManager eventManager;
 
-	public bool IsCollisionEnabled { get; set; } = true;
+	public bool IsCollisionEnabled { get; set; }
 
 	public override void _Ready () {
+		pinballController = GetNode<PinballController>("/root/Pinball");
 		eventManager = GetNodeOrNull<EventManager>("/root/EventManager");
 		LayerManager.UpdateActionables(GetTree().Root);
 
 	}
 	public void Action (EventData data) {
-		Ball ball = PinballController.Instance.Ball;
+		Ball ball = pinballController.Ball;
 		if (ball == null) {
 			return;
 		}
 
 		bool isEntering = false;
-		if (data.Parameters.TryGetValue(ITrigger.ENTERING, out var obj) && obj is bool boolean) {
+		if (data.Parameters.TryGetValue(TriggerBase.ENTERING, out var obj) && obj is bool boolean) {
 			isEntering = boolean;
 		}
-
-		GD.Print($" -- {Name} CHANGING LAYER OF {((Node2D)data.Parameters[ITrigger.ACTIVATOR]).Name} TO {outLayer} -- ");
 
 		var newLayer = isEntering ? insideLayer : outLayer;
 		ball.SetLevel(newLayer);
@@ -38,7 +39,7 @@ public partial class LayerSwapper : Node2D, IActionable {
 	}
 
 	public void EnableCollision (bool enable) {
-		//IsCollisionEnabled = enable;
+		return;
 	}
 }
 

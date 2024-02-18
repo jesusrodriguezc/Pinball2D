@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7juco4ll1flx"]
+
+[ext_resource type="Script" path="res://Scripts/GlobalControllers/RankController.cs" id="1_w285h"]
+
+[node name="RankController" type="Node"]
+script = ExtResource("1_w285h")

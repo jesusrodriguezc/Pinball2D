@@ -11,6 +11,15 @@
     <Compile Remove="Scripts\EventManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Missions\mission_test.json" />
+    <Content Include="Missions\mission_test2.json" />
+    <Content Include="Missions\mission_test3.json" />
+    <Content Include="Missions\_mission_test2.json" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 </Project>

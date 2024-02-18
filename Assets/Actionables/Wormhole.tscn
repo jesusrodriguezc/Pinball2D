@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://7lu2bdwysrs8"]
+[gd_scene load_steps=8 format=3 uid="uid://7lu2bdwysrs8"]
 
 [ext_resource type="Script" path="res://Scripts/Assets/Actionables/Wormhole.cs" id="1_ggtf1"]
 [ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="2_je2cf"]
 [ext_resource type="AudioStream" uid="uid://byfm65dieayca" path="res://SFX/pasadizo.wav" id="2_kx31j"]
 [ext_resource type="PackedScene" uid="uid://cy3dvu3unu2uo" path="res://Components/ScoreComponent.tscn" id="3_jh21q"]
 [ext_resource type="Texture2D" uid="uid://n68yp5rdtocu" path="res://Sprites/wormhole.png" id="4_q855h"]
+[ext_resource type="PackedScene" uid="uid://b3lonk8yxtlki" path="res://Components/CooldownComponent.tscn" id="6_ifcve"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_68g7g"]
 radius = 1.0
@@ -16,6 +17,7 @@ OutAudio = ExtResource("2_kx31j")
 Score = 10000.0
 ShootPower = 10000.0
 TimeInsideAfterEntering = 1.0
+Cooldown = 0.5
 
 [node name="AudioComponent" parent="." instance=ExtResource("2_je2cf")]
 
@@ -29,3 +31,5 @@ texture = ExtResource("4_q855h")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.5)
 shape = SubResource("CircleShape2D_68g7g")
+
+[node name="CooldownComponent" parent="." instance=ExtResource("6_ifcve")]

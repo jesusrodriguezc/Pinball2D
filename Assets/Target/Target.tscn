@@ -11,8 +11,8 @@
 friction = 0.0
 bounce = 0.5
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bhca2"]
-size = Vector2(3, 10)
+[sub_resource type="CircleShape2D" id="CircleShape2D_282l5"]
+radius = 2.5
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_57asj"]
 size = Vector2(4, 12)
@@ -163,14 +163,15 @@ _data = {
 physics_material_override = SubResource("PhysicsMaterial_si8w8")
 script = ExtResource("1_fksfy")
 HitStream = ExtResource("2_4ia71")
-HitPower = 4000.0
+HitPower = 1500.0
 Score = 500.0
 
 [node name="CollisionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
 position = Vector2(-1.5, 0)
-shape = SubResource("RectangleShape2D_bhca2")
+shape = SubResource("CircleShape2D_282l5")
+debug_color = Color(1, 0, 0, 0.419608)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_57asj")

@@ -1,4 +1,5 @@
 ﻿using Godot;
+//using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,14 @@ public class SettingsData {
 
 	#region Resolution Values
 	public static readonly Dictionary<long, Vector2I> ResolutionDict = new() {
-		{0,  new Vector2I(640, 360)},
-		{1, new Vector2I(1024, 768)},
-		{2, new Vector2I(1280, 720)},
-		{3, new Vector2I(1366, 768)},
-		{4, new Vector2I(1920, 1080)}
+		{0,  new Vector2I(854, 480)},
+		{1, new Vector2I(1280, 720)},
+		{2, new Vector2I(1366, 768)},
+		{3, new Vector2I(1600, 900)},
+		{4, new Vector2I(1920, 1080)},
+		{5, new Vector2I(2560, 1440)},
+		{6, new Vector2I(3840, 2160)}
+
 	};
 	#endregion
 
@@ -29,6 +33,14 @@ public class SettingsData {
 		{0, "res://Palettes/pink_palette.png"},
 		{1, "res://Palettes/blue_palette.png"},
 		{2, "res://Palettes/gray_palette.png"}
+	};
+
+	#endregion
+
+	#region Language Values
+	public static Dictionary<long, string> LanguageDict = new () {
+		{0, "en"},
+		{1, "es"}
 	};
 
 	#endregion
@@ -48,6 +60,8 @@ public class SettingsData {
 	public double MasterVolume { get; set; }
 	public double MusicVolume { get; set; }
 	public double SfxVolume { get; set; }
+	public string PlayerName { get; set; }
+	public long Language { get; set; }
 
 	#endregion
 

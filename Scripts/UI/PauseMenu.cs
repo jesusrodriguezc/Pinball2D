@@ -2,20 +2,27 @@ using Godot;
 using System;
 
 public partial class PauseMenu : Control {
+	private PinballController pinballController;
 	private SceneSwitcher sceneSwitcher;
+	private Label scoreLabel;
 
 	public override void _Ready () {
+		pinballController = GetNode<PinballController>("/root/Pinball");
 		sceneSwitcher = GetNodeOrNull<SceneSwitcher>("/root/SceneSwitcher");
+		scoreLabel = GetNodeOrNull<Label>("CenterContainer/VBoxContainer/ScoreLabel");
+		VisibilityChanged += () => scoreLabel.Text = string.Format("SCORE: {0:0000000}", pinballController?.GetScore());
 	}
 
+	
 	private void OnResumeButtonPressed () {
 		Hide();
-		PinballController.Instance.ResumeGame();
+		pinballController?.ResumeGame();
 	}
 
 
 	private void OnMenuButtonPressed () {
-		PinballController.Instance.ResumeGame();
+		pinballController?.ResumeGame();
+		pinballController?.HideUI();
 		sceneSwitcher?.GotoScene("res://Escenas/MainMenu.tscn");
 	}
 

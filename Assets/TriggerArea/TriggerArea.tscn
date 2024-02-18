@@ -1,11 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://cysdgl8aojt6b"]
+[gd_scene load_steps=3 format=3 uid="uid://cysdgl8aojt6b"]
 
 [ext_resource type="Script" path="res://Scripts/Assets/Trigger/TriggerArea.cs" id="1_8xb8q"]
+[ext_resource type="PackedScene" uid="uid://b3lonk8yxtlki" path="res://Components/CooldownComponent.tscn" id="2_je615"]
 
-[node name="Area2D" type="Area2D" node_paths=PackedStringArray("triggeredNodes")]
+[node name="TriggerArea" type="Area2D" node_paths=PackedStringArray("triggeredNodes")]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_8xb8q")
 Type = 1
 triggeredNodes = []
 triggerOnEnter = true
+
+[node name="CooldownComponent" parent="." instance=ExtResource("2_je615")]

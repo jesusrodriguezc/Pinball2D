@@ -111,7 +111,7 @@ public partial class Flipper : AnimatableBody2D {
 
 			var theoreticalAngleNextFrame = rotationSpeed * (float)timeFromStart;
 
-			var theorethicalNormalVector = Vector2.Up;//.Rotated(theoreticalAngleNextFrame - Rotation);
+			var theorethicalNormalVector = Transform.BasisXform(Vector2.Up).Rotated(theoreticalAngleNextFrame - Rotation);//Vector2.Up;//.Rotated(theoreticalAngleNextFrame - Rotation);
 
 			EmitSignal(SignalName.Impulse, body, theorethicalNormalVector * HitBoostPower);
 			IsBallOnTop = false;
@@ -127,8 +127,8 @@ public partial class Flipper : AnimatableBody2D {
 		}
 
 		if (isLeftFlipper) {
-			bool isJustPressed = Input.IsActionJustPressed("Left_Action");
-			bool isJustReleased = Input.IsActionJustReleased("Left_Action");
+			bool isJustPressed = Input.IsActionJustPressed("Left_Flipper");
+			bool isJustReleased = Input.IsActionJustReleased("Left_Flipper");
 
 			if (!isJustPressed && !isJustReleased) {
 				return;
@@ -141,8 +141,8 @@ public partial class Flipper : AnimatableBody2D {
 		}
 
 		if (!isLeftFlipper) {
-			bool isJustPressed = Input.IsActionJustPressed("Right_Action");
-			bool isJustReleased = Input.IsActionJustReleased("Right_Action");
+			bool isJustPressed = Input.IsActionJustPressed("Right_Flipper");
+			bool isJustReleased = Input.IsActionJustReleased("Right_Flipper");
 
 			if (!isJustPressed && !isJustReleased) {
 				return;
@@ -153,38 +153,6 @@ public partial class Flipper : AnimatableBody2D {
 				_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
 			}
 		}
-
-		//if (@event is InputEventKey key) {
-		//	switch (key.Keycode) {
-		//		case Key.Q:
-		//			if (!isLeftFlipper) {
-		//				break;
-		//			}
-		//			if (buttonPressed == key.IsPressed()) {
-		//				break;
-		//			}
-		//			buttonPressed = key.IsPressed();
-		//			if (buttonPressed) {
-		//				timeCurrentKeyPress = DateTime.Now;
-		//				_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
-		//			}
-		//			break;
-		//		case Key.E:
-		//			if (isLeftFlipper) {
-		//				break;
-		//			}
-		//			if (buttonPressed == key.IsPressed()) {
-		//				break;
-		//			}
-		//			buttonPressed = key.IsPressed();
-		//			if (buttonPressed) {
-		//				timeCurrentKeyPress = DateTime.Now;
-		//				_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
-
-		//			}
-		//			break;
-		//	}
-		//}
 	}
 
 	public override void _Process (double delta) {

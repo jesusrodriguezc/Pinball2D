@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static EventManager;
 
-public partial class WaitingNode : Node2D, IActionable, ITrigger
+public partial class WaitingNode : TriggerBase
 {
 
 	[Export] public double waitingTime;
@@ -13,14 +13,12 @@ public partial class WaitingNode : Node2D, IActionable, ITrigger
 	private Node2D[] triggeredNodes;
 	private EventData currentEvent;
 	public bool IsCollisionEnabled { get; set; }
-	public bool Triggered { get; set; }
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 
 		if (waitingTime <= 0) {
-			GD.Print($"[WARNING] WaitingNode {Name} has a value of waitingTime <= 0 ({waitingTime}).");
+			GD.PushWarning($"WaitingNode {Name} has a value of waitingTime <= 0 ({waitingTime}).");
 		} else {
 			waitingTimer = new Timer {
 				OneShot = true,
@@ -28,7 +26,7 @@ public partial class WaitingNode : Node2D, IActionable, ITrigger
 			};
 			AddChild(waitingTimer);
 
-			waitingTimer.Timeout += () => Trigger();
+			waitingTimer.Timeout += () => Trigger(new EventData());
 		}
 
 		eventManager = GetNode<EventManager>("/root/EventManager");
@@ -36,23 +34,23 @@ public partial class WaitingNode : Node2D, IActionable, ITrigger
 		if (triggeredNodes == null || triggeredNodes.Length == 0) {
 			triggeredNodes = GetChildren().OfType<Node2D>().ToArray();
 			if (triggeredNodes.Length == 0) {
-				GD.PrintErr($"WaitingNode ({Name}) has no triggered elements defined");
+				GD.PushWarning($"WaitingNode ({Name}) has no triggered elements defined");
 			}
 
 			triggeredNodes = triggeredNodes.Where(node => node is IActionable).ToArray();
 			if (triggeredNodes.Length == 0) {
-				GD.PrintErr($"WaitingNode ({Name}) has no triggered actionables defined.");
+				GD.PushWarning($"WaitingNode ({Name}) has no triggered actionables defined.");
 			}
 		}
 
 	}
 	public void Action (EventData data) {
-		GD.Print($"Starting {Name} timer of {waitingTime} seconds.");
 		currentEvent = data;
-		if (waitingTime > 0) {
+		if (
+			waitingTime > 0) {
 			waitingTimer.Start();
 		} else {
-			Trigger();
+			Trigger(new EventData());
 		}
 	}
 
@@ -60,10 +58,15 @@ public partial class WaitingNode : Node2D, IActionable, ITrigger
 		return;
 	}
 
-	public void Trigger (Dictionary<StringName, object> args = null) {
-		eventManager.SendMessage(this, triggeredNodes, EventType.TRIGGER, currentEvent.Parameters);
-
-		Triggered = true;
-		currentEvent = null;
+	public override void Trigger (EventData data) {
+		currentEvent = data;
+		if (waitingTime > 0) {
+			waitingTimer.Start();
+		} else {
+			base.Trigger(data);
+			eventManager.SendMessage(this, triggeredNodes, EventType.TRIGGER, currentEvent.Parameters);
+			IsTriggered = true;
+			currentEvent = null;
+		}
 	}
 }

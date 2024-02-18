@@ -2,67 +2,75 @@
 using Pinball.Scripts.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using static System.Formats.Asn1.AsnWriter;
 
 public partial class PinballController : Node2D {
 
-	public enum LevelZ {
-		FONDO = -10,
-		BASE = 0,
-		RAMPA = 1,
-		SHADER = 50,
-		UI = 100
-	}
-
 	#region Singleton
 	// Singleton
-	private static PinballController _instance = new PinballController();
+	//private static PinballController _instance = new PinballController();
 	private Random randomNumberGenerator;
 
 	private PinballController () { }
-	public static PinballController Instance {
-		get { return _instance; }
-	}
+	//public static PinballController Instance {
+	//	get { return _instance; }
+	//}
 	#endregion Singleton
 
-	[Export]
-	public bool Debug { get; set; }
+	[Export] public bool Debug { get; set; }
 
-	[Export]
-	public int LivesLeft { get; set; }
+	[Export] public int LivesLeft { get; set; }
+	[Export] public Vector2 ballInitialPosition { get; set; }
 	public Ball Ball { get; set; }
 	public Camera CurrentCamera { get; set; }
 
+	#region Subcontrollers
 	public ScoringController scoreController;
 	public GlobalEffectController globalEffectController;
-	private PauseMenu pauseMenu;
-	bool isPaused = false;
+	private MissionController missionController;
+	private RankController rankController;
 	private SceneSwitcher sceneSwitcher;
 
+	#endregion
+	private PauseMenu pauseMenu;
+	private GameOverMenu gameoverMenu;
+	bool isPaused = false;
+
+	private CanvasLayer userInterface;
+	private GameUI gameUI;
+	private MissionMenu missionMenu;
+
 	public override void _Ready () {
-		_instance = this;
 		randomNumberGenerator = new Random(Guid.NewGuid().GetHashCode());
 		LayerManager.UpdateActionables(this, 0, true);
 
 		sceneSwitcher = GetNode<SceneSwitcher>("/root/SceneSwitcher");
 
-		Ball = GetChildren().OfType<Ball>().ToList().First();
 		CurrentCamera = GetChildren().OfType<Camera>().FirstOrDefault();
-		scoreController = GetNode<ScoringController>("ScoringController");
-		globalEffectController = GetNode<GlobalEffectController>("GlobalEffectController");
+		scoreController = GetNode<ScoringController>("/root/ScoringController");
+		scoreController.Prepare();
+		globalEffectController = GetNode<GlobalEffectController>("/root/GlobalEffectController");
+		globalEffectController.Prepare();
 
-		pauseMenu = GetNodeOrNull<PauseMenu>("PauseMenu");
+		userInterface = GetNode<CanvasLayer>("UserInterface");
+		gameUI = GetNode<GameUI>("UserInterface/GameUI");
+		missionMenu = GetNode<MissionMenu>("UserInterface/MissionMenu");
+		pauseMenu = GetNodeOrNull<PauseMenu>("UserInterface/PauseMenu");
+		gameoverMenu = GetNodeOrNull<GameOverMenu>("UserInterface/GameOverMenu");
+		missionController = GetNodeOrNull<MissionController>("/root/Pinball/MissionController");
 
-		Ball.Death += OnLiveLost;
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process (double delta) {
-		if (LivesLeft <= 0 && Ball.currentStatus.IsNotIn(Ball.Status.DEAD, Ball.Status.GAMEOVER)) {
-			GD.Print("Este mensaje es imposible, hacker.");
-			sceneSwitcher.GotoScene("res://Escenas/MainMenu.tscn");
+		rankController = GetNodeOrNull<RankController>("/root/Pinball/RankController");
+		if (rankController != null) {
+			rankController.RankChanged += OnRankChanged;
 		}
+
+
+		StartGame();
+	}
+	public void OnRankChanged (int nextRank) {
+		missionController.OnRankChanged(nextRank);
 	}
 
 	public override void _Input (InputEvent @event) {
@@ -80,11 +88,14 @@ public partial class PinballController : Node2D {
 	}
 
 	public void OnLiveLost(Ball ball) {
+		SetBall();
 
 		if (LivesLeft <= 0) {
-			GD.Print("Hemos perdido");
 			Ball.currentStatus = Ball.Status.GAMEOVER;
-			sceneSwitcher.GotoScene("res://Escenas/GameOverMenu.tscn");
+			gameUI.Hide();
+			missionMenu.Hide();
+			gameoverMenu.Show();
+			missionController.Reset();
 		}
 	}
 
@@ -93,49 +104,68 @@ public partial class PinballController : Node2D {
 	}
 
 	internal void PauseGame () {
+		gameUI.Hide();
+		missionMenu.Hide(); 
 		pauseMenu.Show();
 		GetTree().Paused = true;
 		Ball.Pause();
-		//Engine.TimeScale = 0f;
+		Engine.TimeScale = 0f;
 	}
 
 	internal void ResumeGame () {
-		//Engine.TimeScale = 1f;
-		Ball.Resume();
+		Engine.TimeScale = 1f;
+		Ball.Unpause();
 		pauseMenu.Hide();
+		gameUI.Show();
+		missionMenu.Show();
 		GetTree().Paused = false;
 
 	}
 
 	public void Shake () {
-		// Should shake the camera and the ball.
 		CurrentCamera.ApplyShake();
 		Ball.ForceMove(new Vector2((float)randomNumberGenerator.NextDouble(), (float)randomNumberGenerator.NextDouble()), randomNumberGenerator.Next(100, 1000));
 	}
 
-	public async void DisableAll<T> (double secondsDisabled) where T : Node2D, IActionable {
-		var nodes = Nodes.findByClass<T>(GetTree().Root).Where(node => node.IsCollisionEnabled).ToList();
+	public void DisableAllFor<T> (double secondsDisabled) where T : Node2D, IActionable {
+		var nodes = Nodes.findByClass<T>(GetTree().Root).ToList();
 		foreach (var node in nodes) {
-			node.EnableCollision(false);
+			var cooldownController = node.GetChildByType<CooldownComponent>();
+			if (cooldownController == null) {
+				continue;
+			}
+
+			cooldownController.ApplyCooldown(secondsDisabled);
+		}
+	}
+
+	public void SetBall () {
+		if (Ball != null) {
+			RemoveChild(Ball);
+			Ball.QueueFree();
+			Ball = null;
 		}
 
-		Timer disableTimer = new() {
-			Autostart = false,
-			OneShot = true,
-			WaitTime = secondsDisabled
-		};
-		AddChild(disableTimer);
+		Ball = GD.Load<PackedScene>("res://Assets/Ball/ball.tscn").Instantiate<Ball>();
+		Ball.GlobalPosition = ballInitialPosition;
+		CallDeferred("add_child", Ball);
+		Ball.Death += OnLiveLost;
+	}
+	public async void StartGame () {
+		GD.Print("Empezamos partida");
 
-		disableTimer.Start(secondsDisabled);
-		await ToSignal(disableTimer, "timeout");
-		foreach (var node in nodes) {
-			node.EnableCollision(true);
-		}
+		await ToSignal(this, SignalName.Ready);
 
-		RemoveChild(disableTimer);
-		disableTimer.QueueFree();
+		SetBall();
 
+		gameoverMenu?.Hide();
+		scoreController?.ResetScore();
+		rankController?.Reset();
+		gameUI?.Show();
+	}
 
+	public void HideUI () {
+		userInterface.Hide();
 	}
 }
 

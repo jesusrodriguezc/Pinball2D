@@ -28,7 +28,7 @@ public partial class EventManager : Node {
 		}
 
 		if (receivers == null || receivers.Length == 0) {
-			GD.PrintErr("EventManager.SendMessage() without receiver.");
+			GD.PushWarning($"EventManager.SendMessage() from {sender.Name} without receiver.");
 			return;
 		}
 
@@ -36,11 +36,13 @@ public partial class EventManager : Node {
 			case EventType.TRIGGER:
 
 				foreach (var receiver in receivers) {
-					if (receiver is not IActionable actionable) {
-						continue;
+					if (receiver is IActionable actionable) {
+						actionable.Action(new EventData() { Sender = sender, Parameters = args });
 					}
 
-					actionable.Action(new EventData() { Sender = sender, Parameters = args });
+					if (receiver is TriggerBase trigger) {
+						trigger.Trigger(new EventData() { Sender = sender, Parameters = args });
+					}
 				}
 				break;
 			case EventType.ENABLE:

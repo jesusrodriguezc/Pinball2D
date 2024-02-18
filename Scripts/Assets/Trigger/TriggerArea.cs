@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static EventManager;
-using static ITrigger;
+using static TriggerBase;
 using static TriggerBehaviour;
 
-public partial class TriggerArea : Area2D, ITrigger {
+public partial class TriggerArea : TriggerBase {
 	private const float STILL_ELEMENT_MAX_VELOCITY = 0.1f;
 	[Export] public EventType Type;
 
@@ -29,8 +29,8 @@ public partial class TriggerArea : Area2D, ITrigger {
 	[Export] public double HoldingTime;
 	private Timer waitTimer;
 	[Export] public double WaitingTime;
-
-	public bool Triggered { get; set; }
+	private CooldownComponent cooldownComponent;
+	[Export] public double Cooldown { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
 
@@ -42,22 +42,26 @@ public partial class TriggerArea : Area2D, ITrigger {
 		preassignedTarget = Target != null;
 		eventManager = GetNode<EventManager>("/root/EventManager");
 		if (GetChildren().Count(child => (child is CollisionPolygon2D) || (child is CollisionShape2D)) == 0 ) {
-			GD.PrintErr($"TriggerArea ({Name}) has no collision area defined");
+			GD.PushWarning($"TriggerArea ({Name}) has no collision area defined");
 		}
 
 		if (triggeredNodes == null || triggeredNodes.Length == 0) {
 			triggeredNodes = GetChildren().OfType<Node2D>().ToArray();
 			if (triggeredNodes.Length == 0) {
-				GD.PrintErr($"TriggerArea ({Name}) has no triggered elements defined");
+				GD.PushWarning($"TriggerArea ({Name}) has no triggered elements defined");
 			}
 
 			triggeredNodes = triggeredNodes.Where(node => node is IActionable).ToArray();
 			if (triggeredNodes.Length == 0) {
-				GD.PrintErr($"TriggerArea ({Name}) has no triggered actionables defined.");
+				GD.Print($"TriggerArea ({Name}) has no triggered actionables defined.");
 			}
 		}
 
+		cooldownComponent = GetNode<CooldownComponent>("CooldownComponent");
+		cooldownComponent.SetCooldown(Cooldown);
+
 		PrepareEvents();
+
 	}
 
 	#region Inputs
@@ -115,17 +119,15 @@ public partial class TriggerArea : Area2D, ITrigger {
 		}
 
 		if (!triggerOnEnter) {
-			Triggered = false;
+			IsTriggered = false;
+			return;
+		}
+
+		if (node is not RigidBody2D) {
 			return;
 		}
 
 		NodesInside.Add(node);
-
-
-
-		if (node is not RigidBody2D collisionObject2D) {
-			return;
-		}
 
 		switch (Behaviour) {
 			case TriggerBehaviourId.INSTANTANEOUS:
@@ -153,7 +155,7 @@ public partial class TriggerArea : Area2D, ITrigger {
 		}
 
 		if (triggerOnEnter) {
-			Triggered = false;
+			IsTriggered = false;
 			return;
 		}
 
@@ -212,8 +214,7 @@ public partial class TriggerArea : Area2D, ITrigger {
 			return;
 		}
 
-		GD.Print($"{Name}.AfterWaiting()");
-		Trigger();
+		Trigger(new EventData());
 	}
 	public void AfterHolding() {
 		if (!behaviourInfo.HoldButton) {
@@ -225,8 +226,7 @@ public partial class TriggerArea : Area2D, ITrigger {
 			return;
 		}
 
-		GD.Print($"{Name}.AfterHolding()");
-		Trigger();
+		Trigger(new EventData());
 	}
 
 	public void AfterStopping () {
@@ -248,21 +248,25 @@ public partial class TriggerArea : Area2D, ITrigger {
 		if (!behaviourInfo.Stopped) {
 			return;
 		}
-
-		GD.Print($"{Name}.AfterStopping()");
-		Trigger();
+		Trigger(new EventData());
 	}
-	public void Trigger(Dictionary<StringName, object> args = null) {
-		object isInstantaneousObj = null;
-		bool isInstantaneous = args?.TryGetValue(INSTANTANEOUS, out isInstantaneousObj) ?? false;
+	public override void Trigger(EventData data ) {
+
+		if (cooldownComponent.IsOnCooldown) {
+			return;
+		}
+
+		bool isInstantaneous = data?.Parameters?.ContainsKey(INSTANTANEOUS) ?? false;
 		if (isInstantaneous) {
-			isInstantaneous = (bool)isInstantaneousObj;
+			isInstantaneous = (bool)data?.Parameters?[INSTANTANEOUS];
 		}
 
 		if (!NodesInside.Contains(Target) && !isInstantaneous) {
-			GD.Print($" [TriggerArea.Trigger()]: Target {Target.Name} is not inside TriggerArea {Name} anymore.");
+			GD.PushWarning($" [TriggerArea.Trigger()]: Target {Target.Name} is not inside TriggerArea {Name} anymore.");
 			return;
 		}
+
+		base.Trigger(data);
 
 		if (triggerOnEnter) {
 			NodesInside.Remove(Target);
@@ -272,35 +276,33 @@ public partial class TriggerArea : Area2D, ITrigger {
 			Target = null;
 		}
 
-		if (args == null) {
-			args = new Dictionary<StringName, object>();
+		if (data.Parameters == null) {
+			data.Parameters = new Dictionary<StringName, object>();
 		}
 
-		if (!args.TryGetValue(ACTIVATOR, out var _))
+		if (!data.Parameters.TryGetValue(ACTIVATOR, out var _))
 		{
-			args[ACTIVATOR] = Target;
+			data.Parameters[ACTIVATOR] = Target;
 		}
 
-		args[ENTERING] = triggerOnEnter;
+		data.Parameters[ENTERING] = triggerOnEnter;
 
-		GD.Print($" -- {Name} TRIGGERED by {((Node2D)args[ACTIVATOR]).Name} -- ");
-		eventManager.SendMessage(this, triggeredNodes, Type, args);
+		eventManager.SendMessage(this, triggeredNodes, Type, data.Parameters);
 
-		Triggered = true;
+		IsTriggered = true;
 	}
 
 	public void ProcessInstantaneous() {
-		Trigger(new Dictionary<StringName, object>() { { INSTANTANEOUS, true }, { ACTIVATOR, Target} });
+		Trigger(new EventData() { Sender = Target, Parameters = new Dictionary<StringName, object>() { { INSTANTANEOUS, true }, { ACTIVATOR, Target } } });
 	}
 	public void ProcessWait () {
-		GD.Print($"{Name}.ProcessWait()");
 		if (waitTimer.TimeLeft == 0) {
 			waitTimer.Start();
 		}
 	}
 	public void ProcessPress (bool isPressed) {
 		if (isPressed) {
-			Trigger();
+			Trigger(new EventData());
 		}
 	}
 
@@ -319,7 +321,7 @@ public partial class TriggerArea : Area2D, ITrigger {
 				float holdPerc = (float)Mathf.Min(1, (HoldingTime - timeLeft) / HoldingTime);
 				
 
-				Trigger(new Dictionary<StringName, object> { { HOLD_PERCENTAGE, holdPerc } });
+				Trigger(new EventData() { Sender = Target, Parameters = new Dictionary<StringName, object> { { HOLD_PERCENTAGE, holdPerc } } });
 
 			}
 		}

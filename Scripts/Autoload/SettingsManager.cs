@@ -14,7 +14,6 @@ public partial class SettingsManager : Node {
 	private SaveManager saveManager;
 	public SettingsData settingsData;
 	private ShaderPlaceholder shaderPlaceholder;
-	private AudioComponent audioSystem;
 	public override void _Ready () {
 		saveManager = GetNode<SaveManager>("/root/SaveManager");
 		
@@ -25,7 +24,6 @@ public partial class SettingsManager : Node {
 		ApplySettings();
 
 		shaderPlaceholder = GetNodeOrNull<ShaderPlaceholder>("/root/ShaderPlaceholder");
-		audioSystem = GetNodeOrNull<AudioComponent>("/root/GlobalAudioSystem");
 	}
 
 	private void ApplySettings () {
@@ -37,6 +35,9 @@ public partial class SettingsManager : Node {
 		MasterVolumeSelected(settingsData.MasterVolume);
 		MusicVolumeSelected(settingsData.MusicVolume);
 		SfxVolumeSelected(settingsData.SfxVolume);
+
+		PlayerNameSubmitted(settingsData.PlayerName);
+		LanguageSelected(settingsData.Language);
 	}
 
 	private void CreateSettingsFile () {
@@ -53,7 +54,8 @@ public partial class SettingsManager : Node {
 			WindowResolution = resolutionId ?? 0L,
 			MasterVolume = .5,
 			MusicVolume = .5,
-			SfxVolume = .5
+			SfxVolume = .5,
+			Language = 0
 		};
 
 		Save();
@@ -115,5 +117,18 @@ public partial class SettingsManager : Node {
 		settingsData.SfxVolume = value;
 
 	}
+	public void PlayerNameSubmitted (string newText) {
+		settingsData.PlayerName = newText;
+	}
+
+	public void LanguageSelected (long index) {
+		if (!SettingsData.LanguageDict.TryGetValue(index, out string language)) {
+			throw new Exception($"[LanguageSelected({index})]: Incorrect option");
+		}
+		TranslationServer.SetLocale(language);
+		settingsData.Language = index;
+	}
+
+
 }
 

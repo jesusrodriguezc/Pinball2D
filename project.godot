@@ -23,23 +23,32 @@ buses/default_bus_layout="res://SFX/default_bus_layout.tres"
 
 [autoload]
 
+SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
 EventManager="*res://Scripts/Autoload/EventManager.cs"
 SaveManager="*res://Scripts/Autoload/SaveManager.cs"
 SettingsManager="*res://Scripts/Autoload/SettingsManager.cs"
-ShaderPlaceholder="*res://AutoLoad/ShaderPlaceholder.tscn"
+ShaderPlaceholder="*res://Assets/AutoLoad/ShaderPlaceholder.tscn"
 GlobalAudioSystem="*res://Components/AudioComponent.tscn"
 SceneSwitcher="*res://Escenas/SceneSwitcher.tscn"
+GlobalEffectController="*res://Assets/AutoLoad/GlobalEffectController.tscn"
+ScoringController="*res://Assets/AutoLoad/ScoringController.tscn"
+LocalizationManager="*res://addons/localization_editor/LocalizationManager.gd"
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=854
+window/size/viewport_height=480
 window/size/resizable=false
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
+window/dpi/allow_hidpi=false
 
 [dotnet]
 
 project/assembly_name="Pinball"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/localization_editor/plugin.cfg")
 
 [input]
 
@@ -48,18 +57,50 @@ Pause={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"echo":false,"script":null)
 ]
 }
+Left_Flipper={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":81,"key_label":0,"unicode":81,"echo":false,"script":null)
+]
+}
+Right_Flipper={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":69,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
+}
+Back={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
+}
+Submit={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194309,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
+}
+
+[internationalization]
+
+locale/translation_remaps={}
+locale/translations=PackedStringArray("res://localization/localizations.en.translation", "res://localization/localizations.es.translation")
+locale/translations_pot_files=PackedStringArray("res://Escenas/SettingsMenu.tscn", "res://Escenas/GameScene.tscn", "res://Escenas/CreditScene.tscn", "res://Escenas/GameOverMenu.tscn", "res://Escenas/PauseMenu.tscn")
+locale/locale_filter_mode=0
 
 [layer_names]
 
 2d_render/layer_1="Global"
 2d_render/layer_2="Planta baja"
 2d_render/layer_3="Planta alta"
-2d_physics/layer_1="Ball"
+2d_physics/layer_1="Ball_Level0"
 2d_physics/layer_2="Bordes permanentes"
 2d_physics/layer_3="Zona baja"
 2d_physics/layer_4="Planta 1a"
 2d_physics/layer_5="ShooterLane"
 2d_physics/layer_6="Left shooter"
+2d_physics/layer_7="Ball_Level1"
+
+[localization_editor]
+
+translations_save_auth=false
 
 [physics]
 
@@ -69,3 +110,4 @@ common/physics_ticks_per_second=120
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
+textures/decals/filter=0
