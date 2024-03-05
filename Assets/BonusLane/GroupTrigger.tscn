@@ -9,6 +9,7 @@
 script = ExtResource("1_qk28h")
 AudioStream = ExtResource("2_52cvf")
 actionables = []
+DisableOnCompleted = true
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

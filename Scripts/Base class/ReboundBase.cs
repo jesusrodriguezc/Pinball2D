@@ -63,6 +63,7 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable {
 
 		EmitSignal(SignalName.Impulse, node, dirImpulso * HitPower);
 		scoreComponent?.AddScore();
+		pinballController.ImpulseShake(HitPower);
 
 	}
 
@@ -85,14 +86,12 @@ public abstract partial class ReboundBase : StaticBody2D, IActionable {
 		}
 
 		EmitSignal(SignalName.Actioned);
-
-
 	}
 
 	public abstract Vector2 CalculateImpulseDirection (Node2D node);
 	public abstract void EmitParticles (Node2D node);
 
-	public void Action (EventData data) {
+	public virtual void Action (EventData data) {
 		if (!IsCollisionEnabled) {
 			return;
 		}

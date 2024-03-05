@@ -40,17 +40,7 @@ public partial class Flipper : AnimatableBody2D {
 
 	private AudioComponent _audioComponent;
 
-	public readonly StringName HIT = "Hit";
-
-	public CollisionShape2D collisionShape;
-	public RectangleShape2D collisionRectangle;
-
-	private Vector2 idleCollisionPosition;
-	private Vector2 idleCollisionShapeSize;
-
-	public Area2D HitBooster { get; private set; }
-	public bool IsBallOnTop { get; private set; }
-	public Node2D ElementOnTop { get; private set; }
+	public readonly StringName PRESS = "Press";
 
 	public DateTime? timeCurrentKeyPress;
 
@@ -58,8 +48,6 @@ public partial class Flipper : AnimatableBody2D {
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready () {
-		//currentStatus = Status.IDLE;
-
 		idleRotation = Rotation;
 		rotationDuration = RotationFrameDuration / 120f;
 		rotationSpeed = Mathf.DegToRad(RotationMax) / rotationDuration;
@@ -70,55 +58,10 @@ public partial class Flipper : AnimatableBody2D {
 			hitRotation = Rotation + Mathf.DegToRad(RotationMax);
 		}
 
-		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
+		_audioComponent = GetNode<AudioComponent>("AudioComponent");
 		if (_audioComponent != null) {
-			_audioComponent.AddAudio(HIT, ResourceLoader.Load<AudioStream>("res://SFX/flipper_press.wav"));
-
+			_audioComponent.AddAudio(PRESS, ResourceLoader.Load<AudioStream>("res://SFX/flipper_press.wav"));
 		}
-
-		collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
-		if (collisionShape.Shape is RectangleShape2D) {
-			collisionRectangle = (RectangleShape2D)collisionShape.Shape;
-		}
-		idleCollisionPosition = collisionShape.Position;
-		idleCollisionShapeSize = collisionRectangle.Size;
-
-		HitBooster = GetNode<Area2D>("HitBooster");
-		HitBooster.BodyEntered += (node) => { IsBallOnTop = true; ElementOnTop = node; };
-		HitBooster.BodyExited += (node) => { IsBallOnTop = false; ElementOnTop = null; };
-
-	}
-
-	private void TryHitBoost (Node2D body, double delta) {
-		// Pepinazo en la normal del area.
-
-
-		if (body == null) {
-			return;
-		}
-		if (body is not IActor actor) {
-			return;
-		}
-
-		if (timeCurrentKeyPress == null) {
-			return;
-		}
-
-		if (currentStatus == Status.MOVING_UP && IsBallOnTop) {
-			//var normalVectorCurrentFrame = Transform.BasisXform(Vector2.Up);
-
-			double timeFromStart = (DateTime.Now - timeCurrentKeyPress.Value).TotalSeconds - delta;
-
-			var theoreticalAngleNextFrame = rotationSpeed * (float)timeFromStart;
-
-			var theorethicalNormalVector = Transform.BasisXform(Vector2.Up).Rotated(theoreticalAngleNextFrame - Rotation);//Vector2.Up;//.Rotated(theoreticalAngleNextFrame - Rotation);
-
-			EmitSignal(SignalName.Impulse, body, theorethicalNormalVector * HitBoostPower);
-			IsBallOnTop = false;
-			timeCurrentKeyPress = null;
-		}
-		
-
 	}
 
 	public override void _Input (InputEvent @event) {
@@ -136,7 +79,7 @@ public partial class Flipper : AnimatableBody2D {
 			buttonPressed = isJustPressed;
 			if (buttonPressed) {
 				timeCurrentKeyPress = DateTime.Now;
-				_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
+				_audioComponent?.Play(PRESS, AudioComponent.SFX_BUS);
 			}
 		}
 
@@ -150,35 +93,30 @@ public partial class Flipper : AnimatableBody2D {
 			buttonPressed = isJustPressed;
 			if (buttonPressed) {
 				timeCurrentKeyPress = DateTime.Now;
-				_audioComponent?.Play(HIT, AudioComponent.SFX_BUS);
+				_audioComponent?.Play(PRESS, AudioComponent.SFX_BUS);
 			}
 		}
 	}
 
 	public override void _Process (double delta) {
 
+		Status lastStatus = currentStatus;
 		switch (currentStatus) {
 			case Status.IDLE:
 				currentStatus = buttonPressed ? Status.MOVING_UP : Status.IDLE;
-				collisionRectangle.Size = idleCollisionShapeSize;
-				collisionShape.Position = idleCollisionPosition;
 				break;
 			case Status.MOVING_DOWN:
 				currentStatus = buttonPressed ? Status.MOVING_UP : Status.MOVING_DOWN;
-				PrepareForCollision();
-				//TryHitBoost(ElementOnTop); 
 				break;
 			case Status.MOVING_UP:
-				PrepareForCollision();
 				break;
 			case Status.STAY_UP:
 				currentStatus = buttonPressed ? Status.STAY_UP : Status.MOVING_DOWN;
-				collisionRectangle.Size = idleCollisionShapeSize;
-				collisionShape.Position = idleCollisionPosition; 
 				break;
 		}
 
 	}
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess (double delta) {
 		switch (currentStatus) {
@@ -197,8 +135,6 @@ public partial class Flipper : AnimatableBody2D {
 			case Status.GAMEOVER:
 				break;
 		}
-
-		//QueueRedraw();
 	}
 
 	private void PhysicsProcess_StatusStayUp (double delta) {
@@ -220,7 +156,6 @@ public partial class Flipper : AnimatableBody2D {
 	}
 
 	private void PhysicsProcess_StatusMovingUp (double delta) {
-		TryHitBoost(ElementOnTop, delta);
 		float deltaRotation = isLeftFlipper ? -rotationSpeed * (float)delta : rotationSpeed * (float)delta;
 
 		Rotation += deltaRotation;
@@ -235,11 +170,6 @@ public partial class Flipper : AnimatableBody2D {
 	private void IdlePhysicsProcess (double delta) {
 		// No debe hacer nada.
 		return;
-	}
-
-	public void PrepareForCollision () {
-		collisionRectangle.Size = idleCollisionShapeSize + new Vector2(10, 10);
-		collisionShape.Position = idleCollisionPosition + (isLeftFlipper? new Vector2(5, 5) : new Vector2(-5, 5));
 	}
 
 }

@@ -1,0 +1,10 @@
+{"Title":"MISSION_LEVEL7_0", 
+"Hidden": false,
+"Items": [
+{"Title": "REBOUND", "Repetitions":25},
+{"Title": "ENTER_RAMP", "Repetitions":1}
+],
+"Ranks": [7],
+"XpReward": 7000,
+"ScoreReward" : 2000000
+}

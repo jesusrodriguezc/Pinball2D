@@ -1,12 +1,18 @@
-[gd_scene load_steps=13 format=3 uid="uid://rvbtg2oc61o2"]
+[gd_scene load_steps=19 format=3 uid="uid://rvbtg2oc61o2"]
 
 [ext_resource type="Script" path="res://Scripts/GlobalControllers/PinballController.cs" id="1_spehh"]
-[ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="2_6q7fh"]
+[ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="2_2p412"]
+[ext_resource type="PackedScene" uid="uid://cwqiwcpdsxmf7" path="res://Assets/AutoLoad/MissionController.tscn" id="2_b8eyn"]
+[ext_resource type="PackedScene" uid="uid://eyhg24mwjxbk" path="res://Escenas/Background.tscn" id="2_jnhc0"]
+[ext_resource type="PackedScene" uid="uid://c7juco4ll1flx" path="res://Assets/AutoLoad/RankController.tscn" id="3_h01f2"]
 [ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/TriggerArea.tscn" id="4_3pjr2"]
-[ext_resource type="PackedScene" uid="uid://bacfc0s5fsli" path="res://Assets/Actionables/Teleport.tscn" id="6_8kvga"]
-[ext_resource type="PackedScene" uid="uid://p5ihd7ojsajs" path="res://Assets/Actionables/LifeModifier.tscn" id="6_q82bs"]
+[ext_resource type="PackedScene" uid="uid://b7b82tavlwifj" path="res://UI/MissionMenu.tscn" id="5_agtii"]
+[ext_resource type="PackedScene" uid="uid://iqxm0toimpog" path="res://Assets/Flag/Flag.tscn" id="6_s1kva"]
 [ext_resource type="PackedScene" uid="uid://bq026lg6n6o7t" path="res://Assets/Actionables/LayerSwapper.tscn" id="7_cnshn"]
-[ext_resource type="PackedScene" uid="uid://uuk4ox1idhce" path="res://Assets/Ball/ball.tscn" id="9_pxuon"]
+[ext_resource type="PackedScene" uid="uid://8wbtmaw03d7i" path="res://Assets/BonusLane/GroupTrigger.tscn" id="8_210gf"]
+[ext_resource type="AudioStream" uid="uid://m0ctv00ntaei" path="res://SFX/bankCompleted.wav" id="9_fhcr1"]
+[ext_resource type="PackedScene" uid="uid://ceed5ikp6njui" path="res://Assets/Target/MissionTarget.tscn" id="10_u1wl1"]
+[ext_resource type="PackedScene" uid="uid://fosrqs3cnv2p" path="res://Assets/MissionItem.tscn" id="11_7rxtk"]
 
 [sub_resource type="Gradient" id="Gradient_b81lh"]
 offsets = PackedFloat32Array(1)
@@ -22,41 +28,47 @@ rough = true
 absorbent = true
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jrh3b"]
-size = Vector2(69.5378, 9.2311)
+size = Vector2(145.88, 24.0624)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_f81gk"]
-size = Vector2(189, 18)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5yycv"]
+size = Vector2(32, 27)
 
 [node name="Pinball" type="Node2D"]
 process_mode = 3
-position = Vector2(640, 360)
+position = Vector2(641, 360)
 script = ExtResource("1_spehh")
 Debug = true
 LivesLeft = 999
+IsTestScene = true
+
+[node name="MissionController" parent="." node_paths=PackedStringArray("missionItemAccepter", "missionTargetGroup") instance=ExtResource("2_b8eyn")]
+missionItemAccepter = NodePath("../EnterRamp")
+missionTargetGroup = NodePath("../Mission Target Bank")
+
+[node name="RankController" parent="." instance=ExtResource("3_h01f2")]
+
+[node name="Ball" parent="." instance=ExtResource("2_2p412")]
+position = Vector2(-246, 137)
+DebugPower = 500
+currentLayer = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-24, 0)
+position = Vector2(-100, 19)
 texture = SubResource("GradientTexture2D_ox6ls")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-125, 60)
 
-[node name="UI" parent="Camera2D" instance=ExtResource("2_6q7fh")]
-offset_left = -408.0
-offset_top = -216.0
-offset_right = -322.0
-offset_bottom = -168.0
-metadata/_edit_use_anchors_ = true
-
-[node name="Ball" parent="." instance=ExtResource("9_pxuon")]
-position = Vector2(-300, -57)
-collision_mask = 7
-mass = 5.0
-gravity_scale = 0.5
-max_contacts_reported = 10
-contact_monitor = true
-DebugPower = 500
-MaxVelocity = 1000.0
-currentLayer = 1
+[node name="MissionMenu" parent="Camera2D" instance=ExtResource("5_agtii")]
+z_index = 50
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 143.0
+offset_top = -239.0
+offset_right = 428.0
+offset_bottom = -22.0
+grow_horizontal = 0
 
 [node name="Mapa" type="StaticBody2D" parent="."]
 collision_layer = 2
@@ -94,14 +106,14 @@ offset_bottom = 256.0
 color = Color(0, 0, 0, 1)
 
 [node name="Shooter_Lane_full" parent="." instance=ExtResource("4_3pjr2")]
-position = Vector2(-296, -32)
+position = Vector2(-232, 184)
 scale = Vector2(0.36, 1.64551)
 collision_layer = 2
-collision_mask = 1
+collision_mask = 65
 Type = 0
 
 [node name="In" type="CollisionShape2D" parent="Shooter_Lane_full"]
-position = Vector2(6.10352e-05, -1.52588e-05)
+position = Vector2(38.1712, -7.41565)
 shape = SubResource("RectangleShape2D_jrh3b")
 debug_color = Color(0.929412, 0, 0.12549, 0.419608)
 
@@ -109,19 +121,60 @@ debug_color = Color(0.929412, 0, 0.12549, 0.419608)
 insideLayer = 4
 outLayer = 4
 
-[node name="DeathArea" parent="." instance=ExtResource("4_3pjr2")]
-position = Vector2(52.0009, 4)
-collision_layer = 2
+[node name="Background2" parent="." instance=ExtResource("2_jnhc0")]
+z_index = -300
+z_as_relative = false
+position = Vector2(-432, -158)
+
+[node name="Mission Target Bank" parent="." instance=ExtResource("8_210gf")]
+position = Vector2(-149, 190)
+rotation = -1.57079
+GroupName = &"MissionBank"
+AudioStream = ExtResource("9_fhcr1")
+DisableOnCompleted = false
+DisableDuration = 2.0
+
+[node name="MissionTarget" parent="Mission Target Bank" instance=ExtResource("10_u1wl1")]
+position = Vector2(-0.000244141, -172)
+rotation = 3.14159
+MissionId = 1
+HitPower = 1100.0
+Score = 1000.0
+
+[node name="MissionTarget2" parent="Mission Target Bank" instance=ExtResource("10_u1wl1")]
+position = Vector2(-1.00024, -30)
+rotation = 3.14159
+MissionId = 2
+HitPower = 1100.0
+Score = 1000.0
+
+[node name="MissionTarget3" parent="Mission Target Bank" instance=ExtResource("10_u1wl1")]
+position = Vector2(-1, 32)
+rotation = 3.14159
+MissionId = 3
+HitPower = 1100.0
+Score = 1000.0
+
+[node name="EnterRamp" parent="." node_paths=PackedStringArray("Targets") instance=ExtResource("11_7rxtk")]
+ItemId = &"ENTER_RAMP"
+Targets = [NodePath("../AcceptMission")]
+
+[node name="Flag" parent="." instance=ExtResource("6_s1kva")]
+position = Vector2(-241, 75)
+collision_layer = 4
+Score = 500.0
+
+[node name="AcceptMission" parent="." instance=ExtResource("4_3pjr2")]
+position = Vector2(-35, 166)
 collision_mask = 65
 Type = 0
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="DeathArea"]
-position = Vector2(-332.001, 180)
-shape = SubResource("RectangleShape2D_f81gk")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AcceptMission"]
+position = Vector2(13, 13)
+shape = SubResource("RectangleShape2D_5yycv")
 
-[node name="LifeModifier" parent="DeathArea" instance=ExtResource("6_q82bs")]
-LivesModification = -1
-
-[node name="Teleport" parent="DeathArea" instance=ExtResource("6_8kvga")]
-position = Vector2(-284.001, -28)
-StoppedAfterTeleport = true
+[node name="ColorRect" type="ColorRect" parent="AcceptMission"]
+offset_left = -3.0
+offset_top = -1.0
+offset_right = 29.0
+offset_bottom = 27.0

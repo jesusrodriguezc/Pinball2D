@@ -19,7 +19,10 @@ namespace Pinball.Components {
 			//shaderContainer.Visible = false;
 			shader = shaderContainer?.Material as ShaderMaterial;
 
-			Palette = (CompressedTexture2D)GD.Load(settings.settingsData.GetPaletteURL());
+			var paletteUrl = settings.settingsData.GetPaletteURL();
+			if (!string.IsNullOrWhiteSpace(paletteUrl)) {
+				Palette = (CompressedTexture2D)GD.Load(paletteUrl);
+			}
 
 
 		}

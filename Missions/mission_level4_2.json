@@ -1,0 +1,10 @@
+{"Title":"MISSION_LEVEL4_2", 
+"Hidden": false,
+"Items": [
+{"Title": "UPGRADE_RAMP", "Repetitions":1},
+{"Title": "BLACKHOLE", "Repetitions":1}
+],
+"Ranks": [4, 5],
+"XpReward": 1500,
+"ScoreReward" : 1250000
+}

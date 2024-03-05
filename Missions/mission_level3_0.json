@@ -1,0 +1,11 @@
+{"Title":"MISSION_LEVEL3_0", 
+"Hidden": false,
+"Items": [
+{"Title": "RIGHT_WORMHOLE", "Repetitions":1},
+{"Title": "MIDDLE_WORMHOLE", "Repetitions":1},
+{"Title": "LEFT_WORMHOLE", "Repetitions":1}
+],
+"Ranks": [3],
+"XpReward": 700,
+"ScoreReward" : 1500000
+}

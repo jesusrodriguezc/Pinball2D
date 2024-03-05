@@ -8,8 +8,11 @@ public partial class Camera : Camera2D
 	private Vector2 BasePosition;
 	private RandomNumberGenerator randomNumberGenerator;
 	private float shakeStrength = 0f;
-	
-	[Export] private float randomStrength;
+
+	public const float tiltShakeStrength = 30f;
+	public const float impulseShakeStrengthRatio = 0.001f;
+
+	[Export] private float testShakeStrength;
 	[Export] private float shakeFade;
 
 	// Called when the node enters the scene tree for the first time.
@@ -27,8 +30,15 @@ public partial class Camera : Camera2D
 		}
 	}
 
-	public void ApplyShake () {
-		shakeStrength = randomStrength;
+	public void ApplyShake (float strength = 0f) {
+		if (strength == 0f) { 
+			return; 
+		}
+		float newStrength = strength * impulseShakeStrengthRatio;
+		if (shakeStrength > newStrength) {
+			return;
+		}
+		shakeStrength = strength * impulseShakeStrengthRatio;
 	}
 
 	public Vector2 GetRandomShakeStrength () {

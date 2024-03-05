@@ -1,6 +1,5 @@
 ﻿using Godot;
 using System.Collections.Generic;
-using static System.Formats.Asn1.AsnWriter;
 
 public partial class Flag: Area2D, IActionable {
 	[Signal] public delegate void ActionedEventHandler ();
@@ -19,6 +18,7 @@ public partial class Flag: Area2D, IActionable {
 		BodyExited += (node) => Action(new EventData() { Sender = node, Parameters = new Dictionary<StringName, object>() { { TriggerBase.ENTERING, false }, { TriggerBase.ACTIVATOR, node } } });
 
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		animationPlayer.AnimationFinished += (animation) => { if (animation == "anticlockwise") OnTurnCompleted(); };
 
 		animationTimer = new Timer() { OneShot = true, Autostart = false };
 		AddChild(animationTimer);
@@ -39,10 +39,17 @@ public partial class Flag: Area2D, IActionable {
 
 	private void Release (Node2D body) {
 		animationTimer.Start(currentSpinningTime);
-		animationPlayer.GetAnimation("anticlockwise").LoopMode = Animation.LoopModeEnum.Linear;
+		//animationPlayer.GetAnimation("anticlockwise").LoopMode = Animation.LoopModeEnum.Linear;
 		animationPlayer.Play("anticlockwise");
 
+		// TO_DO: Llamar actioned al acabar la animacion
+
+	}
+	
+	private void OnTurnCompleted () {
+		animationPlayer.Play("anticlockwise");
 		EmitSignal(SignalName.Actioned);
+		scoreComponent?.AddScore();
 	}
 
 	private void Collision (Node2D node) {
@@ -62,19 +69,21 @@ public partial class Flag: Area2D, IActionable {
 		var direction = GlobalPosition.DirectionTo(body.GlobalPosition);
 		var isMovementClockwise = direction.Dot(Transform.BasisXform(Vector2.Up)) > 0;
 
-		animationPlayer.GetAnimation("anticlockwise").LoopMode = Animation.LoopModeEnum.None;
+		//animationPlayer.GetAnimation("anticlockwise").LoopMode = Animation.LoopModeEnum.None;
 
 		if (isLastMovementClockWise.HasValue && isLastMovementClockWise.Value != isMovementClockwise) {
 			currentSpinningTime = -currentSpinningTime;
 		}
 
+		GD.Print(body.LinearVelocity.Length());
+
 		if (isMovementClockwise) {
 			animationPlayer.PlayBackwards("anticlockwise");
-			currentSpinningTime += (body.LinearVelocity.Length() / 100f) * animationPlayer.GetAnimation("anticlockwise").Length;
+			currentSpinningTime += (body.LinearVelocity.Length() / 200f) * animationPlayer.GetAnimation("anticlockwise").Length;
 
 		} else {
 			animationPlayer.Play("anticlockwise");
-			currentSpinningTime += (body.LinearVelocity.Length() / 100f) * animationPlayer.GetAnimation("anticlockwise").Length;
+			currentSpinningTime += (body.LinearVelocity.Length() / 200f) * animationPlayer.GetAnimation("anticlockwise").Length;
 		}
 
 		isLastMovementClockWise = isMovementClockwise;

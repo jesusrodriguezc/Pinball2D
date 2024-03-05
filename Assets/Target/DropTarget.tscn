@@ -1,11 +1,11 @@
 [gd_scene load_steps=18 format=3 uid="uid://cqhjn5gombvfj"]
 
-[ext_resource type="Script" path="res://Scripts/Assets/Actionables/Target.cs" id="1_fksfy"]
-[ext_resource type="AudioStream" uid="uid://7mpnvjkwmiqj" path="res://SFX/slingshot_hit.wav" id="2_4ia71"]
-[ext_resource type="Texture2D" uid="uid://c1lhwvsmqn6rm" path="res://Assets/Target/Target.png" id="3_voxh8"]
-[ext_resource type="PackedScene" uid="uid://cy3dvu3unu2uo" path="res://Components/ScoreComponent.tscn" id="4_rwlhy"]
-[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="5_8ebvo"]
-[ext_resource type="Texture2D" uid="uid://d6bjnljj6raf" path="res://Assets/BonusLane/bonus_lane-sheet.png" id="6_fh5we"]
+[ext_resource type="Script" path="res://Scripts/Assets/Actionables/Target.cs" id="1_kygph"]
+[ext_resource type="AudioStream" uid="uid://7mpnvjkwmiqj" path="res://SFX/slingshot_hit.wav" id="2_fiayp"]
+[ext_resource type="Texture2D" uid="uid://c1lhwvsmqn6rm" path="res://Assets/Target/DropTarget.png" id="3_jg6b7"]
+[ext_resource type="PackedScene" uid="uid://cy3dvu3unu2uo" path="res://Components/ScoreComponent.tscn" id="4_7fx72"]
+[ext_resource type="PackedScene" uid="uid://mlgqd1jjcpif" path="res://Components/AudioComponent.tscn" id="5_pt5ma"]
+[ext_resource type="Texture2D" uid="uid://d6bjnljj6raf" path="res://Assets/BonusLane/bonus_lane-sheet.png" id="6_bmvb8"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_si8w8"]
 friction = 0.0
@@ -159,11 +159,11 @@ _data = {
 "on_collision": SubResource("Animation_x271m")
 }
 
-[node name="Target" type="StaticBody2D"]
+[node name="DropTarget" type="StaticBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_si8w8")
-script = ExtResource("1_fksfy")
-HitStream = ExtResource("2_4ia71")
-HitPower = 1500.0
+script = ExtResource("1_kygph")
+HitStream = ExtResource("2_fiayp")
+HitPower = 1100.0
 Score = 500.0
 
 [node name="CollisionArea" type="Area2D" parent="."]
@@ -177,7 +177,7 @@ debug_color = Color(1, 0, 0, 0.419608)
 shape = SubResource("RectangleShape2D_57asj")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("3_voxh8")
+texture = ExtResource("3_jg6b7")
 
 [node name="ParticleSystem" type="GPUParticles2D" parent="."]
 position = Vector2(-1, 0)
@@ -191,10 +191,10 @@ explosiveness = 1.0
 randomness = 0.5
 fixed_fps = 60
 
-[node name="ScoreComponent" parent="." instance=ExtResource("4_rwlhy")]
+[node name="ScoreComponent" parent="." instance=ExtResource("4_7fx72")]
 BaseScore = 500.0
 
-[node name="AudioComponent" parent="." instance=ExtResource("5_8ebvo")]
+[node name="AudioComponent" parent="." instance=ExtResource("5_pt5ma")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -204,6 +204,6 @@ libraries = {
 [node name="Led" type="Sprite2D" parent="."]
 position = Vector2(-8, 0)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("6_fh5we")
+texture = ExtResource("6_bmvb8")
 hframes = 2
 vframes = 2

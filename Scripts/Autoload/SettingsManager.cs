@@ -50,7 +50,7 @@ public partial class SettingsManager : Node {
 		settingsData = new SettingsData() {
 			DisplayMode = (isFullscreen ? 1 : 0) + (isBorderless ? 2 : 0),
 			VSync = DisplayServer.WindowGetVsyncMode() != DisplayServer.VSyncMode.Disabled,
-			ShaderPalette = 0,
+			ShaderPalette = "PINK",
 			WindowResolution = resolutionId ?? 0L,
 			MasterVolume = .5,
 			MusicVolume = .5,
@@ -89,12 +89,12 @@ public partial class SettingsManager : Node {
 	}
 
 
-	public void ShaderPaletteSelected (long index) {
-		settingsData.ShaderPalette = index;
+	public void ShaderPaletteSelected (StringName paletteName) {
+		settingsData.ShaderPalette = paletteName;
 		if (shaderPlaceholder == null) {
 			return;
 		}
-		if (SettingsData.PaletteDict.TryGetValue(index, out var palettePath))
+		if (SettingsData.PaletteDict.TryGetValue(paletteName, out var palettePath))
 			shaderPlaceholder.Palette = GD.Load<CompressedTexture2D>(palettePath);
 
 	}

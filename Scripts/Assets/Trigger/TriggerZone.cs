@@ -47,21 +47,16 @@ public partial class TriggerZone : TriggerBase{
 			};
 			AddChild(mapGenerator);
 			mapGenerator.EnableCollision(false);
-
-
-
 		}
-
 	}
 
 	private void TriggerZone_BodyEntered (Node2D body) {
+		if (body is not IActor actor) {
+			return;
+		}
 		IsTriggered = true;
 		if (!NodesInside.Contains(body)) {
 			NodesInside.Add(body);
-		}
-
-		if (body is not IActor actor) {
-			return;
 		}
 
 		List<TriggerZone> currentZones = actor.CurrentTriggerZones;
@@ -78,6 +73,10 @@ public partial class TriggerZone : TriggerBase{
 
 	private void TriggerZone_BodyExited (Node2D body) {
 
+		if (body is not IActor actor) {
+			return;
+		}
+
 		Trigger(new EventData() { 
 			Sender = body,
 			Parameters = new Dictionary<StringName, object>() { { ACTIVATOR, body }, { ENTERING, false } } 
@@ -85,7 +84,7 @@ public partial class TriggerZone : TriggerBase{
 
 		IsTriggered = false;
 		NodesInside.Remove(body);
-		((IActor)body).CurrentTriggerZones.Remove(this);
+		actor.CurrentTriggerZones.Remove(this);
 
 	}
 
@@ -111,7 +110,9 @@ public partial class TriggerZone : TriggerBase{
 
 		base.Trigger(data);
 
-		eventManager.SendMessage(this, triggeredNodes, EventType.TRIGGER, data.Parameters);
+		if (triggeredNodes != null && triggeredNodes.Length > 0) {
+			eventManager.SendMessage(this, triggeredNodes, EventType.TRIGGER, data.Parameters);
+		}
 
 		IsTriggered = true;
 	}

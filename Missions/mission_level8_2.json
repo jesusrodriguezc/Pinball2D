@@ -1,0 +1,12 @@
+{"Title":"MISSION_LEVEL8_2", 
+"Hidden": false,
+"Items": [
+{"Title": "REBOUND", "Repetitions":25},
+{"Title": "ENTER_RAMP", "Repetitions":1, "ForbiddenItems": 
+	[{"Title": "HYPERSPACE", "Repetitions":1}]}
+],
+"Ranks": [8,9],
+"XpReward": 11500,
+"ScoreReward" : 2000000,
+"DegradeOnFail":true
+}

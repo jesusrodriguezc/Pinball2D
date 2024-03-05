@@ -1,0 +1,9 @@
+{"Title":"MISSION_LEVEL1_3", 
+"Hidden": false,
+"Items": [
+{"Title": "ANY_TARGET", "Repetitions":9}
+],
+"Ranks": [1],
+"XpReward": 50,
+"ScoreReward" : 750000
+}

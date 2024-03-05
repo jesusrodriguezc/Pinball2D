@@ -1,5 +1,7 @@
 ﻿using Godot;
+using Pinball.Scripts.Utils;
 using System;
+using System.Linq;
 using System.Reflection;
 
 /// <summary>
@@ -30,6 +32,7 @@ public partial class MissionCard : Control {
 	private Label completedLabel;
 	private AnimationPlayer animationPlayer;
 
+	private Timer freeTimer;
 	public override void _Ready () {
 		base._Ready();
 
@@ -53,13 +56,16 @@ public partial class MissionCard : Control {
 		completedLabel = GetNode<Label>("CompletedLabel");
 		completedLabel.Text = Tr("COMPLETED");
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		animationPlayer.AnimationFinished += (_) => OnMissionClosed();
+		animationPlayer.AnimationFinished += (animationName) => { GD.Print(animationName, ".AnimationFinished");  if (animationName.ToString().IsIn("completed", "failed")) OnMissionClosed(); };
 
+		freeTimer = new Timer();
+		AddChild(freeTimer);
 	}
 
 	public void SetMission(Mission mission) {
 		currentMission = mission;
 		mission.MissionUpdated += UpdateCardSteps;
+		mission.MissionFailed += OnMissionFailed;
 		mission.MissionCompleted += OnMissionCompleted;
 
 		ClearAllLabels();
@@ -67,8 +73,13 @@ public partial class MissionCard : Control {
 
 		UpdateCardSteps();
 
-		SetRankSpriteFromAtlas(mission.Rank);
-		xpReward.Text = string.Format("+{0:00}xp", mission.XpReward);
+		SetRankSpriteFromAtlas(mission.Ranks.Min());
+		if (mission.XpReward > 10) {
+			xpReward.Text = string.Format("+{0:00}xp", mission.XpReward);
+		}
+		else {
+			xpReward.Text = string.Format("+{0}lvl", mission.XpReward);
+		}
 		if (mission.ScoreReward > 999999) {
 			var scoreRewardInThousands = mission.ScoreReward / 1000000f;
 			if (Math.Abs(scoreRewardInThousands % 1) <= (float.Epsilon * 100)) {
@@ -90,7 +101,13 @@ public partial class MissionCard : Control {
 	}
 
 	private void OnMissionCompleted () {
+		completedLabel.Text = Tr("COMPLETED");
 		animationPlayer.Play("completed");
+	}
+
+	private void OnMissionFailed () {
+		completedLabel.Text = Tr("FAILED");
+		animationPlayer.Play("failed");
 	}
 
 	private void OnMissionClosed () {
@@ -98,20 +115,28 @@ public partial class MissionCard : Control {
 		Hide();
 	}
 
+	public void OnMissionStarted () {
+		Show();
+		animationPlayer.Play("started");
+		UpdateCardSteps();
+	}
 	private void UpdateCardSteps () {
-		if (currentMission.Steps.Count > 0) {
-			firstStep.Text = Tr(currentMission.Steps[0].Type);
-			firstStepCounter.Text = string.Format("({0}/{1})", currentMission.Steps[0].RepetitionsDone, currentMission.Steps[0].Repetitions);
+		if (currentMission == null) {
+			return;
+		}
+		if (currentMission.Items.Count > 0 && currentMission.Items[0] is MissionStep step1) {
+			firstStep.Text = Tr(step1.Title);
+			firstStepCounter.Text = string.Format("({0}/{1})", currentMission.Items[0].RepetitionsDone, step1.Repetitions);
 		}
 
-		if (currentMission.Steps.Count > 1) {
-			secondStep.Text = Tr(currentMission.Steps[1].Type);
-			secondStepCounter.Text = string.Format("({0}/{1})", currentMission.Steps[1].RepetitionsDone, currentMission.Steps[1].Repetitions);
+		if (currentMission.Items.Count > 1 && currentMission.Items[1] is MissionStep step2) {
+			secondStep.Text = Tr(step2.Title);
+			secondStepCounter.Text = string.Format("({0}/{1})", step2.RepetitionsDone, step2.Repetitions);
 		}	
 
-		if (currentMission.Steps.Count > 2) {
-			thirdStep.Text = Tr(currentMission.Steps[2].Type);
-			thirdStepCounter.Text = string.Format("({0}/{1})", currentMission.Steps[2].RepetitionsDone, currentMission.Steps[2].Repetitions);
+		if (currentMission.Items.Count > 2 && currentMission.Items[2] is MissionStep step3) {
+			thirdStep.Text = Tr(step3.Title);
+			thirdStepCounter.Text = string.Format("({0}/{1})", step3.RepetitionsDone, step3.Repetitions);
 		}
 	}
 	private void ClearAllLabels () {
@@ -130,10 +155,22 @@ public partial class MissionCard : Control {
 	}
 
 	private void SetRankSpriteFromAtlas (RankId rank) {
-		int x = ((int)rank % 4) * 16;
-		int y = ((int)rank / 4) * 16;
+		int rankInt = (int)rank - 1;
+		int x = (rankInt % 4) * 16;
+		int y = (rankInt / 4) * 16;
 
 		rankAtlas.Region = new Rect2(x, y, rankAtlas.Region.Size.X, rankAtlas.Region.Size.Y);
+	}
+
+	internal async void RemoveSafely () {
+		if (animationPlayer.IsPlaying()) {
+			await ToSignal(animationPlayer, AnimationPlayer.SignalName.AnimationFinished);
+		}
+		Hide();
+		freeTimer.Start(0.5f);
+		await ToSignal(freeTimer, Timer.SignalName.Timeout);
+		QueueFree();
+
 	}
 }
 

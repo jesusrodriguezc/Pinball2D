@@ -1,6 +1,7 @@
 using Godot;
 using Pinball.Scripts.Utils;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public partial class Ball : RigidBody2D, IActor{
 	public enum Status {
@@ -27,7 +28,7 @@ public partial class Ball : RigidBody2D, IActor{
 	public Status currentStatus;
 	public Status previousStatus;
 	[Export] private LayerId currentLayer;
-
+	private AnimationPlayer animationPlayer;
 	private Vector2 initialPosition;
 	private AudioComponent _audioComponent;
 	private readonly StringName DEAD = "Dead";
@@ -47,7 +48,9 @@ public partial class Ball : RigidBody2D, IActor{
 
 		_audioComponent = GetNodeOrNull<AudioComponent>("AudioComponent");
 		_audioComponent?.AddAudio(DEAD, ResourceLoader.Load<AudioStream>("res://SFX/deathzone_enter.wav"));
-		
+
+		animationPlayer = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+		animationPlayer.AnimationFinished += (animation) => GD.Print($"Ball -> Animacion {animation} terminada");
 		initialPosition = GlobalPosition;
 		currentStatus = Status.IDLE;
 		previousStatus = Status.IDLE;
@@ -66,6 +69,12 @@ public partial class Ball : RigidBody2D, IActor{
 		foreach (var flipper in flippers) {
 			flipper.Impulse += (nodeAffected, impulse) => { if (nodeAffected == this) ApplyImpulse(impulse); };
 		}
+
+		//var wormholes = Nodes.findByClass<Wormhole>(GetTree().Root);
+		//foreach (var wormhole in wormholes) {
+		//	wormhole.EnteringBall += EnteringWormhole;
+		//	wormhole.ExitingBall += ExitingWormhole;
+		//}
 	}
 
 	public override void _Input (InputEvent @event) {
@@ -84,7 +93,7 @@ public partial class Ball : RigidBody2D, IActor{
 
 		if (@event is InputEventKey key) {
 			if (key.Keycode.Equals(Key.Enter) && key.IsPressed()) {
-				pinballController.Shake();
+				pinballController.TiltShake();
 			}		
 		}
 	}
@@ -200,6 +209,27 @@ public partial class Ball : RigidBody2D, IActor{
 			CollisionLayer = storedCollisionLayer;
 			CollisionMask = storedCollisionMask;
 		}
+	}
+
+	public void EnteringWormhole () {
+		GD.Print("Inside EnteringWormhole");
+
+		animationPlayer.Play("entering_wormhole");
+		Hide();
+		Stop();
+		IgnoreCollision(true);
+		Teleport(new Vector2(100, 100), Vector2.Zero);
+	}
+
+	public void ExitingWormhole (Vector2 finalPosition) {
+		GD.Print("Inside ExitingWormhole");
+
+		Show();
+		Resume();
+		Teleport(finalPosition, Vector2.Zero);
+		IgnoreCollision(false);
+		//animationPlayer.Play("exiting_wormhole");
+
 	}
 	#endregion
 }

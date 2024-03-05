@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://cb7aph7p675a8"]
+[gd_scene load_steps=49 format=3 uid="uid://cb7aph7p675a8"]
 
 [ext_resource type="Script" path="res://Scripts/GlobalControllers/PinballController.cs" id="1_0pib5"]
 [ext_resource type="PackedScene" uid="uid://eyhg24mwjxbk" path="res://Escenas/Background.tscn" id="2_gbs7o"]
@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://c7bo5nf411ybk" path="res://Assets/Slingshot/rebound.tscn" id="7_wpwg3"]
 [ext_resource type="PackedScene" uid="uid://b7u8gr8pt5tuv" path="res://Assets/Flipper/left_flipper.tscn" id="8_khtso"]
 [ext_resource type="PackedScene" uid="uid://rvg8pn7803jr" path="res://Assets/Flipper/right_flipper.tscn" id="9_ee4xj"]
-[ext_resource type="PackedScene" uid="uid://cqhjn5gombvfj" path="res://Assets/Target/Target.tscn" id="10_a6qii"]
+[ext_resource type="PackedScene" uid="uid://cqhjn5gombvfj" path="res://Assets/Target/DropTarget.tscn" id="10_a6qii"]
 [ext_resource type="PackedScene" uid="uid://dvym84ocroljg" path="res://Escenas/GameOverMenu.tscn" id="11_r5spd"]
 [ext_resource type="PackedScene" uid="uid://cysdgl8aojt6b" path="res://Assets/TriggerArea/TriggerArea.tscn" id="12_p47g8"]
 [ext_resource type="PackedScene" uid="uid://c7c7gyfni5vjd" path="res://UI/user_interface.tscn" id="12_uotgu"]
@@ -23,16 +23,28 @@
 [ext_resource type="PackedScene" uid="uid://ddcmg3477qnnl" path="res://Escenas/PauseMenu.tscn" id="13_fcjr0"]
 [ext_resource type="AudioStream" uid="uid://m0ctv00ntaei" path="res://SFX/bankCompleted.wav" id="13_q7v8a"]
 [ext_resource type="PackedScene" uid="uid://dnnucr2srvyrn" path="res://Assets/Actionables/Shooter.tscn" id="13_yfwst"]
-[ext_resource type="PackedScene" uid="uid://xv5e2r5qk23p" path="res://Escenas/SettingsMenu.tscn" id="14_5vdku"]
 [ext_resource type="AudioStream" uid="uid://c5tsamikog7v2" path="res://SFX/shooterlane_full.wav" id="14_702jj"]
 [ext_resource type="PackedScene" uid="uid://b6ib76heth48f" path="res://Assets/Actionables/WaitingNode.tscn" id="17_4gw3y"]
 [ext_resource type="PackedScene" uid="uid://b3qi8eycesa21" path="res://Assets/Actionables/ScoreModifier.tscn" id="17_ab7x8"]
 [ext_resource type="PackedScene" uid="uid://bbn3ape6o6pht" path="res://Assets/Actionables/Door.tscn" id="18_vwigw"]
+[ext_resource type="PackedScene" uid="uid://ceed5ikp6njui" path="res://Assets/Target/MissionTarget.tscn" id="21_kg5de"]
 [ext_resource type="PackedScene" uid="uid://p5ihd7ojsajs" path="res://Assets/Actionables/LifeModifier.tscn" id="23_ufy8r"]
 [ext_resource type="PackedScene" uid="uid://7lu2bdwysrs8" path="res://Assets/Actionables/Wormhole.tscn" id="26_a5g04"]
-[ext_resource type="PackedScene" uid="uid://fosrqs3cnv2p" path="res://Assets/MissionTarget.tscn" id="30_4dt3r"]
+[ext_resource type="PackedScene" uid="uid://fosrqs3cnv2p" path="res://Assets/MissionItem.tscn" id="30_4dt3r"]
 [ext_resource type="PackedScene" uid="uid://iqxm0toimpog" path="res://Assets/Flag/Flag.tscn" id="30_58w5p"]
 [ext_resource type="PackedScene" uid="uid://bdu43i4eov6ki" path="res://Assets/led.tscn" id="31_h7374"]
+[ext_resource type="PackedScene" uid="uid://pe8t2pdopwyy" path="res://Assets/XpCircle/XpCircle.tscn" id="33_t8qxl"]
+[ext_resource type="PackedScene" uid="uid://b325cidknb0at" path="res://Assets/CenterPost/CenterPost.tscn" id="34_fkqoq"]
+
+[sub_resource type="Environment" id="Environment_6hgp5"]
+glow_enabled = true
+glow_levels/1 = 1.5
+glow_levels/2 = 1.5
+glow_levels/3 = 0.0
+glow_levels/5 = 1.5
+glow_intensity = 0.3
+glow_blend_mode = 0
+glow_hdr_threshold = 1.5
 
 [sub_resource type="Gradient" id="Gradient_ivc7w"]
 
@@ -77,14 +89,19 @@ radius = 7.0
 process_mode = 3
 position = Vector2(320, 240)
 script = ExtResource("1_0pib5")
-LivesLeft = 1
-ballInitialPosition = Vector2(210, 164)
-metadata/_edit_horizontal_guides_ = [382.0]
-metadata/_edit_vertical_guides_ = [640.0, 350.0]
+LivesLeft = 3
+ballInitialPosition = Vector2(242, 162)
+metadata/_edit_horizontal_guides_ = [382.0, 464.0]
+metadata/_edit_vertical_guides_ = [640.0, 367.0]
 
-[node name="MissionController" parent="." instance=ExtResource("2_jf67t")]
+[node name="MissionController" parent="." node_paths=PackedStringArray("missionItemAccepter", "missionTargetGroup") instance=ExtResource("2_jf67t")]
+missionItemAccepter = NodePath("../MissionItems/EnterRamp")
+missionTargetGroup = NodePath("../Targets/Mission Target Bank")
 
 [node name="RankController" parent="." instance=ExtResource("3_k6610")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6hgp5")
 
 [node name="Background" parent="." instance=ExtResource("2_gbs7o")]
 position = Vector2(-320, -240)
@@ -104,15 +121,19 @@ metadata/_edit_horizontal_guides_ = [587.0, 584.0]
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(107, 0)
 script = ExtResource("3_or7yh")
-randomStrength = 30.0
 shakeFade = 5.0
+
+[node name="RankXpCircle" parent="." instance=ExtResource("33_t8qxl")]
+z_index = 30
+position = Vector2(-17, -11)
 
 [node name="UserInterface" type="CanvasLayer" parent="."]
 
 [node name="GameUI" parent="UserInterface" instance=ExtResource("12_uotgu")]
 offset_left = 0.0
-offset_right = 86.0
-offset_bottom = 86.0
+offset_top = 2.0
+offset_right = 219.0
+offset_bottom = 88.0
 
 [node name="MissionMenu" parent="UserInterface" instance=ExtResource("5_52icq")]
 z_index = 50
@@ -141,20 +162,6 @@ offset_bottom = 240.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="SettingsMenu" parent="UserInterface" instance=ExtResource("14_5vdku")]
-process_mode = 2
-visible = false
-z_index = 2000
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -427.0
-offset_top = -240.0
-offset_right = 427.0
-offset_bottom = 240.0
-
 [node name="GameOverMenu" parent="UserInterface" instance=ExtResource("11_r5spd")]
 visible = false
 z_index = 1000
@@ -165,39 +172,35 @@ position = Vector2(-533.999, -264)
 
 [node name="ReentryBumper" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 45
-position = Vector2(538, 123)
+position = Vector2(553.999, 123)
 collision_layer = 4
-CurrentLevel = 0
-HitPower = 2500.0
+HitPower = 1500.0
 
 [node name="ReentryBumper2" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 45
-position = Vector2(569, 157)
+position = Vector2(581.999, 158)
 collision_layer = 4
-CurrentLevel = 0
-HitPower = 2500.0
+HitPower = 1500.0
 
 [node name="ReentryBumper3" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 45
-position = Vector2(600, 122)
+position = Vector2(609.999, 118)
 collision_layer = 4
-CurrentLevel = 0
-HitPower = 2500.0
+HitPower = 1500.0
 
 [node name="RoundBumper" parent="Bumpers" instance=ExtResource("4_7xi1l")]
 z_index = 40
-position = Vector2(441, 58)
+position = Vector2(447.999, 52)
 collision_layer = 4
-CurrentLevel = 0
-HitPower = 2500.0
+HitPower = 1500.0
+Score = 1500.0
 
 [node name="RampBumper" parent="Bumpers" instance=ExtResource("7_ewt1i")]
 z_index = 75
 position = Vector2(425, 248)
 collision_layer = 8
 collision_mask = 64
-CurrentLevel = 0
-HitPower = 1500.0
+HitPower = 900.0
 Score = 1500.0
 
 [node name="RampBumper2" parent="Bumpers" instance=ExtResource("7_ewt1i")]
@@ -205,8 +208,7 @@ z_index = 75
 position = Vector2(376, 246)
 collision_layer = 8
 collision_mask = 64
-CurrentLevel = 0
-HitPower = 1500.0
+HitPower = 900.0
 Score = 1500.0
 
 [node name="RampBumper3" parent="Bumpers" instance=ExtResource("7_ewt1i")]
@@ -214,8 +216,7 @@ z_index = 75
 position = Vector2(400, 270)
 collision_layer = 8
 collision_mask = 64
-CurrentLevel = 0
-HitPower = 1500.0
+HitPower = 900.0
 Score = 1500.0
 
 [node name="Rebounds" type="Node2D" parent="."]
@@ -227,43 +228,45 @@ z_index = 40
 position = Vector2(-636.001, 574)
 rotation = -0.464258
 collision_layer = 4
+HitPower = 4000.0
 metadata/_edit_horizontal_guides_ = [5.0]
 
 [node name="Slingshot2" parent="Rebounds" instance=ExtResource("5_wm3ia")]
 z_index = 40
-position = Vector2(-421.001, 574)
+position = Vector2(-394.001, 574)
 rotation = 0.464258
 scale = Vector2(-1, 1)
 collision_layer = 4
+HitPower = 4000.0
 metadata/_edit_horizontal_guides_ = [5.0]
 
 [node name="Rebound" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
-position = Vector2(-622, 351)
-rotation = -1.1095
+position = Vector2(-620.001, 353)
+rotation = -1.04845
 collision_layer = 4
-HitPower = 2000.0
+HitPower = 1500.0
 
 [node name="Rebound6" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
-position = Vector2(-608, 358)
-rotation = -0.971619
+position = Vector2(-607.001, 361)
+rotation = -0.975326
 collision_layer = 4
-HitPower = 2000.0
+HitPower = 1500.0
 
 [node name="Rebound4" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
-position = Vector2(-434, 355)
-rotation = -2.76069
+position = Vector2(-421.001, 362)
+rotation = -2.70514
 collision_layer = 4
-HitPower = 2000.0
+HitPower = 1500.0
 
 [node name="Rebound5" parent="Rebounds" instance=ExtResource("7_wpwg3")]
 z_index = 40
-position = Vector2(-429, 338)
-rotation = -2.96572
+position = Vector2(-416.001, 347)
+rotation = -2.90311
 collision_layer = 4
-HitPower = 2000.0
+HitPower = 1500.0
 
 [node name="Flippers" type="Node2D" parent="."]
 process_mode = 1
@@ -271,22 +274,21 @@ position = Vector2(-586.999, -451)
 
 [node name="Right Flipper" parent="Flippers" instance=ExtResource("9_ee4xj")]
 z_index = 40
-position = Vector2(672.999, 640)
-rotation = -0.581195
+position = Vector2(695.999, 644)
+rotation = -0.436332
 scale = Vector2(0.65, 0.65)
-collision_mask = 0
-RotationMax = 70.0
-RotationFrameDuration = 4.0
+collision_layer = 4
+RotationMax = 55.0
 HitBoostPower = 10000.0
 
 [node name="Left Flipper" parent="Flippers" instance=ExtResource("8_khtso")]
 z_index = 40
-position = Vector2(560.999, 640)
-rotation = 0.580578
+position = Vector2(571.999, 644)
+rotation = 0.436332
 scale = Vector2(0.65, 0.65)
-collision_mask = 128
-constant_linear_velocity = Vector2(0, -10)
-RotationMax = 70.0
+collision_layer = 4
+RotationMax = 55.0
+RotationFrameDuration = 6.0
 HitBoostPower = 10000.0
 
 [node name="Targets" type="Node2D" parent="."]
@@ -294,7 +296,7 @@ process_mode = 1
 position = Vector2(52.0009, 4)
 
 [node name="Booster Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(-685, -348)
+position = Vector2(-665.001, -349)
 GroupName = &"BoosterBank"
 AudioStream = ExtResource("13_q7v8a")
 actionables = [null]
@@ -318,7 +320,7 @@ position = Vector2(787, 293)
 collision_layer = 4
 
 [node name="Medal Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(-641, -362)
+position = Vector2(-627.001, -359)
 GroupName = &"MedalBank"
 AudioStream = ExtResource("13_q7v8a")
 actionables = [null]
@@ -345,7 +347,7 @@ rotation = -1.309
 collision_layer = 4
 
 [node name="Field Multiplier Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(-633, -298)
+position = Vector2(-617.001, -307)
 GroupName = &"FieldMultiplierBank"
 AudioStream = ExtResource("13_q7v8a")
 actionables = [null]
@@ -371,8 +373,8 @@ position = Vector2(541, 130)
 rotation = -1.86544
 collision_layer = 4
 
-[node name="Hazard Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(-149, -132)
+[node name="Radiation Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+position = Vector2(-141.001, -138)
 rotation = -1.32775
 GroupName = &"HazardBank"
 AudioStream = ExtResource("13_q7v8a")
@@ -381,54 +383,54 @@ ScoreAddition = 3000.0
 CurrentUpgradeLevel = -1
 DisableDuration = 2.0
 
-[node name="Target" parent="Targets/Hazard Target Bank" instance=ExtResource("10_a6qii")]
+[node name="Target" parent="Targets/Radiation Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 30
 position = Vector2(12.6339, -11.3748)
 rotation = -1.82722
 collision_layer = 4
 
-[node name="Target2" parent="Targets/Hazard Target Bank" instance=ExtResource("10_a6qii")]
+[node name="Target2" parent="Targets/Radiation Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 30
-position = Vector2(-0.962639, -3.88242)
-rotation = -2.35619
+position = Vector2(-0.473366, -6.0643)
+rotation = -2.21407
 collision_layer = 4
 
-[node name="Target3" parent="Targets/Hazard Target Bank" instance=ExtResource("10_a6qii")]
+[node name="Target3" parent="Targets/Radiation Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 30
-position = Vector2(-6.32887, 11.872)
-rotation = -3.10108
+position = Vector2(-10.1954, 4.5885)
+rotation = -2.75651
 collision_layer = 4
 
-[node name="Mission Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+[node name="Mission Target Bank" parent="Targets" instance=ExtResource("6_sjfye")]
 position = Vector2(-150, -20)
-rotation = -1.25054
 GroupName = &"MissionBank"
 AudioStream = ExtResource("13_q7v8a")
-actionables = [null]
-ScoreAddition = 3000.0
-CurrentUpgradeLevel = -1
+DisableOnCompleted = false
 DisableDuration = 2.0
 
-[node name="Target" parent="Targets/Mission Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 30
-position = Vector2(12.6585, -6.3056)
-rotation = -1.88709
-collision_layer = 4
+[node name="MissionTarget" parent="Targets/Mission Target Bank" instance=ExtResource("21_kg5de")]
+position = Vector2(-1.00092, -14)
+rotation = 3.14159
+MissionId = 0
+HitPower = 1100.0
+Score = 1000.0
 
-[node name="Target2" parent="Targets/Mission Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 30
-position = Vector2(-0.629639, -1.89832)
-rotation = -1.88709
-collision_layer = 4
+[node name="MissionTarget2" parent="Targets/Mission Target Bank" instance=ExtResource("21_kg5de")]
+position = Vector2(-1.00092, -1)
+rotation = 3.14159
+MissionId = 1
+HitPower = 1100.0
+Score = 1000.0
 
-[node name="Target3" parent="Targets/Mission Target Bank" instance=ExtResource("10_a6qii")]
-z_index = 30
-position = Vector2(-13.9178, 2.50903)
-rotation = -1.88709
-collision_layer = 4
+[node name="MissionTarget3" parent="Targets/Mission Target Bank" instance=ExtResource("21_kg5de")]
+position = Vector2(-1.00092, 12)
+rotation = 3.14159
+MissionId = 2
+HitPower = 1100.0
+Score = 1000.0
 
-[node name="Hazard Target Bank2" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(71, -146)
+[node name="Comet Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
+position = Vector2(101.999, -144)
 rotation = 1.30901
 GroupName = &"HazardBank2"
 AudioStream = ExtResource("13_q7v8a")
@@ -437,26 +439,26 @@ ScoreAddition = 3000.0
 CurrentUpgradeLevel = -1
 DisableDuration = 2.0
 
-[node name="Target" parent="Targets/Hazard Target Bank2" instance=ExtResource("10_a6qii")]
+[node name="Target" parent="Targets/Comet Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 30
-position = Vector2(-8.24504, -0.138611)
-rotation = -2.22889
+position = Vector2(-2.13974, 11.85)
+rotation = -1.54001
 collision_layer = 4
 
-[node name="Target2" parent="Targets/Hazard Target Bank2" instance=ExtResource("10_a6qii")]
+[node name="Target2" parent="Targets/Comet Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 30
-position = Vector2(-20.3029, 10.0892)
-rotation = -2.35619
+position = Vector2(-17.2156, 14.0222)
+rotation = -1.80235
 collision_layer = 4
 
-[node name="Target3" parent="Targets/Hazard Target Bank2" instance=ExtResource("10_a6qii")]
+[node name="Target3" parent="Targets/Comet Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 30
-position = Vector2(-30.9466, 22.7665)
-rotation = -2.52588
+position = Vector2(-30.8772, 18.644)
+rotation = -2.04988
 collision_layer = 4
 
 [node name="Fuel Target Bank" parent="Targets" node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
-position = Vector2(-157, -189)
+position = Vector2(-153.001, -186)
 rotation = -1.38777
 GroupName = &"FuelBank"
 AudioStream = ExtResource("13_q7v8a")
@@ -467,38 +469,38 @@ DisableDuration = 2.0
 
 [node name="Target" parent="Targets/Fuel Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 30
-position = Vector2(21.3063, -22.2495)
-rotation = -1.57079
+position = Vector2(24.9843, -18.8622)
+rotation = -1.74447
 collision_layer = 4
 
 [node name="Target2" parent="Targets/Fuel Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 30
-position = Vector2(53.0603, 6.45043)
-rotation = -0.0876478
+position = Vector2(50.5122, -7.31561)
+rotation = -0.614693
 collision_layer = 4
 
 [node name="Target3" parent="Targets/Fuel Target Bank" instance=ExtResource("10_a6qii")]
 z_index = 30
-position = Vector2(45.4468, 31.2504)
-rotation = -5.56466
+position = Vector2(54.2965, 29.6124)
+rotation = -5.71688
 collision_layer = 4
 
 [node name="Space Warp Target" parent="Targets" instance=ExtResource("6_sjfye")]
-position = Vector2(69, -81)
+position = Vector2(84.9991, -86)
 scale = Vector2(0.5, 0.5)
 GroupName = &"SpaceWarpTarget"
 AudioStream = null
 
 [node name="Target" parent="Targets/Space Warp Target" instance=ExtResource("10_a6qii")]
 z_index = 30
-position = Vector2(0, 2)
+position = Vector2(4, -12)
 rotation = -1.27958
 collision_layer = 4
 
 [node name="ReentryLaneBonus" parent="." node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
 process_mode = 1
 z_index = 30
-position = Vector2(40.0009, 71)
+position = Vector2(66, 64)
 GroupName = &"ReentryLane"
 actionables = [NodePath("../Bumpers/ReentryBumper"), NodePath("../Bumpers/ReentryBumper2"), NodePath("../Bumpers/ReentryBumper3"), NodePath("../Bumpers/RoundBumper")]
 canShiftWhenButtonPressed = true
@@ -507,15 +509,15 @@ EffectDuration = 60.0
 DisableDuration = 3.0
 
 [node name="ReentryLane" parent="ReentryLaneBonus" instance=ExtResource("7_87ocl")]
-position = Vector2(-37, -256)
+position = Vector2(-42, -256)
 collision_layer = 4
 
 [node name="ReentryLane2" parent="ReentryLaneBonus" instance=ExtResource("7_87ocl")]
-position = Vector2(-13, -256)
+position = Vector2(-14, -256)
 collision_layer = 4
 
 [node name="ReentryLane3" parent="ReentryLaneBonus" instance=ExtResource("7_87ocl")]
-position = Vector2(10, -256)
+position = Vector2(14, -256)
 collision_layer = 4
 
 [node name="RampLaneBonus" parent="." node_paths=PackedStringArray("actionables") instance=ExtResource("6_sjfye")]
@@ -562,7 +564,7 @@ LivesModification = -1
 process_mode = 1
 
 [node name="ShooterKicker" parent="Kickers" instance=ExtResource("12_p47g8")]
-position = Vector2(52, 3)
+position = Vector2(85, 5)
 collision_layer = 2
 collision_mask = 1
 input_pickable = false
@@ -578,12 +580,12 @@ shape = SubResource("RectangleShape2D_7k5xa")
 [node name="Kicker" parent="Kickers/ShooterKicker" instance=ExtResource("13_yfwst")]
 position = Vector2(867, 665)
 HitAudio = ExtResource("13_1riy5")
-MaxHitPower = 7000
+MaxHitPower = 5000
 ShootDirection = Vector2(0, -1)
 HoldingForMaxPowerSound = 0.5
 
 [node name="HyperspaceKickout" parent="Kickers" instance=ExtResource("12_p47g8")]
-position = Vector2(-171, -581)
+position = Vector2(-138, -587)
 collision_layer = 4
 collision_mask = 1
 input_pickable = false
@@ -596,9 +598,9 @@ rotation = 0.523598
 shape = SubResource("RectangleShape2D_7k5xa")
 
 [node name="Kicker" parent="Kickers/HyperspaceKickout" instance=ExtResource("13_yfwst")]
-position = Vector2(867, 665)
+position = Vector2(867, 664)
 HitAudio = ExtResource("13_1riy5")
-MaxHitPower = 6000
+MaxHitPower = 4200
 ShootDirection = Vector2(0.75, 0.25)
 
 [node name="LeftKicker" type="Node2D" parent="Kickers"]
@@ -634,7 +636,7 @@ shape = SubResource("RectangleShape2D_6s5sr")
 [node name="Kicker" parent="Kickers/LeftKicker/FirstPart_Kicker" instance=ExtResource("13_yfwst")]
 position = Vector2(389, 558)
 HitAudio = ExtResource("14_702jj")
-MaxHitPower = 6000
+MaxHitPower = 4200
 ShootDirection = Vector2(0, -1)
 HoldingForMaxPowerSound = 0.75
 
@@ -680,14 +682,14 @@ scale = Vector2(0.5, 0.5)
 collision_layer = 4
 collision_mask = 65
 Score = 0.0
-ShootDirection = Vector2(0.25, -1)
+ShootDirection = Vector2(0.15, -1)
 finalPosition = NodePath("../Salida_Wormhole")
 
 [node name="Salida_Wormhole" type="Node2D" parent="Kickers/LeftKicker/SecondPart"]
-position = Vector2(220, 117)
+position = Vector2(220, 122)
 
 [node name="RightKicker" type="Node2D" parent="Kickers"]
-position = Vector2(892, 573)
+position = Vector2(923, 574)
 
 [node name="FirstPart_Kicker" parent="Kickers/RightKicker" instance=ExtResource("12_p47g8")]
 position = Vector2(-380, -179)
@@ -698,18 +700,18 @@ Behaviour = 1
 WaitingTime = 2.0
 
 [node name="CollisionArea" type="CollisionShape2D" parent="Kickers/RightKicker/FirstPart_Kicker"]
-position = Vector2(-2, 20)
+position = Vector2(-1, 20)
 shape = SubResource("RectangleShape2D_8ecuv")
 
 [node name="Kicker" parent="Kickers/RightKicker/FirstPart_Kicker" instance=ExtResource("13_yfwst")]
 HitAudio = ExtResource("14_702jj")
-MaxHitPower = 6000
+MaxHitPower = 4200
 ShootDirection = Vector2(0, -1)
 HoldingForMaxPowerSound = 0.75
 
 [node name="Door_Wormhole" parent="Kickers/RightKicker/FirstPart_Kicker" instance=ExtResource("18_vwigw")]
 z_index = 30
-position = Vector2(-5, -154)
+position = Vector2(-4, -154)
 rotation = -3.14159
 Behaviour = 0
 InitialStatus = 1
@@ -757,7 +759,7 @@ shape = SubResource("RectangleShape2D_u1yef")
 [node name="Wormhole" parent="Kickers/RightKicker/SecondPart" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
 visible = false
 z_index = 60
-position = Vector2(-383, -353)
+position = Vector2(-382, -353)
 collision_layer = 4
 collision_mask = 65
 Score = 0.0
@@ -765,7 +767,7 @@ ShootDirection = Vector2(0, -1)
 finalPosition = NodePath("../Salida_Wormhole")
 
 [node name="Salida_Wormhole" type="Node2D" parent="Kickers/RightKicker/SecondPart"]
-position = Vector2(-363, -385)
+position = Vector2(-361, -385)
 
 [node name="Wormholes" type="Node2D" parent="."]
 process_mode = 1
@@ -774,7 +776,7 @@ rotation = 0.615491
 
 [node name="WormholeRight" parent="Wormholes" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
 z_index = 60
-position = Vector2(-31.884, 31.1193)
+position = Vector2(-12.8665, 16.4467)
 collision_layer = 4
 collision_mask = 65
 ShootDirection = Vector2(-1, 1)
@@ -782,7 +784,7 @@ finalPosition = NodePath("../WormholeTopRight")
 
 [node name="WormholeTopRight" parent="Wormholes" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
 z_index = 60
-position = Vector2(-207.701, -56.4391)
+position = Vector2(-182.828, -80.1512)
 rotation = -0.27576
 collision_layer = 4
 collision_mask = 65
@@ -791,7 +793,7 @@ finalPosition = NodePath("../WormholeRight")
 
 [node name="WormholeTopLeft" parent="Wormholes" node_paths=PackedStringArray("finalPosition") instance=ExtResource("26_a5g04")]
 z_index = 60
-position = Vector2(-307.231, -3.20575)
+position = Vector2(-297.731, -20.946)
 rotation = 2.1296
 collision_layer = 4
 collision_mask = 65
@@ -815,26 +817,28 @@ position = Vector2(52.0009, 4)
 
 [node name="FuelChuteFlag" parent="Flags" instance=ExtResource("30_58w5p")]
 z_index = 40
-position = Vector2(-178, -152)
-rotation = 0.261799
+position = Vector2(-173.001, -151)
+rotation = 0.182732
 collision_layer = 4
+Score = 500.0
 
 [node name="HyperspaceFlag" parent="Flags" instance=ExtResource("30_58w5p")]
 z_index = 40
-position = Vector2(93, -78)
-rotation = 0.523598
+position = Vector2(116.999, -96)
+rotation = 0.417423
 collision_layer = 4
+Score = 500.0
 
 [node name="Leds" type="Node2D" parent="."]
 position = Vector2(66.0009, -88)
 
 [node name="ReplayLight" parent="Leds" instance=ExtResource("31_h7374")]
 z_index = 35
-position = Vector2(-137, 248)
+position = Vector2(-148, 259)
 
 [node name="RedeployLight" parent="Leds" instance=ExtResource("31_h7374")]
 z_index = 35
-position = Vector2(69, 248)
+position = Vector2(90.9991, 267)
 
 [node name="OtherMissionItems" type="Node" parent="."]
 
@@ -859,7 +863,7 @@ position = Vector2(-6.25, -1)
 shape = SubResource("RectangleShape2D_psh3p")
 
 [node name="ReturnLaneRight" parent="OtherMissionItems" instance=ExtResource("12_p47g8")]
-position = Vector2(320.001, 214)
+position = Vector2(350.001, 214)
 Type = 0
 Cooldown = 5.0
 
@@ -885,7 +889,7 @@ Cooldown = 5.0
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="OtherMissionItems/OutlaneRight"]
 z_index = 60
-position = Vector2(194, 166)
+position = Vector2(225, 166)
 shape = SubResource("RectangleShape2D_psh3p")
 
 [node name="BonusLane" parent="OtherMissionItems" instance=ExtResource("12_p47g8")]
@@ -896,67 +900,104 @@ Cooldown = 1.0
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="OtherMissionItems/BonusLane"]
 z_index = 60
-position = Vector2(2, 19)
+position = Vector2(1.99899, 9)
 shape = SubResource("CircleShape2D_apath")
 
-[node name="MissionTargets" type="Node" parent="."]
+[node name="MissionItems" type="Node" parent="."]
 
-[node name="AttackBumpers" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="AttackBumpers" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"ATTACK_BUMPERS"
 Targets = [NodePath("../../Bumpers/ReentryBumper"), NodePath("../../Bumpers/ReentryBumper2"), NodePath("../../Bumpers/ReentryBumper3"), NodePath("../../Bumpers/RoundBumper")]
 
-[node name="RampBumpers" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="RampBumpers" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"RAMP_BUMPERS"
 Targets = [NodePath("../../Bumpers/RampBumper"), NodePath("../../Bumpers/RampBumper2"), NodePath("../../Bumpers/RampBumper3")]
 
-[node name="EnterRamp" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="EnterRamp" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"ENTER_RAMP"
 Targets = [NodePath("../../OtherMissionItems/EnterRamp")]
 
-[node name="Hyperspace" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="Hyperspace" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"HYPERSPACE"
 Targets = [NodePath("../../Kickers/HyperspaceKickout/Kicker")]
 
-[node name="Rebound" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="Rebound" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"REBOUND"
 Targets = [NodePath("../../Rebounds/Slingshot"), NodePath("../../Rebounds/Slingshot2")]
 
-[node name="ReturnLane" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="ReturnLane" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"RETURN_LANE"
 Targets = [NodePath("../../OtherMissionItems/ReturnLaneLeft"), NodePath("../../OtherMissionItems/ReturnLaneRight")]
 
-[node name="OutLane" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="OutLane" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"OUT_LANE"
 Targets = [NodePath("../../OtherMissionItems/OutlaneLeft"), NodePath("../../OtherMissionItems/OutlaneRight")]
 
-[node name="ReentryLane" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="ReentryLane" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"REENTRY_LANE"
 Targets = [NodePath("../../ReentryLaneBonus/ReentryLane"), NodePath("../../ReentryLaneBonus/ReentryLane2"), NodePath("../../ReentryLaneBonus/ReentryLane3")]
 
-[node name="AnyTarget" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="AnyTarget" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"ANY_TARGET"
-Targets = [NodePath("../../Targets/Booster Target Bank/Target"), NodePath("../../Targets/Booster Target Bank/Target2"), NodePath("../../Targets/Booster Target Bank/Target3"), NodePath("../../Targets/Medal Target Bank/Target"), NodePath("../../Targets/Medal Target Bank/Target2"), NodePath("../../Targets/Medal Target Bank/Target3"), NodePath("../../Targets/Field Multiplier Target Bank/Target"), NodePath("../../Targets/Field Multiplier Target Bank/Target2"), NodePath("../../Targets/Field Multiplier Target Bank/Target3"), NodePath("../../Targets/Hazard Target Bank/Target"), NodePath("../../Targets/Hazard Target Bank/Target2"), NodePath("../../Targets/Hazard Target Bank/Target3"), NodePath("../../Targets/Mission Target Bank/Target"), NodePath("../../Targets/Mission Target Bank/Target2"), NodePath("../../Targets/Mission Target Bank/Target3"), NodePath("../../Targets/Hazard Target Bank2/Target"), NodePath("../../Targets/Hazard Target Bank2/Target2"), NodePath("../../Targets/Hazard Target Bank2/Target3"), NodePath("../../Targets/Fuel Target Bank/Target"), NodePath("../../Targets/Fuel Target Bank/Target2"), NodePath("../../Targets/Fuel Target Bank/Target3"), NodePath("../../Targets/Space Warp Target/Target")]
+Targets = [NodePath("../../Targets/Booster Target Bank/Target"), NodePath("../../Targets/Booster Target Bank/Target2"), NodePath("../../Targets/Booster Target Bank/Target3"), NodePath("../../Targets/Medal Target Bank/Target"), NodePath("../../Targets/Medal Target Bank/Target2"), NodePath("../../Targets/Medal Target Bank/Target3"), NodePath("../../Targets/Field Multiplier Target Bank/Target"), NodePath("../../Targets/Field Multiplier Target Bank/Target2"), NodePath("../../Targets/Field Multiplier Target Bank/Target3"), NodePath("../../Targets/Radiation Target Bank/Target"), NodePath("../../Targets/Radiation Target Bank/Target2"), NodePath("../../Targets/Radiation Target Bank/Target3"), NodePath("../../Targets/Mission Target Bank/MissionTarget"), NodePath("../../Targets/Mission Target Bank/MissionTarget2"), NodePath("../../Targets/Mission Target Bank/MissionTarget3"), NodePath("../../Targets/Comet Target Bank/Target"), NodePath("../../Targets/Comet Target Bank/Target2"), NodePath("../../Targets/Comet Target Bank/Target3"), NodePath("../../Targets/Fuel Target Bank/Target"), NodePath("../../Targets/Fuel Target Bank/Target2"), NodePath("../../Targets/Fuel Target Bank/Target3"), NodePath("../../Targets/Space Warp Target/Target")]
 
-[node name="UpgradeAttack" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="UpgradeAttack" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"UPGRADE_ATTACK"
 Targets = [NodePath("../../ReentryLaneBonus")]
 
-[node name="BoosterTargetBank" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="UpgradeRamp" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+ItemId = &"UPGRADE_RAMP"
+Targets = [NodePath("../../RampLaneBonus")]
+
+[node name="BoosterTargetBank" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"BOOSTER_TARGET_BANK"
 Targets = [NodePath("../../Targets/Booster Target Bank")]
 
-[node name="AnyWormhole" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="CometTargetBank" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+ItemId = &"COMET_TARGET_BANK"
+Targets = [NodePath("../../Targets/Comet Target Bank")]
+
+[node name="RadiationTargetBank" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+ItemId = &"RADIATION_TARGET_BANK"
+Targets = [NodePath("../../Targets/Radiation Target Bank")]
+
+[node name="AnyWormhole" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"ANY_WORMHOLE"
 Targets = [NodePath("../../Wormholes/WormholeRight"), NodePath("../../Wormholes/WormholeTopRight"), NodePath("../../Wormholes/WormholeTopLeft")]
 
-[node name="RemoteAttackBumper" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="RightWormhole" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+ItemId = &"RIGHT_WORMHOLE"
+Targets = [NodePath("../../Wormholes/WormholeRight")]
+
+[node name="MiddleWormhole" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+ItemId = &"MIDDLE_WORMHOLE"
+Targets = [NodePath("../../Wormholes/WormholeTopRight")]
+
+[node name="LeftWormhole" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+ItemId = &"LEFT_WORMHOLE"
+Targets = [NodePath("../../Wormholes/WormholeTopLeft")]
+
+[node name="RemoteAttackBumper" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"REMOTE_ATTACK_BUMPER"
 Targets = [NodePath("../../Bumpers/RoundBumper")]
 
-[node name="AnyLane" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="AnyLane" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"ANY_LANE"
 Targets = [NodePath("../../OtherMissionItems/OutlaneLeft"), NodePath("../../OtherMissionItems/OutlaneRight"), NodePath("../../OtherMissionItems/ReturnLaneLeft"), NodePath("../../OtherMissionItems/ReturnLaneRight"), NodePath("../../OtherMissionItems/BonusLane"), NodePath("../../ReentryLaneBonus/ReentryLane"), NodePath("../../ReentryLaneBonus/ReentryLane2"), NodePath("../../ReentryLaneBonus/ReentryLane3"), NodePath("../../RampLaneBonus/RampLane"), NodePath("../../RampLaneBonus/RampLane2"), NodePath("../../RampLaneBonus/RampLane3")]
 
-[node name="Flag" parent="MissionTargets" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+[node name="Flag" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
 ItemId = &"FLAG"
 Targets = [NodePath("../../Flags/FuelChuteFlag"), NodePath("../../Flags/HyperspaceFlag")]
+
+[node name="FuelFlag" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+ItemId = &"FUEL_FLAG"
+Targets = [NodePath("../../Flags/FuelChuteFlag")]
+
+[node name="Blackhole" parent="MissionItems" node_paths=PackedStringArray("Targets") instance=ExtResource("30_4dt3r")]
+ItemId = &"BLACKHOLE"
+Targets = [NodePath("../../Wormholes/WormholeRampRight")]
+
+[node name="CenterPost" parent="." instance=ExtResource("34_fkqoq")]
+visible = false
+position = Vector2(47, 219)
+collision_layer = 0

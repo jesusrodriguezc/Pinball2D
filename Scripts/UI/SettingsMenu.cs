@@ -72,7 +72,11 @@ public partial class SettingsMenu : Control
 		vsyncButton.Toggled += settingsManager.VSyncButtonToggled;
 		resolutionButton.ItemSelected += settingsManager.WindowResolutionSelected;
 
-		shaderPaletteButton.ItemSelected += settingsManager.ShaderPaletteSelected;
+		foreach(var paletteName in SettingsData.PaletteDict.Keys) {
+			shaderPaletteButton.AddItem(paletteName);
+		}
+
+		shaderPaletteButton.ItemSelected += (paletteId) => settingsManager.ShaderPaletteSelected(shaderPaletteButton.GetItemText((int)paletteId));
 
 		masterVolumeSlider.ValueChanged += settingsManager.MasterVolumeSelected;
 		musicVolumeSlider.ValueChanged += settingsManager.MusicVolumeSelected;
@@ -95,7 +99,7 @@ public partial class SettingsMenu : Control
 		displayModeButton.Select((int)settingsManager.settingsData.DisplayMode);
 		vsyncButton.SetPressedNoSignal(settingsManager.settingsData.VSync);
 		resolutionButton.Select((int)settingsManager.settingsData.WindowResolution);
-		shaderPaletteButton.Select((int)settingsManager.settingsData.ShaderPalette);
+		shaderPaletteButton.Select(shaderPaletteButton.GetItemByText(settingsManager.settingsData.ShaderPalette));
 
 		masterVolumeSlider.SetValueNoSignal(settingsManager.settingsData.MasterVolume);
 		musicVolumeSlider.SetValueNoSignal(settingsManager.settingsData.MusicVolume);

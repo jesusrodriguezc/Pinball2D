@@ -1,0 +1,9 @@
+{"Title":"MISSION_LEVEL6_0", 
+"Hidden": false,
+"Items": [
+{"Title": "REMOTE_ATTACK_BUMPER", "Repetitions":5}
+],
+"Ranks": [6,7],
+"XpReward": 4000,
+"ScoreReward" : 1250000
+}

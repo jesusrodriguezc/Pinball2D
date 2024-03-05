@@ -29,10 +29,12 @@ public class SettingsData {
 	#endregion
 
 	#region Shader Palettes
-	public static readonly Dictionary<long, StringName> PaletteDict = new() {
-		{0, "res://Palettes/pink_palette.png"},
-		{1, "res://Palettes/blue_palette.png"},
-		{2, "res://Palettes/gray_palette.png"}
+	public static readonly Dictionary<StringName, StringName> PaletteDict = new() {
+		{"PINK", "res://Palettes/pink_palette.png"},
+		{"BLUE", "res://Palettes/blue_palette.png"},
+		{"GRAYSCALE", "res://Palettes/gray_palette.png"},
+		{"GREEN", "res://Palettes/ammo-8-1x.png"},
+		{"PHOENIX", "res://Palettes/st-8-phoenix-1x.png"}
 	};
 
 	#endregion
@@ -56,7 +58,7 @@ public class SettingsData {
 	public long DisplayMode { get; set; }
 	public bool VSync { get; set; }
 	public long WindowResolution { get; set; }
-	public long ShaderPalette { get; set; }
+	public string ShaderPalette { get; set; }
 	public double MasterVolume { get; set; }
 	public double MusicVolume { get; set; }
 	public double SfxVolume { get; set; }
@@ -66,6 +68,9 @@ public class SettingsData {
 	#endregion
 
 	public string GetPaletteURL () {
+		if (string.IsNullOrEmpty(ShaderPalette) || !PaletteDict.ContainsKey(ShaderPalette)) {
+			return null;
+		}
 		return PaletteDict[ShaderPalette];
 	}
 }

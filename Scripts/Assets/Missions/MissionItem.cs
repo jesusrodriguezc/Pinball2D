@@ -2,14 +2,13 @@ using Godot;
 using System;
 using System.Linq;
 
-public partial class MissionTarget : Node {
+public partial class MissionItem : Node {
 
 	[Signal] public delegate void MissionTargetReachedEventHandler ();
 
 	[Export] public StringName ItemId { get; set; }
 	[Export] public Node2D[] Targets { get; set; }
 	[Export] public bool ActionEachTarget { get; set; }
-	[Export] public Node2D[] AvoidTargets { get; set; }
 
 	public override void _Ready () {
 		if (Targets == null || Targets.Length == 0) {
@@ -36,12 +35,6 @@ public partial class MissionTarget : Node {
 				}
 				target.Connect("Actioned", Callable.From(TargetReached));
 				//body.Actioned += () => TargetReached();
-			}
-		}
-
-		foreach (var target in AvoidTargets) {
-			if (target is not TriggerBase && target is not IActionable) {
-				throw new Exception($"Avoid target {target.Name} from {Name} is not valid.");
 			}
 		}
 	}

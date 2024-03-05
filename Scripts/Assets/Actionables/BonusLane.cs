@@ -85,6 +85,7 @@ public partial class BonusLane : Area2D, IActionable, IGroupable {
 		Active = !Active;
 
 		_audioComponent?.Play(SWITCH, AudioComponent.SFX_BUS);
+		EmitSignal(SignalName.Actioned);
 	}
 
 	public void OnCompleted (double duration) {

@@ -1,0 +1,9 @@
+{"Title":"MISSION_LEVEL6_1", 
+"Hidden": false,
+"Items": [
+{"Title": "ANY_LANE", "Repetitions":15}
+],
+"Ranks": [6,7],
+"XpReward": 4000,
+"ScoreReward" : 1250000
+}

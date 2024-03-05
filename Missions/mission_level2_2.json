@@ -1,0 +1,10 @@
+{"Title":"MISSION_LEVEL2_2", 
+"Hidden": false,
+"Items": [
+{"Title": "UPGRADE_ATTACK", "Repetitions":1},
+{"Title": "ATTACK_BUMPERS", "Repetitions":12}
+],
+"Ranks": [2, 3],
+"XpReward": 200,
+"ScoreReward" : 750000
+}

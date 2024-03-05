@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 public partial class MissionMenu : Control {
 	private List<MissionCard> missionCards = new List<MissionCard>();
@@ -17,17 +18,17 @@ public partial class MissionMenu : Control {
 		AddChild(rankChangedTimer);
 	}
 
-	public async void OnRankChanged(int rank) {
+	public void OnRankChanged(int rank) {
 
 		//rankChangedTimer.Start(2f);
 		//await ToSignal(rankChangedTimer, Timer.SignalName.Timeout);
 
-		foreach (var card in missionCards) {
-			if (card != null) {
-				RemoveChild(card);
-				card.QueueFree();
-			}
-		}
+		//foreach (var card in missionCards) {
+		//	if (card != null && !card.IsQueuedForDeletion()) {
+		//		GD.Print($"Intentamos eliminar la tarjeta {card.Name}");
+		//		card.RemoveSafely();
+		//	}
+		//}
 
 		missionCards = new List<MissionCard>();
 		if (!Enum.IsDefined(typeof(RankId), rank)) {
@@ -35,12 +36,20 @@ public partial class MissionMenu : Control {
 		}
 
 		foreach (Mission mission in missionController.GetMissionList((RankId)rank)) {
+			if (mission.Hidden) {
+				continue;
+			}
 
 			var missionCard = missionScene.Instantiate<MissionCard>();
 			missionCards.Add(missionCard);
 			AddChild(missionCard);
 			missionCard.SetMission(mission);
+			missionCard.Hide();
 		}
+	}
+
+	public MissionCard GetMissionCard(Mission mission) {
+		return missionCards.Where(card => card.currentMission == mission).FirstOrDefault();
 	}
 }
 

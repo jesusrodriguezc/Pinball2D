@@ -73,6 +73,7 @@ fixed_fps = 60
 trail_lifetime = 3.0
 
 [node name="ColorRect2" type="ColorRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_ltys6")
 offset_right = 854.0
 offset_bottom = 480.0

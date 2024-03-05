@@ -1,0 +1,10 @@
+{"Title":"MISSION_LEVEL8_1", 
+"Hidden": false,
+"Items": [
+{"Title": "FLAG", "Repetitions":75},
+{"Title": "REMOTE_ATTACK_BUMPER", "Repetitions":1}
+],
+"Ranks": [8,9],
+"XpReward": 10000,
+"ScoreReward" : 1750000
+}

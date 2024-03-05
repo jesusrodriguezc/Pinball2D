@@ -64,7 +64,10 @@ public partial class WaitingNode : TriggerBase
 			waitingTimer.Start();
 		} else {
 			base.Trigger(data);
-			eventManager.SendMessage(this, triggeredNodes, EventType.TRIGGER, currentEvent.Parameters);
+
+			if (triggeredNodes != null && triggeredNodes.Length > 0) {
+				eventManager.SendMessage(this, triggeredNodes, EventType.TRIGGER, data.Parameters);
+			}
 			IsTriggered = true;
 			currentEvent = null;
 		}

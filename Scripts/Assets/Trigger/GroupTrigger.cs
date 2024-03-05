@@ -35,6 +35,7 @@ public partial class GroupTrigger : TriggerBase {
 	[Export] public double EffectDuration { get; set; }
 	public Timer EffectTimer { get; set; }
 	[Export] public double Cooldown { get; set; }
+	[Export] public bool DisableOnCompleted { get; set; }
 	[Export] public double DisableDuration { get; set; }
 	public override void _Ready () {
 
@@ -69,7 +70,7 @@ public partial class GroupTrigger : TriggerBase {
 	public override void _Process (double delta) {
 		allReady = groupableArray.All(l => l.Active && !l.Blocked);
 
-		if (allReady) {
+		if (allReady && DisableOnCompleted) {
 			Enable();
 		}
 	}
@@ -100,6 +101,8 @@ public partial class GroupTrigger : TriggerBase {
 		_audioComponent.Play(POWERUP, AudioComponent.SFX_BUS);
 		EffectTimer.Start(duration ?? EffectDuration);
 		IsTriggered = true;
+
+		Trigger(new EventData());
 	}
 
 	public void EventOff () {
@@ -132,10 +135,6 @@ public partial class GroupTrigger : TriggerBase {
 		}
 
 		base.Trigger(data);
-
-
-		// TODO: Debe generar un evento.
-
 	}
 
 	#region BonusLanes

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 public partial class RankController : Node{
 	[Signal] public delegate void RankChangedEventHandler (int nextRank);
+	[Signal] public delegate void XpChangedEventHandler (double xpPoints);
+
+
 
 	public RankId CurrentRank;
 	public double ExperiencePoints;
@@ -16,10 +19,33 @@ public partial class RankController : Node{
 		GD.Print("AddExperiencePoints -> ", ExperiencePoints, "+", xp, ">=", MaxXpCurrentRank);
 
 		ExperiencePoints += xp;
+
 		if (ExperiencePoints >= MaxXpCurrentRank) {
 			ChangeRank(CurrentRank + 1);
-			ExperiencePoints %= MaxXpCurrentRank;
+			ExperiencePoints = 0f;
 		}
+		EmitSignal(SignalName.XpChanged, ExperiencePoints / MaxXpCurrentRank);
+
+	}
+
+	public void AddRank(int addedRanks) {
+		RankId nextRank = CurrentRank + addedRanks;
+		if (!Enum.IsDefined(nextRank)) {
+			if (nextRank <= 0) {
+				nextRank = Enum.GetValues<RankId>().First();
+			} else {
+				nextRank = Enum.GetValues<RankId>().Last();
+			}
+		}
+
+		CurrentRank = nextRank;
+
+		MaxXpCurrentRank = Rank.maxXpPerRank[CurrentRank];
+		ExperiencePoints = 0f;
+
+		GD.Print($"Emitimos signal RankChanged({(int)CurrentRank})");
+		EmitSignal(SignalName.RankChanged, (int)CurrentRank);
+		EmitSignal(SignalName.XpChanged, ExperiencePoints / MaxXpCurrentRank);
 
 	}
 
@@ -32,7 +58,6 @@ public partial class RankController : Node{
 		CurrentRank = nextRank;
 		MaxXpCurrentRank = Rank.maxXpPerRank[CurrentRank];
 
-		
 		GD.Print($"Emitimos signal RankChanged({(int)CurrentRank})");
 		EmitSignal(SignalName.RankChanged, (int)CurrentRank);
 	}

@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://pe8t2pdopwyy"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/RankXp/RankXpBar.cs" id="1_jshkf"]
+[ext_resource type="Texture2D" uid="uid://blq8dpcbwj53x" path="res://Assets/XpCircle/XpCircle_empty.png" id="1_txbwr"]
+[ext_resource type="Texture2D" uid="uid://thvk4mpy2gyd" path="res://Assets/XpCircle/XpCircle_full.png" id="2_wtd4w"]
+[ext_resource type="Texture2D" uid="uid://bmx0e3b4nberw" path="res://Assets/XpCircle/RankCircle_empty.png" id="3_kokpo"]
+[ext_resource type="Texture2D" uid="uid://cvtov8q54fsxf" path="res://Assets/XpCircle/RankCircle_full.png" id="4_bxb68"]
+[ext_resource type="Theme" uid="uid://blbvodw1b5vhw" path="res://UI/mission_ui_theme.tres" id="6_ulcnw"]
+
+[node name="RankXpCircle" type="Node2D"]
+script = ExtResource("1_jshkf")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="XpBar" type="TextureProgressBar" parent="CenterContainer"]
+layout_mode = 2
+fill_mode = 4
+texture_under = ExtResource("1_txbwr")
+texture_progress = ExtResource("2_wtd4w")
+
+[node name="RankBar" type="TextureProgressBar" parent="CenterContainer"]
+layout_mode = 2
+max_value = 10.0
+value = 1.0
+fill_mode = 4
+texture_under = ExtResource("3_kokpo")
+texture_progress = ExtResource("4_bxb68")
+
+[node name="MissionTimeLeft" type="Label" parent="CenterContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("6_ulcnw")
+theme_override_font_sizes/font_size = 32
+text = "9:59"

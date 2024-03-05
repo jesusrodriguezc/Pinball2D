@@ -13,7 +13,8 @@ bounce = 0.15
 size = Vector2(89, 20)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qot80"]
-radius = 5.0
+radius = 8.0
+height = 64.0
 
 [node name="LeftFlipper" type="AnimatableBody2D"]
 collision_layer = 2
@@ -35,9 +36,9 @@ offset = Vector2(20.1443, 3.78757)
 
 [node name="AudioComponent" parent="." instance=ExtResource("4_1283b")]
 
-[node name="HitBooster" type="Area2D" parent="."]
+[node name="CollisionArea" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBooster"]
-position = Vector2(66, -7)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
+position = Vector2(53, -3)
 rotation = -1.57079
 shape = SubResource("CapsuleShape2D_qot80")

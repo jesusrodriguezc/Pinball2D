@@ -32,7 +32,6 @@ public partial class ScoringController : Node {
 		scoreComponents.ForEach(scoreComponent => { scoreComponent.Score += AddScore; });
 	}
 	public void ResetScore () {
-		GD.Print("ResetScore()");
 		Score = 0;
 	}
 

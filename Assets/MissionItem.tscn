@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://fosrqs3cnv2p"]
+
+[ext_resource type="Script" path="res://Scripts/Assets/Missions/MissionItem.cs" id="1_tmij1"]
+
+[node name="MissionItem" type="Node" node_paths=PackedStringArray("Targets")]
+script = ExtResource("1_tmij1")
+Targets = []

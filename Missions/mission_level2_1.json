@@ -1,0 +1,10 @@
+{"Title":"MISSION_LEVEL2_1", 
+"Hidden": false,
+"Items": [
+{"Title": "BOOSTER_TARGET_BANK", "Repetitions":1},
+{"Title": "HYPERSPACE", "Repetitions":1}
+],
+"Ranks": [2, 3],
+"XpReward": 200,
+"ScoreReward" : 750000
+}

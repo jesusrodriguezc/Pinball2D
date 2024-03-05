@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,16 @@ namespace Pinball.Scripts.Utils {
 			}
 
 			return true;
+		}
+
+		public static int GetItemByText(this OptionButton optionButton, string text) {
+			for(int itemNumber = 0; itemNumber < optionButton.ItemCount; itemNumber++) {
+				if (optionButton.GetItemText(itemNumber) == text) {
+					return itemNumber;
+				}
+			}
+
+			return -1;
 		}
 	}
 }

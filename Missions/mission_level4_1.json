@@ -1,0 +1,10 @@
+{"Title":"MISSION_LEVEL4_1", 
+"Hidden": false,
+"Items": [
+{"Title": "RADIATION_TARGET_BANK", "Repetitions":1},
+{"Title": "ANY_WORMHOLE", "Repetitions":1}
+],
+"Ranks": [4, 5],
+"XpReward": 900,
+"ScoreReward" : 1000000
+}

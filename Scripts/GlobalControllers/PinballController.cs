@@ -25,6 +25,7 @@ public partial class PinballController : Node2D {
 	[Export] public Vector2 ballInitialPosition { get; set; }
 	public Ball Ball { get; set; }
 	public Camera CurrentCamera { get; set; }
+	[Export] public bool IsTestScene { get; set; }
 
 	#region Subcontrollers
 	public ScoringController scoreController;
@@ -54,9 +55,9 @@ public partial class PinballController : Node2D {
 		globalEffectController = GetNode<GlobalEffectController>("/root/GlobalEffectController");
 		globalEffectController.Prepare();
 
-		userInterface = GetNode<CanvasLayer>("UserInterface");
-		gameUI = GetNode<GameUI>("UserInterface/GameUI");
-		missionMenu = GetNode<MissionMenu>("UserInterface/MissionMenu");
+		userInterface = GetNodeOrNull<CanvasLayer>("UserInterface");
+		gameUI = GetNodeOrNull<GameUI>("UserInterface/GameUI");
+		missionMenu = GetNodeOrNull<MissionMenu>("UserInterface/MissionMenu");
 		pauseMenu = GetNodeOrNull<PauseMenu>("UserInterface/PauseMenu");
 		gameoverMenu = GetNodeOrNull<GameOverMenu>("UserInterface/GameOverMenu");
 		missionController = GetNodeOrNull<MissionController>("/root/Pinball/MissionController");
@@ -89,13 +90,13 @@ public partial class PinballController : Node2D {
 
 	public void OnLiveLost(Ball ball) {
 		SetBall();
-
+		missionController?.StopCurrentMission();
 		if (LivesLeft <= 0) {
 			Ball.currentStatus = Ball.Status.GAMEOVER;
-			gameUI.Hide();
-			missionMenu.Hide();
-			gameoverMenu.Show();
-			missionController.Reset();
+			gameUI?.Hide();
+			missionMenu?.Hide();
+			gameoverMenu?.Show();
+			missionController?.Reset();
 		}
 	}
 
@@ -104,9 +105,9 @@ public partial class PinballController : Node2D {
 	}
 
 	internal void PauseGame () {
-		gameUI.Hide();
-		missionMenu.Hide(); 
-		pauseMenu.Show();
+		gameUI?.Hide();
+		missionMenu?.Hide(); 
+		pauseMenu?.Show();
 		GetTree().Paused = true;
 		Ball.Pause();
 		Engine.TimeScale = 0f;
@@ -115,16 +116,21 @@ public partial class PinballController : Node2D {
 	internal void ResumeGame () {
 		Engine.TimeScale = 1f;
 		Ball.Unpause();
-		pauseMenu.Hide();
-		gameUI.Show();
-		missionMenu.Show();
+		pauseMenu?.Hide();
+		gameUI?.Show();
+		missionMenu?.Show();
 		GetTree().Paused = false;
 
 	}
 
-	public void Shake () {
-		CurrentCamera.ApplyShake();
+	public void TiltShake () {
+		CurrentCamera?.ApplyShake();
 		Ball.ForceMove(new Vector2((float)randomNumberGenerator.NextDouble(), (float)randomNumberGenerator.NextDouble()), randomNumberGenerator.Next(100, 1000));
+	}
+
+	public void ImpulseShake(float impulsePower) {
+		CurrentCamera?.ApplyShake(impulsePower);
+
 	}
 
 	public void DisableAllFor<T> (double secondsDisabled) where T : Node2D, IActionable {
@@ -140,6 +146,10 @@ public partial class PinballController : Node2D {
 	}
 
 	public void SetBall () {
+		if (IsTestScene) {
+			Ball = GetNodeOrNull<Ball>("Ball");
+			return;
+		}
 		if (Ball != null) {
 			RemoveChild(Ball);
 			Ball.QueueFree();
@@ -152,8 +162,6 @@ public partial class PinballController : Node2D {
 		Ball.Death += OnLiveLost;
 	}
 	public async void StartGame () {
-		GD.Print("Empezamos partida");
-
 		await ToSignal(this, SignalName.Ready);
 
 		SetBall();
@@ -165,7 +173,7 @@ public partial class PinballController : Node2D {
 	}
 
 	public void HideUI () {
-		userInterface.Hide();
+		userInterface?.Hide();
 	}
 }
 

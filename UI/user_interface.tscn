@@ -3,23 +3,32 @@
 [ext_resource type="Script" path="res://Scripts/UI/GameUI.cs" id="1_k5vy0"]
 [ext_resource type="Theme" uid="uid://blsj5e3xangu2" path="res://UI/main_menu_theme.tres" id="1_pp32x"]
 
-[node name="VBoxContainer" type="VBoxContainer"]
+[node name="VBoxContainer" type="PanelContainer"]
 offset_left = 68.0
 offset_right = 68.0
 offset_bottom = 40.0
 theme = ExtResource("1_pp32x")
-theme_override_constants/separation = 8
 script = ExtResource("1_k5vy0")
 
-[node name="Score" type="Label" parent="."]
+[node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 2
-text = "Score: 0
+columns = 2
+
+[node name="Score" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "SCORE:"
+
+[node name="ScoreValue" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "999999999
 "
+horizontal_alignment = 2
 
-[node name="Lifes" type="Label" parent="."]
+[node name="Lifes" type="Label" parent="GridContainer"]
 layout_mode = 2
-text = "Lives: 0"
+text = "LIVES_LEFT:"
 
-[node name="BallPosition" type="Label" parent="."]
+[node name="LifesValue" type="Label" parent="GridContainer"]
 layout_mode = 2
-text = "Ball position: (0, 0)"
+text = "99"
+horizontal_alignment = 2

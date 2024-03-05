@@ -1,0 +1,15 @@
+{"Title":"MISSION_LEVEL8_3", 
+"Hidden": false,
+"Items": [
+{"Title": "ANY_TARGET", "Repetitions":6},
+{"Title": "ANY_LANE", "Repetitions":5},
+{"Title": "FUEL_FLAG", "Repetitions":1},
+{"Title": "ENTER_RAMP", "Repetitions":1},
+{"Title": "FLAG", "Repetitions":1},
+{"Title": "ANY_WORMHOLE", "Repetitions":1},
+{"Title": "HYPERSPACE", "Repetitions":1},
+],
+"Ranks": [8,9],
+"XpReward": 25000,
+"ScoreReward" : 5000000,
+}

@@ -20,6 +20,7 @@ public partial class CreditScene : Control {
 
 	public override void _Input (InputEvent inputEvent) {
 		if (Input.IsActionJustPressed("Back")) {
+			GD.Print("Back to the menu from CreditScene");
 			BackToMainMenu();
 		}
 	}

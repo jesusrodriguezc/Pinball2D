@@ -1,0 +1,11 @@
+{"Title":"MISSION_LEVEL8_0", 
+"Hidden": false,
+"Items": [
+{"Title": "RIGHT_WORMHOLE", "Repetitions":1},
+{"Title": "MIDDLE_WORMHOLE", "Repetitions":1},
+{"Title": "LEFT_WORMHOLE", "Repetitions":1}
+],
+"Ranks": [8,9],
+"XpReward": 9000,
+"ScoreReward" : 1500000
+}

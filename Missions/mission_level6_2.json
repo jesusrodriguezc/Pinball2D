@@ -1,0 +1,9 @@
+{"Title":"MISSION_LEVEL6_2", 
+"Hidden": false,
+"Items": [
+{"Title": "OUT_LANE", "Repetitions":3}
+],
+"Ranks": [6,7],
+"XpReward": 4000,
+"ScoreReward" : 1250000
+}

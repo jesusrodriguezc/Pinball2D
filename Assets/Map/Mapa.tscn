@@ -8,7 +8,7 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nki2k"]
 friction = 0.15
 rough = true
-bounce = 0.5
+bounce = 0.15
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gpckx"]
 size = Vector2(4.14273, 250.572)
@@ -29,8 +29,8 @@ friction = 0.0
 bounce = 0.5
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_copbp"]
-friction = 0.0
-bounce = 0.4
+friction = 0.05
+bounce = 0.2
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ojb86"]
 radius = 2.0
@@ -42,7 +42,7 @@ rough = true
 absorbent = true
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ymlyk"]
-size = Vector2(15.0276, 9.2311)
+size = Vector2(15.0276, 10.8672)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7n5gx"]
 size = Vector2(7.7586, 9.53964)
@@ -53,7 +53,7 @@ size = Vector2(82.4838, 6.63973)
 [node name="Mapa" type="Node2D"]
 position = Vector2(218, 244)
 metadata/_edit_vertical_guides_ = [477.0, 745.0, 542.0, 619.0, 558.0, 640.0]
-metadata/_edit_horizontal_guides_ = [443.0, 480.0, 425.0, 360.0, 414.0, 421.0, 495.0]
+metadata/_edit_horizontal_guides_ = [480.0, 365.0, 495.0, 434.0, 431.0, 56.0]
 
 [node name="MapGenerator" parent="." node_paths=PackedStringArray("collisionPolygons", "collisionShapes") instance=ExtResource("5_m8s2l")]
 collisionPolygons = []
@@ -80,39 +80,39 @@ paintingColor = Color(0, 0, 0, 1)
 
 [node name="Borde izquierdo" type="CollisionPolygon2D" parent="Limites"]
 position = Vector2(-25, -2)
-polygon = PackedVector2Array(-35.4283, 361.308, -20.7143, 376.286, -5, 376.286, -5, 390.571, -287.857, 390.571, -286.429, -346.571, 25, -346.571, 25, -314, -48, -316, -86, -315, -100, -315, -131, -314, -139, -326, -148, -333, -156, -338, -166, -341, -175, -342, -184, -341, -192, -339, -202, -335, -211, -328, -218, -318, -222, -308, -224, -297, -224, -286, -216.429, -270.857, -226.429, -259.429, -239.286, -248, -246.429, -219.429, -246.429, -190.857, -237, -158, -267, -141, -277, -130, -284, -117, -284, -7, -281, -3, -277, 15, -270, 24, -266.429, 30.5714, -273.571, 44.8571, -273.571, 229.143, -269.286, 234.857, -263.571, 239.143, -255, 239.143, -249.286, 234.857, -245, 229.143, -245, 213.428, -140, 288, -140, 314)
+polygon = PackedVector2Array(-35.4283, 361.308, -20.7143, 376.286, -5, 376.286, -5, 390.571, -287.857, 390.571, -286.429, -346.571, 25, -346.571, 25, -340.857, -53.5714, -340.857, -106.429, -333.714, -126.429, -325.143, -130.714, -330.857, -140.714, -338, -152.143, -342.286, -165, -345.143, -177.857, -342.286, -189.286, -338, -199.286, -330.857, -207.857, -319.429, -212.143, -309.429, -213.571, -296.571, -210.714, -283.714, -203.571, -270.857, -215, -260.857, -227.857, -240.857, -236.429, -222.286, -242.143, -190.857, -237, -158, -267, -141, -277, -130, -284, -117, -284, -7, -281, -3, -277, 15, -270, 24, -266.429, 30.5714, -273.571, 44.8571, -273.571, 229.143, -269.286, 234.857, -263.571, 239.143, -255, 239.143, -249.286, 234.857, -245, 229.143, -245, 213.428, -139.286, 273.429, -139.286, 313.429)
 
 [node name="Borde derecho" type="CollisionPolygon2D" parent="Limites"]
-position = Vector2(0, -1)
+position = Vector2(45.7143, -1)
 rotation = 3.14159
 scale = Vector2(1, -1)
-polygon = PackedVector2Array(-8.5705, 359.571, 10.0009, 375.286, 30.0009, 375.286, 30.001, 389.571, -117.142, 389.572, -302.856, 389.572, -302.858, -347.571, -0.00088501, -347.571, -0.000798582, -315, -44.2865, -313.286, -67.1436, -310.428, -81.0008, -307, -108.001, -301, -129.001, -295, -150.001, -287, -164.001, -280, -177.001, -272, -191.001, -262, -202.001, -249.999, -211.001, -239.999, -218.001, -227.999, -224.001, -215.999, -229.001, -202.999, -233, -190.999, -235, -180.999, -238, -159.999, -240, -127.7, -240, 313, -212.999, 313.001, -212.857, 243.858, -209.999, 248.143, -205.714, 251, -194.285, 251, -189.999, 248.143, -187.142, 243.858, -187.142, 233.858, -102.856, 285.286, -102.856, 312.429)
+polygon = PackedVector2Array(-8.5705, 359.571, 10.0009, 375.286, 30.0009, 375.286, 30.001, 389.571, -117.142, 389.572, -257.142, 389.572, -257.144, -347.571, 45.7134, -347.572, 45.7134, -341.857, -41.4295, -341.857, -94.2866, -334.714, -142.858, -314.714, -184.286, -281.857, -201.429, -260.428, -215.715, -241.857, -218.572, -233.285, -224.286, -218.999, -230.001, -204.714, -233, -190.999, -235, -180.999, -238, -159.999, -240, -127.7, -240, 313, -212.999, 313.001, -212.857, 243.858, -209.999, 248.143, -205.714, 251, -194.285, 251, -189.999, 248.143, -187.142, 243.858, -187.142, 233.858, -102.856, 285.286, -102.856, 312.429)
 
 [node name="Curva inferior carril shotter" type="CollisionPolygon2D" parent="Limites"]
-position = Vector2(4, 0)
-polygon = PackedVector2Array(200.286, -181.429, 193.143, -198.571, 185, -216, 171.714, -232.857, 147.429, -250, 133.143, -258.571, 111.714, -267.143, 83.1429, -275.714, 48.8571, -285.714, 18.8571, -290, 16, -285.714, 46, -281.429, 80.2857, -272.857, 107.429, -264.286, 130.286, -254.286, 144.571, -245.714, 166, -231.429, 180, -214, 187.429, -198.571, 196, -180, 200.286, -157.143, 207.429, -122.857, 208.857, -84.2857, 208.857, 2.85715, 213.143, 2.85715, 211.714, -84.2857, 211, -123, 204.571, -158.571)
+position = Vector2(49.7141, 0)
+polygon = PackedVector2Array(200.286, -181.429, 194.572, -201.429, 181.714, -232.857, 157.429, -265.714, 121.714, -292.857, 80.2859, -307.143, 28.8573, -317.143, 23.1431, -301.429, 58.8573, -292.857, 93.143, -281.429, 123.143, -267.143, 144.571, -245.714, 166, -231.429, 180, -214, 187.429, -198.571, 196, -180, 200.286, -157.143, 207.429, -122.857, 208.857, -84.2857, 208.857, 2.85715, 213.143, 2.85715, 211.714, -84.2857, 211, -123, 204.571, -158.571)
 
 [node name="Barrera carril shooter2" type="CollisionShape2D" parent="Limites"]
-position = Vector2(214.928, 186.714)
+position = Vector2(260.642, 186.714)
 shape = SubResource("RectangleShape2D_gpckx")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Limites"]
-position = Vector2(-130.9, -302.38)
+position = Vector2(-121.429, -324.286)
 rotation = 1.30031
 build_mode = 1
-polygon = PackedVector2Array(-3.19125, 5.44528, 19.1259, -3.93253, 14.7284, -21.7556, -12.5122, -9.59201, -19.8318, 20.5481)
+polygon = PackedVector2Array(11.9957, -21.8759, 13.291, -31.894, -9.79891, -23.4717, -11.0943, -13.4536)
 one_way_collision = true
 one_way_collision_margin = 10.0
 
 [node name="CollisionPolygon2D7" type="CollisionPolygon2D" parent="Limites"]
-position = Vector2(217, 19)
+position = Vector2(262.714, 19)
 rotation = -1.57079
 polygon = PackedVector2Array(-42.4286, -4.14258, 16, -4.00006, 16, -6.10352e-05, -42.4286, 0.143127)
 one_way_collision = true
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Limites"]
-position = Vector2(-34, -6)
-polygon = PackedVector2Array(-105.1, -269.62, -112.1, -241.62, -105, -232, -46, -250, -46.1, -272.62, -72, -288, -88, -279, -88, -268, -97.1, -262.62, -102.1, -271.62)
+position = Vector2(-11.4286, -18.5714)
+polygon = PackedVector2Array(-105.1, -269.62, -112.1, -241.62, -105, -232, -46, -250, -46.1, -272.62, -75.7143, -301.429, -85.7143, -300, -75.7143, -288.571, -82.8571, -281.429, -80, -270, -97.1, -262.62, -102.1, -271.62)
 
 [node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Limites"]
 polygon = PackedVector2Array(-298.571, 72.8571, -301.429, 20, -290, 31.4286, -272.857, 41.4285, -271.429, 50, -280, 51.4286, -287.143, 55.7143, -294.286, 62.8571)
@@ -130,13 +130,13 @@ paintingColor = Color(0.2, 0.2, 0.2, 1)
 
 [node name="Barrera slingshot izquierdo" type="CollisionPolygon2D" parent="Bordes permanentes"]
 position = Vector2(-35, 10)
-polygon = PackedVector2Array(-236.429, 97.1429, -236.429, 117.143, -236.429, 155.714, -79.2857, 248.571, -70.7143, 247.143, -232.143, 152.857, -232.143, 97.1429)
+polygon = PackedVector2Array(-236.429, 97.1429, -236.429, 117.143, -236.429, 162.857, -49.2857, 262.857, -46.4286, 257.143, -232.143, 158.571, -232.143, 97.1429)
 
 [node name="Barrera slingshot derecho" type="CollisionPolygon2D" parent="Bordes permanentes"]
-position = Vector2(-28, 16)
+position = Vector2(14.8569, 16)
 rotation = 3.14159
 scale = Vector2(1, -1)
-polygon = PackedVector2Array(-213.714, 55.4291, -213.714, 164.001, -85.1422, 242.572, -79.4279, 239.714, -209.428, 159.715, -209.428, 56.8577)
+polygon = PackedVector2Array(-213.714, 55.4291, -213.714, 172.572, -60.8567, 255.429, -57.9996, 251.143, -209.428, 166.858, -209.428, 56.8577)
 
 [node name="Boca salida rampa" type="CollisionShape2D" parent="Bordes permanentes"]
 position = Vector2(-237.857, 118.571)
@@ -144,22 +144,22 @@ shape = SubResource("RectangleShape2D_2jn3q")
 
 [node name="Curva superior rampa entrada" type="CollisionPolygon2D" parent="Bordes permanentes"]
 position = Vector2(-8, -22)
-polygon = PackedVector2Array(-213.429, -196.571, -213.084, -176.198, -202, -158, -170, -149, -148, -142, -140, -138, -121, -126, -121, -117, -107, -100, -82, -56.5715, -89, -63, -115, -99, -130.571, -113.714, -149.143, -128, -176.286, -138, -212, -148, -222, -155, -224.857, -175.143, -219.143, -196.571)
+polygon = PackedVector2Array(-203.429, -210.857, -202.323, -192.623, -200.571, -176.571, -194.857, -166.571, -184.857, -158, -170.571, -152.286, -148, -142, -140, -138, -121, -126, -121, -117, -107, -100, -80.5714, -60.8571, -86.2857, -66.5714, -96.2857, -80.8571, -113.429, -99.4286, -130.571, -113.714, -149.143, -128, -176.286, -138, -212, -148, -216.286, -158, -220.571, -180.857, -213.429, -212.286)
 
 [node name="Curva inferior rampa entrada" type="CollisionPolygon2D" parent="Bordes permanentes"]
 position = Vector2(-42, -24)
-polygon = PackedVector2Array(-153.714, -110.286, -155.143, -107.429, -140, -87, -126, -73, -117, -72, -105.143, -46, -105.143, -53.1429, -114, -73, -119.429, -81.7143, -123, -87, -135.143, -98.8571)
+polygon = PackedVector2Array(-153.714, -110.286, -155.143, -107.429, -140, -87, -126, -73, -117, -72, -98, -41.7143, -100.857, -48.8571, -114, -73, -119.429, -81.7143, -123, -87, -135.143, -98.8571)
 
 [node name="Pared bumpers" type="CollisionPolygon2D" parent="Bordes permanentes"]
-position = Vector2(-23, -33)
+position = Vector2(-5.71429, -30)
 polygon = PackedVector2Array(-15.5714, -128.429, -9.85715, -125.571, -8.42859, -115.571, 7.28571, -112.714, 13, -118.429, 20.1429, -117, 21.5714, -98.4286, -32.7143, -112.714)
 
 [node name="Carril" type="CollisionShape2D" parent="Bordes permanentes"]
-position = Vector2(-50, -270)
+position = Vector2(-17.1429, -280)
 shape = SubResource("CapsuleShape2D_qusb7")
 
 [node name="Carril 2" type="CollisionShape2D" parent="Bordes permanentes"]
-position = Vector2(-18, -270)
+position = Vector2(22.8571, -280)
 shape = SubResource("CapsuleShape2D_qusb7")
 
 [node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Bordes permanentes"]
@@ -167,14 +167,15 @@ position = Vector2(-35, 10)
 polygon = PackedVector2Array(-236.429, 40, -236.429, 34.2857, -237.857, 32.8571, -237.857, 28.5714, -232.143, 34.2857, -232.143, 38.5714)
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Bordes permanentes"]
-polygon = PackedVector2Array(95, -115, 107, -113, 115.714, -140, 125.714, -168.571, 128.571, -192.857, 125.714, -207.143, 112.857, -225.714, 92.8571, -238.571, 68.5714, -247.143, 44.2857, -257.143, 62.8571, -282.857, 50, -285.714, 22.8571, -290, 14, -279, 14, -262, 25.7143, -255.714, 30, -260, 40, -255.714, 40, -251.429, 55, -245, 88, -233, 111, -215, 119, -195, 115, -170, 105.714, -141.429)
+position = Vector2(47.1427, -10.0001)
+polygon = PackedVector2Array(72.8573, -124.286, 85.7145, -120, 104.286, -142.857, 111.429, -164.286, 114.286, -184.286, 110, -218.571, 98.5716, -232.857, 77.1431, -244.286, 47.1431, -260, 62.8571, -282.857, 50, -285.714, 25.7145, -291.428, 14, -279, 12.8574, -258.571, 25.7144, -254.286, 30, -260, 40, -255.714, 40.0001, -250, 48.5715, -245.714, 65.7144, -232.857, 77.143, -217.143, 85.7144, -197.143, 88.5715, -175.714, 85.7144, -152.857)
 
 [node name="Curva inferior carril shotter2" type="CollisionPolygon2D" parent="Bordes permanentes"]
-position = Vector2(4, 0)
-polygon = PackedVector2Array(203, -157, 197, -180, 189, -197, 180, -214, 171, -229, 160, -239, 170, -227, 181, -209, 184, -199, 185, -184, 184, -165, 178, -148, 166, -124, 145, -88, 145, -25, 176, 2, 176, 27.1429, 178.857, 27.1429, 178.857, -84.2857, 208.857, -84.2857, 207.429, -122.857)
+position = Vector2(49.7142, 0)
+polygon = PackedVector2Array(200.286, -157.143, 196, -180, 189, -197, 180.286, -214.286, 166, -231.429, 144.572, -245.714, 121.714, -268.571, 93.1429, -281.429, 60.2858, -292.857, 56.0001, -287.143, 87.4286, -275.714, 114.572, -262.857, 137.429, -238.571, 144.572, -198.571, 148.857, -164.286, 144.572, -130, 131.284, -98.3723, 127.429, -90, 127.429, -25.7143, 176, 2, 176, 27.1429, 178.857, 27.1429, 178.857, -84.2857, 208.857, -84.2857, 207.429, -122.857)
 
 [node name="CollisionPolygon2D7" type="CollisionPolygon2D" parent="Bordes permanentes"]
-position = Vector2(-23, 0)
+position = Vector2(22.7141, 0)
 polygon = PackedVector2Array(205.857, -84.2857, 238.714, -84.2857, 263, -98.5715, 263, -15, 239, 2, 205, 2)
 disabled = true
 
@@ -259,7 +260,7 @@ collision_mask = 65
 physics_material_override = SubResource("PhysicsMaterial_2wji7")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Skill_Shoot_Barrier"]
-position = Vector2(-102.797, 109.119)
+position = Vector2(-124.445, 71.9202)
 rotation = -2.0953
 scale = Vector2(0.946212, 0.689103)
 polygon = PackedVector2Array(-25.7444, 32.3856, 36.6306, 0.5382, 35.5786, -6.71893, -26.7974, 26.5797)
@@ -278,9 +279,9 @@ angular_damp_space_override = 3
 angular_damp = 0.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HyperspaceZone"]
-position = Vector2(275.714, 152.857)
+position = Vector2(297.143, 152.857)
 rotation = -0.0009643
-polygon = PackedVector2Array(754.785, 223.728, 766.98, 169.311, 758.44, 136.446, 684.19, 99.2312, 701.357, 74.9621, 749.914, 89.2946, 794.178, 112.194, 814.166, 125.071, 828.431, 146.513, 837.813, 193.808, 822.774, 234.794)
+polygon = PackedVector2Array(754.08, 213.585, 762.668, 196.45, 765.546, 175.024, 764.138, 153.594, 757.016, 132.159, 744.178, 112.146, 708.486, 89.2548, 724.222, 66.4128, 758.498, 76.4459, 787.054, 92.1877, 809.889, 115.067, 812.723, 139.355, 816.986, 163.645, 821.238, 197.935, 814.061, 233.642)
 
 [node name="Triggers" type="Node2D" parent="."]
 
@@ -292,10 +293,19 @@ IgnoredZones = [NodePath("../SueloPlanta_Zone")]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Triggers/TunelBajoRampa_Zone"]
 position = Vector2(-642, -356)
-polygon = PackedVector2Array(415, 246, 403, 231, 388, 204, 383, 197, 378, 180, 377, 167, 378, 149, 382, 139, 407, 156, 403, 172, 406, 185, 430, 215, 440, 231)
+polygon = PackedVector2Array(415, 246, 401, 232, 385, 206, 381, 195, 378, 180, 377, 167, 378, 149, 382, 139, 409, 156, 409, 171, 412, 184, 430, 215, 442, 232)
+
+[node name="TunelSalidaRampa_Zone" parent="Triggers" node_paths=PackedStringArray("IgnoredZones") instance=ExtResource("2_2vuql")]
+position = Vector2(75, 47)
+gravity_space_override = 3
+gravity = 600.0
+IgnoredZones = [NodePath("../SueloPlanta_Zone")]
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Triggers/TunelSalidaRampa_Zone"]
+polygon = PackedVector2Array(-238, -16, -266, -12, -267, 28, -238, 19)
 
 [node name="Shooter_Lane_full" parent="Triggers" instance=ExtResource("6_8fj8t")]
-position = Vector2(23, -210)
+position = Vector2(47, -210)
 rotation = 0.4665
 scale = Vector2(0.36, 1.64551)
 collision_layer = 2
@@ -303,7 +313,7 @@ collision_mask = 1
 Type = 0
 
 [node name="In" type="CollisionShape2D" parent="Triggers/Shooter_Lane_full"]
-position = Vector2(1.21387, -2.17499)
+position = Vector2(13.4769, -15.2308)
 shape = SubResource("RectangleShape2D_ymlyk")
 debug_color = Color(0.929412, 0, 0.12549, 0.419608)
 
@@ -312,7 +322,7 @@ insideLayer = 4
 outLayer = 4
 
 [node name="Shooter_Lane_escape" parent="Triggers" instance=ExtResource("6_8fj8t")]
-position = Vector2(138, 45)
+position = Vector2(169, 45)
 scale = Vector2(2.32, 1.20551)
 collision_layer = 16
 collision_mask = 1
@@ -328,7 +338,7 @@ position = Vector2(0.431031, -10.7838)
 shape = SubResource("RectangleShape2D_7n5gx")
 
 [node name="Shooter_Lane_empty" parent="Triggers" instance=ExtResource("6_8fj8t")]
-position = Vector2(161, 215)
+position = Vector2(192, 215)
 scale = Vector2(1.16, 0.605511)
 collision_layer = 2
 collision_mask = 65
@@ -355,7 +365,7 @@ PaintingColor = Color(0.581033, 0.581033, 0.581033, 1)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Triggers/SueloPlanta_Zone"]
 position = Vector2(-22, 0)
-polygon = PackedVector2Array(-110, -130, -128, -144.286, -153.714, -155.714, -188, -164.286, -199.429, -167.143, -213.714, -168.571, -230, -165, -247, -157, -270, -145, -280, -133, -287, -119, -286, -8, -280.857, 18.5714, -269.429, 34.2857, -259.429, 37.1429, -249.429, 41.4286, -249, 88, -243, 88, -243, 86, -242, 83, -241, 81, -239, 79, -237, 78, -234, 77, -232, 77, -229, 78, -226, 79, -225, 81, -224, 83, -223, 86, -223, 88, -216, 88, -216, 42, -200, 23, -194, 9, -193, -30, -198, -85, -220, -103, -233, -118, -231, -129, -216, -134, -199, -136, -178, -139, -163, -131, -140.857, -105.714, -132.286, -90, -126.571, -75.7143, -126.571, -71.4285, -122.286, -58.5714, -65.1429, -71.4285, -85.1429, -102.857, -96.5714, -120)
+polygon = PackedVector2Array(-136.571, -150, -163.714, -160, -185.143, -165.714, -199.429, -170, -213.714, -168.571, -230, -165, -247, -157, -270, -145, -280, -133, -287, -119, -286, -8, -280.857, 18.5714, -269.429, 34.2857, -259.429, 37.1429, -249.429, 41.4286, -249, 88, -243, 88, -243, 86, -242, 83, -241, 81, -239, 79, -237, 78, -234, 77, -232, 77, -229, 78, -226, 79, -225, 81, -224, 83, -223, 86, -223, 88, -216, 88, -216, 42, -200, 23, -194, 9, -193, -30, -198, -85, -220, -103, -232.286, -117.143, -232.286, -124.286, -229.429, -128.571, -219.429, -134.286, -195.143, -138.571, -175.143, -134.286, -156.571, -122.857, -140.857, -105.714, -132.286, -90, -122.286, -71.4285, -116.571, -58.5714, -60.8572, -72.8571, -83.7143, -102.857, -98, -118.571, -118, -135.714)
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Triggers/SueloPlanta_Zone"]
 position = Vector2(0, 12)
@@ -373,7 +383,7 @@ scale = Vector2(0.7, 0.7)
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="NonReturn_ReturnLanes"]
 z_index = 60
-position = Vector2(-325.714, -41.4278)
+position = Vector2(-367.143, -41.4277)
 rotation = -0.523598
 shape = SubResource("RectangleShape2D_usbks")
 one_way_collision = true
@@ -409,7 +419,7 @@ paintingColor = Color(0, 0, 0, 1)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="NonReturnShooterLane"]
 z_index = 60
-position = Vector2(6.94254, -6.88888)
+position = Vector2(62.6568, -28.3172)
 rotation = -1.43936
-polygon = PackedVector2Array(-14.6186, -12.4774, 11.5172, -0.081604, 12.2661, 5.58337, -14.9114, -3.79269)
+polygon = PackedVector2Array(-9.99532, -10.2066, 17.3691, 0.585785, 16.7018, 6.43799, -9.91376, 1.31064)
 one_way_collision = true

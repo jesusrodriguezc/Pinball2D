@@ -156,14 +156,6 @@ text = "SHADER_PALETTE"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
-item_count = 3
-selected = 0
-popup/item_0/text = "PINK"
-popup/item_0/id = 0
-popup/item_1/text = "BLUE"
-popup/item_1/id = 1
-popup/item_2/text = "GRAYSCALE"
-popup/item_2/id = 2
 
 [node name="_SOUND_" type="TabBar" parent="VBoxContainer/TabContainer"]
 visible = false
